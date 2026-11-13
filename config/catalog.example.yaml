@@ -1,6 +1,17 @@
-# v4：积分兑换和购买均为限期免保号播放；XTR未定价，真实购买关闭。
-schema_version: 4
-catalog_version: proposal-v4-2026-11-13
+# v5设计示例；现金价格留空、销售关闭。份额是提案，不是2GB承载保证。
+schema_version: 5
+catalog_version: proposal-v5-2026-11-13
+defaults:
+  quantity_per_order: 1
+  points_delivery: DIRECT_GRANT
+  cash_delivery: SINGLE_USE_CODE
+  cash_code_max_claims: 1
+  cash_code_bound_to_purchaser: true
+  code_claim_valid_days: 30
+  code_duration_starts_at: CLAIM_COMMIT
+  unpublish_revokes_sold_codes: false
+  hard_capacity_check_required: true
+  promotions_overlap: REJECT
 products:
   - sku: EXEMPT_PLAY_30D_POINTS
     title: 积分月卡（30天免保号播放）
@@ -23,23 +34,90 @@ products:
   - sku: EXEMPT_PLAY_30D_STARS
     title: 播放月卡（30天免保号）
     enabled: false
+    entrypoint: TELEGRAM
+    delivery: DIRECT_GRANT
     price: {unit: XTR, amount: null}
     effect: {type: EXEMPT_PLAYBACK, duration_days: 30, registered_devices: 3, concurrent_streams: 1}
   - sku: EXEMPT_PLAY_365D_STARS
     title: 播放年卡（365天免保号）
     enabled: false
+    entrypoint: TELEGRAM
+    delivery: DIRECT_GRANT
     price: {unit: XTR, amount: null}
     effect: {type: EXEMPT_PLAYBACK, duration_days: 365, registered_devices: 3, concurrent_streams: 1}
   - sku: REGISTER_AND_EXEMPT_PLAY_30D
-    title: 注册并开通30天免保号播放
+    title: 月注册码（注册并开通30天免保号播放）
     enabled: false
-    price: {unit: XTR, amount: null}
-    eligibility: [PURCHASE_REGISTRATION_PATH_OPEN, MEMBER_CAPACITY_RESERVED]
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 5
+    purchase_limit_per_uid: 1
+    eligibility: [PURCHASE_REGISTRATION_PATH_OPEN, MEMBER_CAPACITY_RESERVED, NOT_YET_REGISTERED]
     effect: {type: REGISTER_AND_EXEMPT_PLAYBACK, duration_days: 30, includes_registration: true}
+  - sku: REGISTER_AND_EXEMPT_PLAY_365D
+    title: 年注册码（注册并开通365天免保号播放）
+    enabled: false
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 3
+    purchase_limit_per_uid: 1
+    eligibility: [PURCHASE_REGISTRATION_PATH_OPEN, MEMBER_CAPACITY_RESERVED, NOT_YET_REGISTERED]
+    effect: {type: REGISTER_AND_EXEMPT_PLAYBACK, duration_days: 365, includes_registration: true}
+  - sku: RENEW_30D_CODE
+    title: 30天续期码
+    enabled: false
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 20
+    eligibility: [EXISTING_MEMBER, FUTURE_CAPACITY_CHECKED]
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 30, includes_registration: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: RENEW_90D_CODE
+    title: 90天续期码
+    enabled: false
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 10
+    eligibility: [EXISTING_MEMBER, FUTURE_CAPACITY_CHECKED]
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 90, includes_registration: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: RENEW_365D_CODE
+    title: 365天续期码
+    enabled: false
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 5
+    eligibility: [EXISTING_MEMBER, FUTURE_CAPACITY_CHECKED]
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 365, includes_registration: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: ACTIVITY_WHITELIST_365D_CODE
+    title: 限期白名单（365天免活动播放）
+    enabled: false
+    entrypoint: STANDALONE_WEB
+    price: {unit: CNY_FEN, amount: null}
+    delivery: SINGLE_USE_CODE
+    sales_limit_total: 2
+    maximum_active_including_unclaimed: 2
+    eligibility: [EXISTING_MEMBER, WHITELIST_CAPACITY_RESERVED]
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 365, includes_registration: false, bypass_security_or_capacity: false}
+  - sku: PERMANENT_ACTIVITY_WHITELIST
+    title: 永久免活动授权（默认不售）
+    enabled: false
+    price: {unit: CNY_FEN, amount: null}
+    requires_owner_special_terms: true
+    sales_limit_total: 0
+    effect: {type: EXEMPT_PLAYBACK, permanent: true, includes_registration: false, bypass_security_or_capacity: false}
   - sku: DATA_RETENTION_90D
     title: 仅账号资料保留90天（无播放）
     enabled: false
-    price: {unit: XTR, amount: null}
+    entrypoint: STANDALONE_WEB
+    delivery: SINGLE_USE_CODE
+    price: {unit: CNY_FEN, amount: null}
     effect: {type: ACCOUNT_DATA_PROTECTION, duration_days: 90, grants_playback: false}
   - sku: EXTRA_DEVICE_30D
     title: 额外授权设备1台30天（不增加同播）
@@ -50,6 +128,9 @@ products:
   - sku: EXTRA_STREAM_30D
     title: 额外同播1路30天
     enabled: false
-    price: {unit: XTR, amount: null}
+    entrypoint: STANDALONE_WEB
+    delivery: SINGLE_USE_CODE
+    price: {unit: CNY_FEN, amount: null}
     eligibility: [HARD_CONCURRENCY_ADMISSION_VERIFIED, GLOBAL_AND_NODE_CAPACITY_RESERVED]
     effect: {type: ADDITIONAL_STREAM_QUOTA, count: 1, duration_days: 30}
+promotions: [] # 后台创建定时活动，价格/时区/限额单独快照。

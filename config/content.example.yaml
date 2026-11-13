@@ -1,0 +1,38 @@
+# 结构示例，无真实禁用客户端名单；说明与已执行拦截分开。
+schema_version: 5
+help_center:
+  enabled: true
+  public_categories: [START, PLAYBACK, CLIENTS, RETENTION_POINTS, PURCHASE_CODES, TROUBLESHOOTING, PRIVACY]
+  protected_addresses_resolve_per_reader: true
+  administrator_editable: true
+  draft_publish_versioning: true
+announcements:
+  enabled: true
+  homepage_summary_limit: 3
+  schedule_timezone: Asia/Shanghai
+  audience_filter_enforced_on_backend: true
+  acknowledgement_unique_per_user_version: true
+  acknowledgement_equals_terms_consent: false
+  outbound_push_default: false
+  withdrawal_automatically_reopens_sales: false
+client_policy:
+  advisory_enabled: true
+  hard_enforcement_enabled: false
+  enforcement_readiness: NOT_VERIFIED
+  unknown_client_policy: AUTHENTICATE_AND_OBSERVE
+  supported_levels: [TESTED, RECOMMENDED, UNSUPPORTED, WARN, DENY_NEW_PLAY, BLOCK_DOWNLOAD]
+  entries: []
+  arbitrary_regex_enabled: false
+  purchased_whitelist_bypasses_client_security: false
+  publisher_role: OPERATOR_OR_OWNER
+editor_security:
+  content_role: CONTENT_EDITOR
+  raw_html_script_iframe_allowed: false
+  markdown_sanitized_on_server: true
+  allowed_link_schemes: [https, http]
+  arbitrary_server_side_image_fetch: false
+  uploaded_image_types: [JPEG, PNG, WEBP]
+  maximum_upload_mib: 5
+  maximum_image_pixels: 16000000
+  reencode_images_and_remove_exif: true
+  publish_requires_expected_version_and_audit: true

@@ -1,6 +1,6 @@
-# v4设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
-schema_version: 4
-policy_version: proposal-v4-2026-11-13
+# v5设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
+schema_version: 5
+policy_version: proposal-v5-2026-11-13
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -110,10 +110,30 @@ online_statistics:
   public_details_enabled: false
 commerce:
   real_payments_enabled: false
-  digital_goods_payment_route: TELEGRAM_STARS
-  payment_currency: XTR
+  standalone_web_default_route: ALIPAY_RED_PACKET_MANUAL
+  telegram_digital_goods_route: TELEGRAM_STARS
+  standalone_web_currency: CNY_FEN
+  telegram_payment_currency: XTR
+  manual_payment_delivery: SINGLE_USE_CODE
+  manual_payment_claim_equals_paid: false
+  honor_sold_registration_codes: true
   partial_refunds_enabled: false
   price_must_be_configured_before_publish: true
+  detailed_contract: commerce.example.yaml
+extensions:
+  external_points_enabled: false
+  remote_backup_push_enabled: false
+  remote_backup_pull_enabled: false
+  detailed_contract: integrations.example.yaml
+user_content:
+  help_and_announcements_enabled: true
+  client_hard_enforcement_enabled: false
+  detailed_contract: content.example.yaml
+network_access:
+  media_ip_access_enabled: false
+  account_ip_access_enabled: false
+  shop_ip_access_enabled: false
+  detailed_contract: network.example.yaml
 tasks:
   heavy_background_workers: 1
   postgres_pool_connections: 4

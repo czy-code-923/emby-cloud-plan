@@ -1,0 +1,50 @@
+# example.com仅作占位；没有进行DNS/TLS配置或开启公网IP访问。
+schema_version: 5
+domains:
+  media: emby.example.com
+  account: account.example.com
+  standalone_shop: shop.example.com
+  admin: admin.example.com
+  placeholders_are_active_bindings: false
+binding:
+  owner_mfa_required: true
+  ownership_challenge_required: true
+  validate_a_and_aaaa: true
+  wildcard_enabled: false
+  arbitrary_proxy_upstream_or_directives: false
+  staged_config_validation_and_probe: true
+  rollback_preserves_current_business_data: true
+  cannot_remove_only_admin_recovery_path: true
+ip_access:
+  media_enabled: false
+  account_enabled: false
+  shop_enabled: false
+  admin_public_ip_enabled: false
+  configured_ipv4: []
+  configured_ipv6: []
+  trusted_matching_tls_required_if_enabled: true
+  sensitive_plain_http_allowed: false
+  implies_hidden_origin: false
+edge:
+  active_host_allowlist_required: true
+  reject_unknown_host: true
+  arbitrary_on_demand_certificate_issuance: false
+  public_port_80_scope: KNOWN_HOST_HTTPS_REDIRECT_AND_ACME_ONLY
+  sensitive_links_from_request_host: false
+  trusted_proxy_networks: []
+  untrusted_forwarded_headers_ignored: true
+  internal_service_ports_public: false
+admin:
+  preferred_access: VPN_OR_SSH_TUNNEL
+  public_access_enabled: false
+  source_allowlist: []
+  independent_mfa_required: true
+web_sessions:
+  host_only_secure_httponly_cookies: true
+  csrf_required: true
+  allowed_credentialed_origins: []
+  wildcard_credentialed_cors: false
+  emby_native_clients_require_origin_header: false
+certificate_monitor:
+  warning_days_before_expiry: 14
+  preserve_old_working_binding_on_failure: true

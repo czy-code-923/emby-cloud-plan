@@ -1,0 +1,107 @@
+# v5待开发规格；实际价格、收款资料、账号适用性、核款/退款测试未确认，不启用真实收款。
+schema_version: 5
+real_payments_enabled: false
+entrypoints:
+  standalone_web:
+    enabled: false
+    default_channel: ALIPAY_RED_PACKET_MANUAL
+    multiple_channels_may_be_enabled: true
+    one_channel_per_order: true
+  telegram_bot_and_mini_app:
+    digital_sales_enabled: false
+    permitted_cashlike_route: TELEGRAM_STARS
+    manual_red_packet_and_qr_checkout_enabled: false
+    redirect_to_external_checkout_for_digital_sales: false
+    existing_order_status_and_code_claims_enabled: true
+channels:
+  - id: ALIPAY_RED_PACKET_MANUAL
+    desired_default: true
+    enabled: false
+    readiness: DRAFT
+    confirmation: MANUAL_ACTUAL_RECEIPT
+    account_use_verified: false
+    collect_payment_password_or_cookie: false
+    automatic_red_packet_claim: false
+  - id: ALIPAY_QR_MANUAL
+    enabled: false
+    readiness: DRAFT
+    account_kind: UNCONFIRMED
+    remote_business_use_verified: false
+    qr_asset_ref: null
+    confirmation: MANUAL_ACTUAL_RECEIPT
+  - id: WECHAT_QR_MANUAL
+    enabled: false
+    readiness: DRAFT
+    account_kind: UNCONFIRMED
+    remote_business_use_verified: false
+    qr_asset_ref: null
+    confirmation: MANUAL_ACTUAL_RECEIPT
+orders:
+  currency: CNY_FEN
+  amount_integer_only: true
+  price_channel_and_effect_snapshots: true
+  payment_window_minutes: 15
+  quantity_limit: 1
+  manual_inflight_orders_per_uid: 1
+  manual_global_pending_reservations: 2
+  keep_review_reservation_until_resolution: true
+  user_payment_claim_equals_paid: false
+  late_real_payments_route: MANUAL_REVIEW
+  provider_transaction_allocation_unique: true
+promotions:
+  overlap_policy: REJECT
+  stacking_enabled: false
+  active_interval: START_INCLUSIVE_END_EXCLUSIVE
+  existing_unexpired_orders_keep_price: true
+  removal_does_not_cancel_paid_orders: true
+review:
+  target_hours: 24
+  unresolved_escalation_hours: [2, 24]
+  overdue_queue_pauses_new_manual_sales: true
+  required_role: FINANCE_CONFIRM_PAYMENT
+  administrator_mfa_required: true
+  require_actual_receipt_and_external_reference: true
+  expected_version_and_idempotency_required: true
+  red_packet_secret:
+    submission_channel: STANDALONE_HTTPS_ONLY
+    encrypt_at_rest: true
+    access_role: FINANCE_REVEAL_RED_PACKET
+    delete_within_hours_after_resolution: 24
+    include_in_common_backups: false
+    include_in_notifications_or_logs: false
+fulfillment:
+  manual_payment_delivery: SINGLE_USE_CODE
+  order_item_effect_unique: true
+  minimum_random_bits: 128
+  max_claims: 1
+  bind_to_purchaser_uid: true
+  gift_transfer_enabled: false
+  valid_for_claim_days: 30
+  unused_expired_paid_code_resolution: MANUAL_REISSUE_OR_REFUND
+  duration_starts_at: CLAIM_COMMIT
+  renewal_stacking: APPEND_CONTIGUOUS_SAME_TIER
+  verification_storage: HMAC
+  delivery_plaintext_storage: SEPARATE_KEY_ENCRYPTED
+  delete_delivery_ciphertext_after_claim_or_refund: true
+  resend_notification_reuses_existing_code: true
+  replacement_revokes_old_code_atomically: true
+  reserve_capacity_until_claim_or_resolution: true
+  honor_sold_registration_codes: true
+notifications:
+  available_channels: [ADMIN_INBOX, TELEGRAM_PRIVATE, RESTRICTED_TELEGRAM_GROUP, EMAIL, HTTPS_WEBHOOK]
+  enabled_channels: [ADMIN_INBOX]
+  destinations: []
+  include_payment_secrets_or_full_code: false
+  paid_confirmed_to_code_alert_minutes: 5
+  durable_outbox_and_deduplication: true
+refunds:
+  whole_order_only: true
+  manual_actual_refund_confirmation_required: true
+  freeze_code_before_refund: true
+  new_recipient_from_chat_auto_accepted: false
+  unique_refund_operation_required: true
+inventory:
+  separate_sales_capacity_and_claim_counters: true
+  count_sold_unclaimed_registration_codes_as_capacity: true
+  ordinary_unpublish_revokes_sold_codes: false
+  null_means_unlimited_only_if_explicitly_approved: true

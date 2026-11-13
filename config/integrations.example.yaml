@@ -1,0 +1,61 @@
+# 接口默认关闭；打开需独立身份、目标和实施验收，不是现成产品配置。
+schema_version: 5
+external_points:
+  enabled: false
+  adapter_types: [GAME_REWARD]
+  sources: []
+  scopes: [points:event:submit, points:event:status]
+  cannot_set_balance: true
+  server_rule_decides_award: true
+  counts_as_checkin_activity: false
+  counts_as_watch_time: false
+  auto_create_members: false
+  secure_signature_required: true
+  signature: HMAC_SHA256
+  allowed_clock_skew_seconds: 300
+  automatic_event_max_age_hours: 24
+  budget_timezone: Asia/Shanghai
+  per_uid_budget_aggregates_sources: true
+  nonce_retention_seconds: 600
+  maximum_request_bytes: 16384
+  idempotency_keys: [SOURCE_EVENT, SOURCE_GAME_ROUND_USER_KIND]
+  proposed_activation_budgets:
+    max_per_event: 20
+    max_game_points_per_uid_daily: 30
+    max_per_source_daily: 500
+    max_global_daily: 1000
+  source_budget_and_ledger_atomic: true
+  final_apply_checks_enabled_and_epoch: true
+  disable_serializes_with_final_commit: true
+  reenable_automatically_replays_held_events: false
+  paid_random_games_cashout_or_user_transfers: false
+remote_backup:
+  push_enabled: false
+  pull_api_enabled: false
+  preferred_mode: ENCRYPTED_SNAPSHOT_PUSH
+  destinations: []
+  allowed_profiles: [BUSINESS_RECOVERY, MEDIA_CONFIG]
+  exclude_fields: [ACTIVE_SESSIONS, RESET_TICKETS, RED_PACKET_SECRETS, UNREDACTED_PAYMENT_SCREENSHOTS]
+  delivery_code_ciphertext_profile_enabled: false
+  business_interval_minutes_when_trading: 60
+  full_interval_hours: 24
+  compression_workers: 1
+  maximum_transfer_mbps: 5
+  public_database_port_allowed: false
+  production_writer_identity_has_remote_delete: false
+  destination_identity_can_restore_production: false
+  trusted_destination_required: true
+  encryption_and_source_authentication_required: true
+  separate_key_storage: true
+  manifest_hash_watermark_and_control_totals: true
+  completed_receipt_required: true
+  copied_status_equals_restore_verified: false
+  disable_revokes_tickets_and_cancels_transfers: true
+  delete_remote_history_when_disabled: false
+  automatic_failover_to_backup_writer: false
+  restore_requires_latest_claim_revoke_payment_epochs: true
+integration_controls:
+  owner_mfa_and_audit_required: true
+  per_source_target_key_scope_switches: true
+  desired_and_applied_version_visible: true
+  secrets_in_query_or_logs: false

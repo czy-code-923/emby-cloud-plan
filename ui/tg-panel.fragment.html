@@ -36,7 +36,7 @@
     @media(max-width:360px){#cloud-panel-v4{padding:8px 0}#cloud-panel-v4 .cl-content{padding:0 10px 12px}#cloud-panel-v4 .cl-box{padding:13px}#cloud-panel-v4 .cl-preview{padding:9px 12px}}
   </style>
   <section class="cl-shell" aria-label="CloudBot面板设计预览">
-    <div class="cl-preview"><span>交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label></div>
+    <div class="cl-preview"><span>v5交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label><label>预览入口<select id="cl-surface" aria-label="预览入口"><option value="telegram">TG面板</option><option value="standalone">独立网页商店</option></select></label></div>
     <header class="cl-head"><div class="cl-logo" aria-hidden="true">C</div><div><h2>Cloud Library</h2><div class="cl-small" id="cl-subtitle">你的个人影音空间</div></div></header>
     <main id="cl-content" class="cl-content"></main>
     <nav id="cl-nav" class="cl-nav" aria-label="面板导航"></nav>
@@ -46,7 +46,7 @@
   (()=>{
     const root=document.getElementById('cloud-panel-v4');
     const saved=window.openai?.widgetState?.privateContent||{};
-    const state={role:saved.role==='admin'?'admin':'user',page:'home',balance:284,signed:false,activity:10,exempt:false,confirm:false,receipt:'',target:'284',reason:'',capacity:2,compact:false};
+    const state={role:saved.role==='admin'?'admin':'user',page:'home',balance:284,signed:false,activity:10,exempt:false,confirm:false,receipt:'',target:'284',reason:'',capacity:2,compact:false,surface:'telegram',manualOrder:'none',reviewConfirm:false,websku:'renew30',orderSku:null,orderChannel:null,codeUsed:false,channels:['ALIPAY_RED_PACKET_MANUAL'],chosenChannel:'ALIPAY_RED_PACKET_MANUAL',announcement:'使用前请查看客户端与播放帮助；当前服务处于设计阶段。',announcementDraft:'使用前请查看客户端与播放帮助；当前服务处于设计阶段。',externalPoints:false,remoteBackup:false};
     const content=root.querySelector('#cl-content'),nav=root.querySelector('#cl-nav'),role=root.querySelector('#cl-role');
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const primary=(label,action,disabled=false)=>`<button class="cl-primary cl-full" type="button" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
@@ -55,7 +55,27 @@
     const label=(a,b)=>`<div class="cl-small">${a}</div><div class="cl-value">${b}</div>`;
     const go=(text,page)=>`<button type="button" data-action="go" data-page="${page}">${text}</button>`;
     function estimate(r){const e=Array(Math.max(0,r)+1).fill(0);for(let n=1;n<=r;n++){let s=0;for(let x=10;x<=20;x++)s+=e[Math.max(0,n-x)];e[n]=1+s/11;}return e[Math.max(0,r)].toFixed(1);}
+    const demoProducts={renew30:{title:'30天续期码',days:30,price:12,stock:20},renew365:{title:'365天续期码',days:365,price:108,stock:5},whitelist:{title:'365天免活动白名单',days:365,price:108,stock:2}};
+    const channelNames={ALIPAY_RED_PACKET_MANUAL:'支付宝口令红包',ALIPAY_QR_MANUAL:'支付宝收款码',WECHAT_QR_MANUAL:'微信收款码'};
+    function helpPage(){return box(`<h3>使用帮助与公告</h3><p class="cl-gap">${esc(state.announcement)}</p><p class="cl-caption">演示公告 · 后台可版本化编辑</p>`)+box(`<h3>开始播放</h3><div class="cl-list">1. 复制本人有权访问的服务器地址，使用Emby账号登录。</div><div class="cl-list">2. 优先使用客户端可直接解码的视频与外置字幕；本档位不做实时视频转码。</div><div class="cl-list">3. 无法播放时提交条目与错误引用号，不发送完整Token或密码。</div>`)+box(`<h3>客户端与禁用说明</h3><p class="cl-gap">当前没有配置实际禁用名单。</p><p class="cl-caption">正式清单写明版本、原因、替代建议和是否已执行拦截；客户端名称可被伪造，业务白名单不绕过安全策略。</p>`)+box(`<h3>购买与单次码</h3><p class="cl-gap">网页人工订单：待核款 → 码已发 → 本人核销 → 权益同步。</p><p class="cl-caption">本原型不接收真实红包口令、支付截图或资金；演示价不代表实际售价。</p><div class="cl-gap">${go('查看本人订单','orders')}</div>`);}
+    function orderPage(){
+      const status={none:'暂无演示现金订单',review:'人工待核款',issued:'兑换码已发 · 未核销',claimed:'已核销 · 演示权益已记录'}[state.manualOrder];
+      const item=state.orderSku?demoProducts[state.orderSku]:null;
+      return box(`<h3>我的订单与兑换码</h3><p class="cl-gap">${status}</p>${item?`<div class="cl-list">${esc(item.title)} · 演示¥${item.price.toFixed(2)}</div><p class="cl-caption">${esc(channelNames[state.orderChannel])} · 本人UID绑定 · 单次使用</p>`:''}`)+((state.manualOrder==='issued'||state.manualOrder==='claimed')?box(`<h3>演示交付码</h3><p class="cl-gap">DEMO-ONLY-ONCE</p><p class="cl-caption">虚构码，无法在任何真实服务使用。时长从核销起算/续期顺延。</p><div class="cl-gap">${primary(state.codeUsed?'已核销，不重复增加时长':'核销演示单次码','claim-demo',state.codeUsed)}</div>`):box(`<p>${state.manualOrder==='review'?'用户声称付款不等于到账；等待管理员在官方App核对。':'可在“预览入口”切换独立网页查看人工订单流程。'}</p>`));
+    }
+    function standaloneShop(){
+      const p=demoProducts[state.websku];
+      return box(`<h3>独立网页商店 · 演示</h3><p class="cl-caption">正式价格未设，真实收款未开放。此页与TG内结账分开。</p>`)+box(`<h3>注册商品</h3><p class="cl-gap">月注册：资格＋30天；年注册：资格＋365天。</p><p class="cl-caption">仅未开通访客可购买，分别限量；本示例用户已有账号，请选续期。未兑注册码也占预留名额。</p>`)+box(`<label>商品<select id="cl-websku">${Object.entries(demoProducts).map(([id,x])=>`<option value="${id}" ${state.websku===id?'selected':''}>${x.title}</option>`).join('')}</select></label><div class="cl-row cl-gap"><h3>演示¥${p.price.toFixed(2)}</h3><span class="cl-tag">演示份额 ${p.stock}</span></div><p class="cl-caption">免签到、免观影；不增加同播。核款后发${p.days}天单次码，码未兑不开始计时。</p><label class="cl-gap">付款渠道<select id="cl-payment-channel" ${state.channels.length?'':'disabled'}>${state.channels.length?state.channels.map(id=>`<option value="${id}" ${state.chosenChannel===id?'selected':''}>${channelNames[id]}</option>`).join(''):'<option>所有渠道暂停</option>'}</select></label><p class="cl-caption">管理员可多选启用渠道，每单只选一种。这里不展示真实二维码、不收口令。</p><div class="cl-gap">${primary(state.manualOrder!=='none'?'已有演示订单，查看状态':state.channels.length?'模拟提交付款申请':'现金购买暂停',state.manualOrder!=='none'?'go-orders':'submit-manual',!state.channels.length&&state.manualOrder==='none')}</div>`)+box(`<h3>确认后发货</h3><p class="cl-gap">提交申请只到待核；管理员核实本方实际到账，再发购买UID绑定的一次性码。</p><p class="cl-caption">正式调价、限时优惠、份额与手动停售见方案；已付款快照不随下架改变。</p>`);
+    }
+    function manualReview(){
+      if(state.manualOrder!=='review')return box(`<h3>人工核款待办</h3><p class="cl-gap">${state.manualOrder==='none'?'尚无演示付款申请。':'本单已核准，重复操作不会再发码。'}</p><p class="cl-caption">切换独立网页提交演示申请后，管理员在这里预览核款。</p>`);
+      const item=demoProducts[state.orderSku];
+      return box(`<h3>人工核款待办 · DEMO-001</h3><p class="cl-gap">${item.title} · 应付演示¥${item.price.toFixed(2)}</p><p>${channelNames[state.orderChannel]}</p><p class="cl-caption">通知仅含摘要，无红包口令/完整截图；真实流程必须查官方App实际到账、唯一交易引用并MFA。</p><div class="cl-gap">${primary('预览演示核准与发码','review-preview')}</div>`);
+    }
     function userPage(){
+      if(state.page==='help')return helpPage();
+      if(state.page==='orders')return orderPage();
+      if(state.page==='shop'&&state.surface==='standalone')return standaloneShop();
       if(state.page==='home')return `<section class="cl-box cl-feature"><div class="cl-row"><h3>你好，demo_user</h3><span class="cl-tag">${state.exempt?'免保号播放':'活动成员'}</span></div><p class="cl-gap">${state.exempt?'兑换后30天免签到、免观影':'签到积分保号 · 20天一个窗口'}</p><div class="cl-gap cl-row"><div>${label('钱包积分',state.balance)}</div>${go('查看权益','mine')}</div></section><div class="cl-grid">${box(label('本期活动分',state.exempt?'免考核':state.activity+'/20'))}${box(label('本人播放','0 / 1'))}</div>${box(`<h3>今天的入口</h3><div class="cl-grid cl-gap">${go(state.signed?'查看今日签到':'今日签到','checkin')}${go('积分商店','shop')}${go('服务器地址','mine')}${go('我的追更','media')}</div>`)}${box(`<div class="cl-row"><h3>示例剧集</h3><span class="cl-tag">已可播放</span></div><p class="cl-gap">第一季 · 更新至第08集</p><p class="cl-caption">已经取得、Emby可见、播放探测通过</p>`)} `;
       if(state.page==='checkin')return box(`<div class="cl-row"><h3>每日签到</h3><span class="cl-tag">${state.signed?'今日已签':'北京时间日界'}</span></div><p class="cl-gap cl-small">每天随机10～20分 · 平均15分</p><div class="cl-row cl-gap"><div>${label('可用积分',state.balance)}</div><div>${label('距月卡',Math.max(0,300-state.balance)+'分')}</div></div><div class="cl-bar"><span style="width:${Math.min(100,state.balance/3)}%"></span></div>${primary(state.signed?'已签到 · 示例奖励16分':'签到，领取今日积分','checkin',state.signed)}<p class="cl-caption">${state.balance>=300?'已达到月卡兑换门槛。':'按当前缺口，平均约再签'+estimate(300-state.balance)+'次；这是平均值。'}</p>`)+box(`<h3>保号与积分分别计算</h3><p class="cl-gap">${state.exempt?'当前免考核；仍可自愿签到。':'当前签到活动分'+state.activity+'/20；花掉钱包积分不影响保号进度。'}</p><p class="cl-caption">${state.exempt?'免保号期结束后，按偏好进入完整20天活动窗口。':'观影模式可预约下个窗口；最早12月3日生效。'}</p><div class="cl-gap">${primary(state.exempt?'设置期满观影偏好':'预约下期观影模式','mode')}</div>`)+box(`<h3>续期说明</h3><p class="cl-gap">月卡300分，30天免保号播放。</p><p class="cl-caption">从零余额起，22次签到达标概率约98.04%；30次保证足够。</p>`);
       if(state.page==='media')return box(`<h3>我的追更</h3><div class="cl-list"><div class="cl-row"><span>示例剧集 · 第一季</span><span class="cl-tag">08/12集</span></div><p class="cl-caption">第08集：已可播放 · 第09集：等待源更新</p></div><div class="cl-list"><div class="cl-row"><span>示例动画 · 第二季</span><span class="cl-tag">索引中</span></div><p class="cl-caption">文件已取得，等待Emby条目确认</p></div>`)+box(`<h3>任务阶段</h3><div class="cl-list">已发现 → 已取得 → Emby可见 → 可播放</div><p class="cl-caption">转存完成不等于已经可看，不重复通知同一集。</p><div class="cl-gap">${primary('查看示例任务','task')}</div>`);
@@ -69,19 +89,29 @@
       if(state.page==='tasks')return box(`<h3>媒体任务水位</h3><div class="cl-list">示例剧集S01E08 · 四阶段完成</div><div class="cl-list">示例动画S02E03 · 文件已取得，索引待确认</div><div class="cl-list">示例分享 · 已暂停，待重新授权</div>`)+box(`<h3>调度原则</h3><p class="cl-gap">播放签发优先；一个Token只有一个收件者；故障不触发全库删除。</p>`);
       return box(`<h3>签到与商品</h3><div class="cl-list">${row('每日随机钱包','10～20分，等概率')}</div><div class="cl-list">${row('本期活动分','每天固定10分')}</div><div class="cl-list">${row('月卡 / 季卡 / 年卡','300 / 850 / 3000分')}</div><div class="cl-list">${row('保号方式锁定','20天')}</div><div class="cl-list">${row('22天额外保底','默认关闭')}</div>`)+box(`<h3>安全与数据</h3><div class="cl-grid cl-gap"><button type="button" data-action="backup">备份与迁移</button><button type="button" data-action="security">安全与审计</button></div>`);
     }
+    function pageExtras(){
+      if(state.role==='user'&&state.page==='home')return box(`<div class="cl-row"><h3>公告</h3>${go('帮助与公告','help')}</div><p class="cl-gap">${esc(state.announcement)}</p>`);
+      if(state.role==='user'&&state.page==='mine')return box(`<h3>自助服务</h3><div class="cl-grid cl-gap">${go('帮助与公告','help')}${go('订单与兑换码','orders')}</div>`);
+      if(state.role==='user'&&state.page==='shop'&&state.surface==='telegram')return box(`<h3>TG积分与兑换中心</h3><p class="cl-caption">TG现金数字销售尚未启用；本入口不展示红包/收款码。</p><div class="cl-gap">${go('已有订单与兑换码','orders')}</div>`);
+      if(state.role==='admin'&&state.page==='tasks')return manualReview();
+      if(state.role==='admin'&&state.page==='settings')return box(`<h3>公告编辑 · 演示</h3><label class="cl-gap">首页公告<input id="cl-announcement" maxlength="120" value="${esc(state.announcementDraft)}"></label><div class="cl-gap">${primary('发布演示公告','publish-announcement')}</div>`)+box(`<h3>网页收款渠道 · 多选</h3><p class="cl-caption">只控制本地演示；不启用真实收款。TG结账不采用这些渠道。</p>${Object.entries(channelNames).map(([id,name])=>`<label class="cl-gap"><span><input type="checkbox" class="cl-channel-toggle" value="${id}" ${state.channels.includes(id)?'checked':''}> ${name}</span></label>`).join('')}`)+box(`<h3>接口与IP策略</h3><p class="cl-gap">游戏奖励：${state.externalPoints?'演示已开启':'关闭'}；异地接口：${state.remoteBackup?'演示已开启':'关闭'}</p><div class="cl-grid cl-gap"><button type="button" data-action="toggle-points">切换积分接口预览</button><button type="button" data-action="toggle-backup">切换异地接口预览</button></div><p class="cl-caption">正式关闭需撤权并阻止在途任务；裸IP入口默认关闭，域名需控制权/TLS验证。</p>`);
+      return '';
+    }
     function render(){
-      role.value=state.role;root.classList.toggle('cl-compact',state.compact);
+      role.value=state.role;root.querySelector('#cl-surface').value=state.surface;root.classList.toggle('cl-compact',state.compact);
       root.querySelector('#cl-subtitle').textContent=state.role==='admin'?'服务与成员管理':'你的个人影音空间';
-      content.innerHTML=(state.role==='admin'?adminPage():userPage())+(state.confirm?box(`<div role="dialog" aria-label="月卡兑换确认"><h3>确认兑换月卡</h3><p class="cl-gap">演示扣300分：${state.balance} → ${state.balance-300}</p><p>30天免签到、免观影，原同播配额不变。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel">取消</button><button class="cl-primary" type="button" data-action="confirm">确认演示兑换</button></div></div>`):'')+(state.receipt?`<div class="cl-receipt" role="status" aria-live="polite">${esc(state.receipt)}</div>`:'');
+      content.innerHTML=pageExtras()+(state.role==='admin'?adminPage():userPage())+(state.confirm?box(`<div role="dialog" aria-label="月卡兑换确认"><h3>确认兑换月卡</h3><p class="cl-gap">演示扣300分：${state.balance} → ${state.balance-300}</p><p>30天免签到、免观影，原同播配额不变。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel">取消</button><button class="cl-primary" type="button" data-action="confirm">确认演示兑换</button></div></div>`):'')+(state.reviewConfirm?box(`<div role="dialog" aria-label="人工核款确认"><h3>演示核款确认</h3><p class="cl-gap">正式需要真实到账引用与MFA；本次不领取红包、不发真实消息。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel-review">取消</button><button class="cl-primary" type="button" data-action="approve-demo">确认演示发单次码</button></div></div>`):'')+(state.receipt?`<div class="cl-receipt" role="status" aria-live="polite">${esc(state.receipt)}</div>`:'');
       const pages=state.role==='admin'?[['home','总览'],['users','用户'],['tasks','任务'],['capacity','容量'],['settings','设置']]:[['home','首页'],['media','追更'],['checkin','签到'],['shop','商店'],['mine','我的']];
       nav.innerHTML=pages.map(([p,n])=>`<button type="button" data-action="go" data-page="${p}" aria-pressed="${state.page===p}">${n}</button>`).join('');
     }
     function remember(){window.openai?.setWidgetState?.({modelContent:{panelPreviewRole:state.role,panelPreviewPage:state.page},privateContent:{role:state.role}})?.catch(()=>{});}
-    role.addEventListener('change',()=>{state.role=role.value;state.page='home';state.confirm=false;state.receipt='';render();remember();});
-    root.addEventListener('input',e=>{if(e.target.id==='cl-target')state.target=e.target.value;if(e.target.id==='cl-reason')state.reason=e.target.value;if(e.target.id==='cl-cap'){root.querySelector('#cl-cap-value').textContent=e.target.value+'路';root.querySelector('#cl-cap-hint').textContent=Number(e.target.value)<2?'已有2路将保持；暂停新增直到低于新上限。':'限制新播放准入；不代表已验证承载能力。';}});
+    role.addEventListener('change',()=>{state.role=role.value;state.page='home';state.confirm=false;state.reviewConfirm=false;state.receipt='';render();remember();});
+    root.addEventListener('input',e=>{if(e.target.id==='cl-announcement')state.announcementDraft=e.target.value;if(e.target.matches('.cl-channel-toggle')){state.channels=e.target.checked?[...new Set([...state.channels,e.target.value])]:state.channels.filter(id=>id!==e.target.value);if(!state.channels.includes(state.chosenChannel))state.chosenChannel=state.channels[0]||'';}if(e.target.id==='cl-target')state.target=e.target.value;if(e.target.id==='cl-reason')state.reason=e.target.value;if(e.target.id==='cl-cap'){root.querySelector('#cl-cap-value').textContent=e.target.value+'路';root.querySelector('#cl-cap-hint').textContent=Number(e.target.value)<2?'已有2路将保持；暂停新增直到低于新上限。':'限制新播放准入；不代表已验证承载能力。';}});
+    root.querySelector('#cl-surface').addEventListener('change',e=>{state.surface=e.target.value;state.page=state.role==='admin'?'settings':'shop';state.confirm=false;state.reviewConfirm=false;state.receipt='';render();remember();});
+    root.addEventListener('change',e=>{if(e.target.id==='cl-websku'){state.websku=e.target.value;render();}if(e.target.id==='cl-payment-channel')state.chosenChannel=e.target.value;});
     root.addEventListener('click',e=>{
       const button=e.target.closest('[data-action]');if(!button||button.disabled)return;const a=button.dataset.action;state.receipt='';
-      if(a==='go'){state.page=button.dataset.page;state.confirm=false;}
+      if(a==='go'){state.page=button.dataset.page;state.confirm=false;state.reviewConfirm=false;}
       else if(a==='go-checkin'){state.page='checkin';}
       else if(a==='checkin'&&!state.signed){state.signed=true;state.balance+=16;state.activity+=10;state.receipt='演示：今日＋16分，钱包达到300分；活动分另加10。';}
       else if(a==='redeem'){state.confirm=true;}
@@ -94,11 +124,19 @@
       else if(a==='backup'){state.receipt='正式面板分预检、加密备份、校验、隔离恢复和切换；本演示不执行。';}
       else if(a==='security'){state.receipt='正式敏感操作通过HTTPS验证安全码/管理员MFA；演示不收集任何凭据。';}
       else if(a==='devices'){state.receipt='示例：电视、手机已授权2台，设备上限3台，同播上限1路。';}
-      else if(a==='orders'){state.receipt='演示数据不含真实订单或积分流水。';}
+      else if(a==='orders'||a==='go-orders'){state.page='orders';}
       else if(a==='other-product'){state.receipt='示例余额不足；季卡850分、年卡3000分，均免活动考核。';}
+      if(a==='submit-manual'&&state.manualOrder==='none'&&state.channels.length){state.manualOrder='review';state.orderSku=state.websku;state.orderChannel=state.chosenChannel||state.channels[0];state.receipt='演示：已建人工待核款；通知仅作本地模拟，尚未实际收款。';}
+      else if(a==='review-preview'&&state.role==='admin'&&state.manualOrder==='review'){state.reviewConfirm=true;}
+      else if(a==='cancel-review'){state.reviewConfirm=false;}
+      else if(a==='approve-demo'&&state.role==='admin'&&state.manualOrder==='review'){state.manualOrder='issued';state.reviewConfirm=false;state.receipt='演示：核准后仅发一枚单次码，未核销前时长未开始。';}
+      else if(a==='claim-demo'&&state.manualOrder==='issued'&&!state.codeUsed){state.codeUsed=true;state.manualOrder='claimed';state.exempt=true;state.receipt='演示核销成功：'+demoProducts[state.orderSku].days+'天免活动播放，重复点击不会增加时长。';}
+      else if(a==='publish-announcement'&&state.role==='admin'){if(state.announcementDraft.trim()){state.announcement=state.announcementDraft.trim();state.receipt='演示公告已发布；可切用户首页查看。';}else state.receipt='公告不能为空。';}
+      else if(a==='toggle-points'&&state.role==='admin'){state.externalPoints=!state.externalPoints;state.receipt='仅切换演示标识；正式关接口须在最终入账前核对开关与epoch。';}
+      else if(a==='toggle-backup'&&state.role==='admin'){state.remoteBackup=!state.remoteBackup;state.receipt='仅切换演示标识；正式关闭会停止新传输并撤销旧下载票据。';}
       render();remember();
     });
-    window.addEventListener('openai:set_globals',event=>{const incoming=event.detail?.globals?.widgetState?.privateContent;if(incoming?.role==='user'||incoming?.role==='admin'){state.role=incoming.role;state.page='home';state.confirm=false;state.receipt='';render();}});
+    window.addEventListener('openai:set_globals',event=>{const incoming=event.detail?.globals?.widgetState?.privateContent;if((incoming?.role==='user'||incoming?.role==='admin')&&incoming.role!==state.role){state.role=incoming.role;state.page='home';state.confirm=false;state.receipt='';render();}});
     render();
     if(globalThis.Tweak){const design={radius:18,compact:false};const tweak=new Tweak({container:root,onChange:()=>{root.style.setProperty('--cl-radius',design.radius+'px');state.compact=design.compact;render();}});tweak.addSlider(design,'radius',{label:'卡片圆角',min:10,max:24,unit:'px'});tweak.addToggle(design,'compact',{label:'紧凑布局'});}
   })();

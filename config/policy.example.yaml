@@ -1,6 +1,6 @@
 # v5设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
 schema_version: 5
-policy_version: proposal-v5-2026-11-13
+policy_version: proposal-v5.1-2026-11-13
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -111,9 +111,11 @@ online_statistics:
 commerce:
   real_payments_enabled: false
   standalone_web_default_route: ALIPAY_RED_PACKET_MANUAL
-  telegram_digital_goods_route: TELEGRAM_STARS
+  telegram_purchase_role: EXTERNAL_WEB_LINK_AND_CODE_CLAIM
+  telegram_native_cash_checkout_enabled: false
+  telegram_stars_checkout_enabled: false
   standalone_web_currency: CNY_FEN
-  telegram_payment_currency: XTR
+  standalone_web_handles_all_cash_purchase_operations: true
   manual_payment_delivery: SINGLE_USE_CODE
   manual_payment_claim_equals_paid: false
   honor_sold_registration_codes: true

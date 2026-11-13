@@ -1,6 +1,6 @@
-# v5设计示例；现金价格留空、销售关闭。份额是提案，不是2GB承载保证。
+# v5.1设计示例；现金只在网页，价格留空/销售关闭；Stars SKU仅停用历史候选。
 schema_version: 5
-catalog_version: proposal-v5-2026-11-13
+catalog_version: proposal-v5.1-2026-11-13
 defaults:
   quantity_per_order: 1
   points_delivery: DIRECT_GRANT

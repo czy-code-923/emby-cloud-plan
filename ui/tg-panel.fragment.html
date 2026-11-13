@@ -36,7 +36,7 @@
     @media(max-width:360px){#cloud-panel-v4{padding:8px 0}#cloud-panel-v4 .cl-content{padding:0 10px 12px}#cloud-panel-v4 .cl-box{padding:13px}#cloud-panel-v4 .cl-preview{padding:9px 12px}}
   </style>
   <section class="cl-shell" aria-label="CloudBot面板设计预览">
-    <div class="cl-preview"><span>v5交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label><label>预览入口<select id="cl-surface" aria-label="预览入口"><option value="telegram">TG面板</option><option value="standalone">独立网页商店</option></select></label></div>
+    <div class="cl-preview"><span>v5.1交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label><label>预览入口<select id="cl-surface" aria-label="预览入口"><option value="telegram">TG面板</option><option value="standalone">独立网页商店</option></select></label></div>
     <header class="cl-head"><div class="cl-logo" aria-hidden="true">C</div><div><h2>Cloud Library</h2><div class="cl-small" id="cl-subtitle">你的个人影音空间</div></div></header>
     <main id="cl-content" class="cl-content"></main>
     <nav id="cl-nav" class="cl-nav" aria-label="面板导航"></nav>
@@ -92,7 +92,7 @@
     function pageExtras(){
       if(state.role==='user'&&state.page==='home')return box(`<div class="cl-row"><h3>公告</h3>${go('帮助与公告','help')}</div><p class="cl-gap">${esc(state.announcement)}</p>`);
       if(state.role==='user'&&state.page==='mine')return box(`<h3>自助服务</h3><div class="cl-grid cl-gap">${go('帮助与公告','help')}${go('订单与兑换码','orders')}</div>`);
-      if(state.role==='user'&&state.page==='shop'&&state.surface==='telegram')return box(`<h3>TG积分与兑换中心</h3><p class="cl-caption">TG现金数字销售尚未启用；本入口不展示红包/收款码。</p><div class="cl-gap">${go('已有订单与兑换码','orders')}</div>`);
+      if(state.role==='user'&&state.page==='shop'&&state.surface==='telegram')return box(`<h3>购买与兑换中心</h3><p class="cl-caption">现金购买全部在独立网页完成；TG负责购买链接、月/年卡码核销与查询。</p><div class="cl-gap">${primary('打开独立购买网页（演示）','open-web-shop-demo')}</div><div class="cl-gap">${go('兑换月/年卡码与查单','orders')}</div><p class="cl-caption">此按钮只切换本地演示。正式用普通HTTPS链接；平台适用性见方案。</p>`);
       if(state.role==='admin'&&state.page==='tasks')return manualReview();
       if(state.role==='admin'&&state.page==='settings')return box(`<h3>公告编辑 · 演示</h3><label class="cl-gap">首页公告<input id="cl-announcement" maxlength="120" value="${esc(state.announcementDraft)}"></label><div class="cl-gap">${primary('发布演示公告','publish-announcement')}</div>`)+box(`<h3>网页收款渠道 · 多选</h3><p class="cl-caption">只控制本地演示；不启用真实收款。TG结账不采用这些渠道。</p>${Object.entries(channelNames).map(([id,name])=>`<label class="cl-gap"><span><input type="checkbox" class="cl-channel-toggle" value="${id}" ${state.channels.includes(id)?'checked':''}> ${name}</span></label>`).join('')}`)+box(`<h3>接口与IP策略</h3><p class="cl-gap">游戏奖励：${state.externalPoints?'演示已开启':'关闭'}；异地接口：${state.remoteBackup?'演示已开启':'关闭'}</p><div class="cl-grid cl-gap"><button type="button" data-action="toggle-points">切换积分接口预览</button><button type="button" data-action="toggle-backup">切换异地接口预览</button></div><p class="cl-caption">正式关闭需撤权并阻止在途任务；裸IP入口默认关闭，域名需控制权/TLS验证。</p>`);
       return '';
@@ -134,6 +134,7 @@
       else if(a==='publish-announcement'&&state.role==='admin'){if(state.announcementDraft.trim()){state.announcement=state.announcementDraft.trim();state.receipt='演示公告已发布；可切用户首页查看。';}else state.receipt='公告不能为空。';}
       else if(a==='toggle-points'&&state.role==='admin'){state.externalPoints=!state.externalPoints;state.receipt='仅切换演示标识；正式关接口须在最终入账前核对开关与epoch。';}
       else if(a==='toggle-backup'&&state.role==='admin'){state.remoteBackup=!state.remoteBackup;state.receipt='仅切换演示标识；正式关闭会停止新传输并撤销旧下载票据。';}
+      else if(a==='open-web-shop-demo'&&state.role==='user'){state.surface='standalone';state.page='shop';state.confirm=false;state.reviewConfirm=false;state.receipt='演示已切换到独立购买网页；真实流程在网页登录、下单、付款，核款后取码。';}
       render();remember();
     });
     window.addEventListener('openai:set_globals',event=>{const incoming=event.detail?.globals?.widgetState?.privateContent;if((incoming?.role==='user'||incoming?.role==='admin')&&incoming.role!==state.role){state.role=incoming.role;state.page='home';state.confirm=false;state.receipt='';render();}});

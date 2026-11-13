@@ -1,4 +1,4 @@
-# v5待开发规格；实际价格、收款资料、账号适用性、核款/退款测试未确认，不启用真实收款。
+# v5.1待开发规格；现金购买统一独立网页，TG外链/兑码；不启用真实收款。
 schema_version: 5
 real_payments_enabled: false
 entrypoints:
@@ -9,10 +9,19 @@ entrypoints:
     one_channel_per_order: true
   telegram_bot_and_mini_app:
     digital_sales_enabled: false
-    permitted_cashlike_route: TELEGRAM_STARS
+    stars_checkout_enabled: false
     manual_red_packet_and_qr_checkout_enabled: false
-    redirect_to_external_checkout_for_digital_sales: false
+    external_purchase_link:
+      enabled_in_design: true
+      url: https://shop.example.com
+      button_type: ORDINARY_HTTPS_URL
+      embedded_web_app_checkout: false
+      configurable_and_independently_switchable: true
+      secret_or_uid_in_query: false
+      destination_host_allowlist_required: true
+      platform_rules_status: EXTERNAL_LINK_EXEMPTION_NOT_CONFIRMED
     existing_order_status_and_code_claims_enabled: true
+    code_claim_preview_and_explicit_confirm: true
 channels:
   - id: ALIPAY_RED_PACKET_MANUAL
     desired_default: true

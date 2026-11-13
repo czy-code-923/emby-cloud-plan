@@ -1,6 +1,6 @@
-# v3设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
-schema_version: 3
-policy_version: proposal-v3-2026-11-13
+# v4设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
+schema_version: 4
+policy_version: proposal-v4-2026-11-13
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -59,7 +59,15 @@ retention:
   collection_failure_hold_after_minutes: 10
   incident_extension_buffer_hours: 24
 points:
-  daily_checkin_reward: 10
+  checkin_reward:
+    distribution: DISCRETE_UNIFORM
+    minimum: 10
+    maximum: 20
+    expected_daily_points: 15
+    server_secure_random: true
+    same_day_retry_returns_original_award: true
+    monthly_22_day_topup_enabled: false
+    optional_topup_target_points: 300
   viewing_rewards_enabled: false
   transferable: false
   cash_withdrawal: false

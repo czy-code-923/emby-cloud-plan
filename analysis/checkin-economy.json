@@ -1,0 +1,718 @@
+{
+  "model": "independent_discrete_uniform_no_bonus_no_spending_zero_start",
+  "reward_min": 10,
+  "reward_max": 20,
+  "mean_daily_reward": 15.0,
+  "renewals": [
+    {
+      "price": 300,
+      "expected_first_passage_days": 20.48888888494101,
+      "earliest_days": 15,
+      "guaranteed_days": 30
+    },
+    {
+      "price": 850,
+      "expected_first_passage_days": 57.15555555555556,
+      "earliest_days": 43,
+      "guaranteed_days": 85
+    },
+    {
+      "price": 3000,
+      "expected_first_passage_days": 200.48888888888888,
+      "earliest_days": 150,
+      "guaranteed_days": 300
+    }
+  ],
+  "daily_distribution_summary": [
+    {
+      "checkin_days": 1,
+      "expected_points": 15.0,
+      "minimum_points": 10,
+      "maximum_points": 20,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 2,
+      "expected_points": 30.0,
+      "minimum_points": 20,
+      "maximum_points": 40,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 3,
+      "expected_points": 45.0,
+      "minimum_points": 30,
+      "maximum_points": 60,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 4,
+      "expected_points": 60.0,
+      "minimum_points": 40,
+      "maximum_points": 80,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 5,
+      "expected_points": 75.0,
+      "minimum_points": 50,
+      "maximum_points": 100,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 6,
+      "expected_points": 90.0,
+      "minimum_points": 60,
+      "maximum_points": 120,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 7,
+      "expected_points": 105.0,
+      "minimum_points": 70,
+      "maximum_points": 140,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 8,
+      "expected_points": 120.0,
+      "minimum_points": 80,
+      "maximum_points": 160,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 9,
+      "expected_points": 135.0,
+      "minimum_points": 90,
+      "maximum_points": 180,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 10,
+      "expected_points": 150.0,
+      "minimum_points": 100,
+      "maximum_points": 200,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 11,
+      "expected_points": 165.0,
+      "minimum_points": 110,
+      "maximum_points": 220,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 12,
+      "expected_points": 180.0,
+      "minimum_points": 120,
+      "maximum_points": 240,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 13,
+      "expected_points": 195.0,
+      "minimum_points": 130,
+      "maximum_points": 260,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 14,
+      "expected_points": 210.0,
+      "minimum_points": 140,
+      "maximum_points": 280,
+      "at_least_price": {
+        "300": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 15,
+      "expected_points": 225.0,
+      "minimum_points": 150,
+      "maximum_points": 300,
+      "at_least_price": {
+        "300": {
+          "probability": 2.3939204936916367e-16,
+          "exact_numerator": "1",
+          "exact_denominator": "4177248169415651"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 16,
+      "expected_points": 240.0,
+      "minimum_points": 160,
+      "maximum_points": 320,
+      "at_least_price": {
+        "300": {
+          "probability": 1.583292117625177e-07,
+          "exact_numerator": "661380410",
+          "exact_denominator": "4177248169415651"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 17,
+      "expected_points": 255.0,
+      "minimum_points": 170,
+      "maximum_points": 340,
+      "at_least_price": {
+        "300": {
+          "probability": 0.00021865504740083643,
+          "exact_numerator": "10047140361375",
+          "exact_denominator": "45949729863572161"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 18,
+      "expected_points": 270.0,
+      "minimum_points": 180,
+      "maximum_points": 360,
+      "at_least_price": {
+        "300": {
+          "probability": 0.01350578666712978,
+          "exact_numerator": "620587248949648",
+          "exact_denominator": "45949729863572161"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 19,
+      "expected_points": 285.0,
+      "minimum_points": 190,
+      "maximum_points": 380,
+      "at_least_price": {
+        "300": {
+          "probability": 0.14760645422778804,
+          "exact_numerator": "74607243676752486",
+          "exact_denominator": "505447028499293771"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 20,
+      "expected_points": 300.0,
+      "minimum_points": 200,
+      "maximum_points": 400,
+      "at_least_price": {
+        "300": {
+          "probability": 0.5139968270835157,
+          "exact_numerator": "31435578437798824386",
+          "exact_denominator": "61159090448414546291"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 21,
+      "expected_points": 315.0,
+      "minimum_points": 210,
+      "maximum_points": 420,
+      "at_least_price": {
+        "300": {
+          "probability": 0.8565473226234348,
+          "exact_numerator": "52385655177673963890",
+          "exact_denominator": "61159090448414546291"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 22,
+      "expected_points": 330.0,
+      "minimum_points": 220,
+      "maximum_points": 440,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9804325806435082,
+          "exact_numerator": "79809907652816066113825",
+          "exact_denominator": "81402749386839761113321"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 23,
+      "expected_points": 345.0,
+      "minimum_points": 230,
+      "maximum_points": 460,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9988324219405952,
+          "exact_numerator": "894384758549485084393121",
+          "exact_denominator": "895430243255237372246531"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 24,
+      "expected_points": 360.0,
+      "minimum_points": 240,
+      "maximum_points": 480,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9999711778093774,
+          "exact_numerator": "9849448784934846706636981",
+          "exact_denominator": "9849732675807611094711841"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 25,
+      "expected_points": 375.0,
+      "minimum_points": 250,
+      "maximum_points": 500,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9999997314879803,
+          "exact_numerator": "9849730031035996617662134",
+          "exact_denominator": "9849732675807611094711841"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 26,
+      "expected_points": 390.0,
+      "minimum_points": 260,
+      "maximum_points": 520,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9999999991996085,
+          "exact_numerator": "108347059347163654081341449",
+          "exact_denominator": "108347059433883722041830251"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 27,
+      "expected_points": 405.0,
+      "minimum_points": 270,
+      "maximum_points": 540,
+      "at_least_price": {
+        "300": {
+          "probability": 0.9999999999994402,
+          "exact_numerator": "108347059433823072325665855",
+          "exact_denominator": "108347059433883722041830251"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 28,
+      "expected_points": 420.0,
+      "minimum_points": 280,
+      "maximum_points": 560,
+      "at_least_price": {
+        "300": {
+          "probability": 1.0,
+          "exact_numerator": "13109994191499929733211234801",
+          "exact_denominator": "13109994191499930367061460371"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 29,
+      "expected_points": 435.0,
+      "minimum_points": 290,
+      "maximum_points": 580,
+      "at_least_price": {
+        "300": {
+          "probability": 1.0,
+          "exact_numerator": "144209936106499234037661244841",
+          "exact_denominator": "144209936106499234037676064081"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    },
+    {
+      "checkin_days": 30,
+      "expected_points": 450.0,
+      "minimum_points": 300,
+      "maximum_points": 600,
+      "at_least_price": {
+        "300": {
+          "probability": 1.0,
+          "exact_numerator": "1",
+          "exact_denominator": "1"
+        },
+        "850": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        },
+        "3000": {
+          "probability": 0.0,
+          "exact_numerator": "0",
+          "exact_denominator": "1"
+        }
+      }
+    }
+  ]
+}

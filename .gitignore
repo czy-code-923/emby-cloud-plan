@@ -13,5 +13,6 @@ logs/
 *.p12
 *.token
 __pycache__/
+.validation/
 .DS_Store
 Thumbs.db

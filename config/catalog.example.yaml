@@ -1,6 +1,6 @@
-# v3：积分兑换和购买均为限期免保号播放；XTR未定价，真实购买关闭。
-schema_version: 3
-catalog_version: proposal-v3-2026-11-13
+# v4：积分兑换和购买均为限期免保号播放；XTR未定价，真实购买关闭。
+schema_version: 4
+catalog_version: proposal-v4-2026-11-13
 products:
   - sku: EXEMPT_PLAY_30D_POINTS
     title: 积分月卡（30天免保号播放）

@@ -1,0 +1,106 @@
+<div id="cloud-panel-v4" class="viz-dotted-background">
+  <style>
+    #cloud-panel-v4{--cl-bg:light-dark(#f3f6fa,#101823);--cl-surface:light-dark(#ffffff,#192637);--cl-text:light-dark(#13283b,#e9f1fa);--cl-muted:light-dark(#52677b,#acbed0);--cl-line:light-dark(#dbe5ee,#34465a);--cl-blue:light-dark(#126ba4,#75c6f7);--cl-onblue:light-dark(#ffffff,#092235);--cl-soft:light-dark(#e9f3fc,#223c53);--cl-radius:18px;color:var(--cl-text);font:400 14px/1.6 system-ui,"Microsoft YaHei",sans-serif;padding:18px 8px;box-sizing:border-box}
+    #cloud-panel-v4 *{box-sizing:border-box}
+    #cloud-panel-v4 .cl-shell{max-width:440px;margin:auto;background:var(--cl-bg);border:1px solid var(--cl-line);border-radius:24px;overflow:hidden}
+    #cloud-panel-v4 .cl-preview{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:11px 16px;background:var(--cl-surface);color:var(--cl-muted);font-size:12px;border-bottom:1px solid var(--cl-line)}
+    #cloud-panel-v4 select,#cloud-panel-v4 input{font:inherit;color:var(--cl-text);background:var(--cl-surface);border:1px solid var(--cl-line);border-radius:10px;padding:9px;max-width:100%;min-height:44px}
+    #cloud-panel-v4 .cl-head{padding:20px 18px 13px;display:flex;align-items:center;gap:12px}
+    #cloud-panel-v4 .cl-logo{background:var(--cl-blue);color:var(--cl-onblue);border-radius:14px;width:42px;height:42px;display:grid;place-items:center;font-size:22px;font-weight:500}
+    #cloud-panel-v4 h2,#cloud-panel-v4 h3,#cloud-panel-v4 p{margin:0}
+    #cloud-panel-v4 h2{font-size:18px;font-weight:500}#cloud-panel-v4 h3{font-size:15px;font-weight:500}
+    #cloud-panel-v4 .cl-small{font-size:12px;color:var(--cl-muted)}
+    #cloud-panel-v4 .cl-content{padding:0 16px 16px;min-height:470px;display:grid;gap:12px;align-content:start}
+    #cloud-panel-v4 .cl-box{border:1px solid var(--cl-line);border-radius:var(--cl-radius);background:var(--cl-surface);padding:16px;min-width:0}
+    #cloud-panel-v4 .cl-feature{background:var(--cl-soft);border-color:transparent}
+    #cloud-panel-v4 .cl-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    #cloud-panel-v4 .cl-stack{display:grid;gap:10px}#cloud-panel-v4 .cl-gap{margin-top:12px}
+    #cloud-panel-v4 .cl-value{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.8px}
+    #cloud-panel-v4 .cl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    #cloud-panel-v4 .cl-tag{display:inline-block;border-radius:7px;background:var(--cl-soft);padding:3px 7px;font-size:12px;color:var(--cl-text)}
+    #cloud-panel-v4 button{font:inherit;font-weight:500;min-height:44px;border:1px solid var(--cl-line);background:var(--cl-surface);color:var(--cl-text);padding:10px 12px;border-radius:11px;max-width:100%}
+    #cloud-panel-v4 button.cl-primary{background:var(--cl-blue);color:var(--cl-onblue);border-color:transparent}
+    #cloud-panel-v4 button:disabled{opacity:.55;cursor:default}
+    #cloud-panel-v4 .cl-full{width:100%}
+    #cloud-panel-v4 .cl-bar{height:7px;background:var(--cl-bg);border-radius:5px;overflow:hidden;margin:10px 0}
+    #cloud-panel-v4 .cl-bar span{display:block;height:100%;background:var(--cl-blue);border-radius:5px}
+    #cloud-panel-v4 .cl-list{padding:11px 0;border-bottom:1px solid var(--cl-line)}#cloud-panel-v4 .cl-list:last-child{border:0;padding-bottom:0}
+    #cloud-panel-v4 .cl-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:8px 7px 12px;background:var(--cl-surface);border-top:1px solid var(--cl-line)}
+    #cloud-panel-v4 .cl-nav button{border:0;padding:9px 2px;border-radius:10px;font-size:12px;font-weight:400;background:transparent}
+    #cloud-panel-v4 .cl-nav button[aria-pressed=true]{background:var(--cl-soft);color:var(--cl-blue);font-weight:500}
+    #cloud-panel-v4 .cl-notice{padding:10px 16px;background:var(--cl-surface);font-size:12px;color:var(--cl-muted);border-top:1px solid var(--cl-line)}
+    #cloud-panel-v4 label{display:grid;gap:6px}#cloud-panel-v4 input[type=range]{width:100%;padding:0;accent-color:var(--cl-blue)}
+    #cloud-panel-v4 .cl-receipt{color:var(--cl-text);padding:10px 12px;border-radius:10px;background:var(--cl-soft)}
+    #cloud-panel-v4 .cl-caption{font-size:12px;color:var(--cl-muted);margin-top:5px}
+    #cloud-panel-v4.cl-compact .cl-box{padding:12px}#cloud-panel-v4.cl-compact .cl-content{gap:9px}
+    @media(max-width:360px){#cloud-panel-v4{padding:8px 0}#cloud-panel-v4 .cl-content{padding:0 10px 12px}#cloud-panel-v4 .cl-box{padding:13px}#cloud-panel-v4 .cl-preview{padding:9px 12px}}
+  </style>
+  <section class="cl-shell" aria-label="CloudBot面板设计预览">
+    <div class="cl-preview"><span>交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label></div>
+    <header class="cl-head"><div class="cl-logo" aria-hidden="true">C</div><div><h2>Cloud Library</h2><div class="cl-small" id="cl-subtitle">你的个人影音空间</div></div></header>
+    <main id="cl-content" class="cl-content"></main>
+    <nav id="cl-nav" class="cl-nav" aria-label="面板导航"></nav>
+    <div class="cl-notice" role="status" id="cl-status">本预览不连接真实服务，不产生积分或订单。</div>
+  </section>
+  <script>
+  (()=>{
+    const root=document.getElementById('cloud-panel-v4');
+    const saved=window.openai?.widgetState?.privateContent||{};
+    const state={role:saved.role==='admin'?'admin':'user',page:'home',balance:284,signed:false,activity:10,exempt:false,confirm:false,receipt:'',target:'284',reason:'',capacity:2,compact:false};
+    const content=root.querySelector('#cl-content'),nav=root.querySelector('#cl-nav'),role=root.querySelector('#cl-role');
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const primary=(label,action,disabled=false)=>`<button class="cl-primary cl-full" type="button" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
+    const box=html=>`<section class="cl-box">${html}</section>`;
+    const row=(a,b)=>`<div class="cl-row"><span>${a}</span><span>${b}</span></div>`;
+    const label=(a,b)=>`<div class="cl-small">${a}</div><div class="cl-value">${b}</div>`;
+    const go=(text,page)=>`<button type="button" data-action="go" data-page="${page}">${text}</button>`;
+    function estimate(r){const e=Array(Math.max(0,r)+1).fill(0);for(let n=1;n<=r;n++){let s=0;for(let x=10;x<=20;x++)s+=e[Math.max(0,n-x)];e[n]=1+s/11;}return e[Math.max(0,r)].toFixed(1);}
+    function userPage(){
+      if(state.page==='home')return `<section class="cl-box cl-feature"><div class="cl-row"><h3>你好，demo_user</h3><span class="cl-tag">${state.exempt?'免保号播放':'活动成员'}</span></div><p class="cl-gap">${state.exempt?'兑换后30天免签到、免观影':'签到积分保号 · 20天一个窗口'}</p><div class="cl-gap cl-row"><div>${label('钱包积分',state.balance)}</div>${go('查看权益','mine')}</div></section><div class="cl-grid">${box(label('本期活动分',state.exempt?'免考核':state.activity+'/20'))}${box(label('本人播放','0 / 1'))}</div>${box(`<h3>今天的入口</h3><div class="cl-grid cl-gap">${go(state.signed?'查看今日签到':'今日签到','checkin')}${go('积分商店','shop')}${go('服务器地址','mine')}${go('我的追更','media')}</div>`)}${box(`<div class="cl-row"><h3>示例剧集</h3><span class="cl-tag">已可播放</span></div><p class="cl-gap">第一季 · 更新至第08集</p><p class="cl-caption">已经取得、Emby可见、播放探测通过</p>`)} `;
+      if(state.page==='checkin')return box(`<div class="cl-row"><h3>每日签到</h3><span class="cl-tag">${state.signed?'今日已签':'北京时间日界'}</span></div><p class="cl-gap cl-small">每天随机10～20分 · 平均15分</p><div class="cl-row cl-gap"><div>${label('可用积分',state.balance)}</div><div>${label('距月卡',Math.max(0,300-state.balance)+'分')}</div></div><div class="cl-bar"><span style="width:${Math.min(100,state.balance/3)}%"></span></div>${primary(state.signed?'已签到 · 示例奖励16分':'签到，领取今日积分','checkin',state.signed)}<p class="cl-caption">${state.balance>=300?'已达到月卡兑换门槛。':'按当前缺口，平均约再签'+estimate(300-state.balance)+'次；这是平均值。'}</p>`)+box(`<h3>保号与积分分别计算</h3><p class="cl-gap">${state.exempt?'当前免考核；仍可自愿签到。':'当前签到活动分'+state.activity+'/20；花掉钱包积分不影响保号进度。'}</p><p class="cl-caption">${state.exempt?'免保号期结束后，按偏好进入完整20天活动窗口。':'观影模式可预约下个窗口；最早12月3日生效。'}</p><div class="cl-gap">${primary(state.exempt?'设置期满观影偏好':'预约下期观影模式','mode')}</div>`)+box(`<h3>续期说明</h3><p class="cl-gap">月卡300分，30天免保号播放。</p><p class="cl-caption">从零余额起，22次签到达标概率约98.04%；30次保证足够。</p>`);
+      if(state.page==='media')return box(`<h3>我的追更</h3><div class="cl-list"><div class="cl-row"><span>示例剧集 · 第一季</span><span class="cl-tag">08/12集</span></div><p class="cl-caption">第08集：已可播放 · 第09集：等待源更新</p></div><div class="cl-list"><div class="cl-row"><span>示例动画 · 第二季</span><span class="cl-tag">索引中</span></div><p class="cl-caption">文件已取得，等待Emby条目确认</p></div>`)+box(`<h3>任务阶段</h3><div class="cl-list">已发现 → 已取得 → Emby可见 → 可播放</div><p class="cl-caption">转存完成不等于已经可看，不重复通知同一集。</p><div class="cl-gap">${primary('查看示例任务','task')}</div>`);
+      if(state.page==='shop')return `<div class="cl-row"><h3>积分商店</h3><span class="cl-tag">余额 ${state.balance}</span></div>`+[{name:'月卡',days:30,price:300},{name:'季卡',days:90,price:850},{name:'年卡',days:365,price:3000}].map(p=>box(`<div class="cl-row"><div><h3>${p.name} · ${p.days}天</h3><div class="cl-caption">免签到、免观影，不增加同播</div></div><div><h3>${p.price}分</h3></div></div><div class="cl-gap">${p.price===300?primary(state.balance>=300?'预览月卡兑换':'积分不足，去签到',state.balance>=300?'redeem':'go-checkin'):primary('查看兑换条件','other-product')}</div>`)).join('')+`<p class="cl-small">真实购买尚未开放，积分兑换独立设计。</p>`;
+      return box(`<h3>demo_user · U10001</h3><div class="cl-list">${row('播放权益',state.exempt?'积分月卡 · 免保号':'20天活动期')}</div><div class="cl-list">${row('已授权设备','2 / 3台')}</div><div class="cl-list">${row('同时播放上限','1路')}</div>`)+box(`<h3>服务器地址</h3><p class="cl-gap">https://emby.example.com · 443</p><p class="cl-caption">示例域名；正式线路按用户资格下发。</p>`)+box(`<h3>安全与账户</h3><div class="cl-grid cl-gap"><button type="button" data-action="security">安全码</button><button type="button" data-action="security">修改密码</button><button type="button" data-action="devices">我的设备</button><button type="button" data-action="orders">订单与流水</button></div>`);
+    }
+    function adminPage(){
+      if(state.page==='home')return `<section class="cl-box cl-feature"><h3>管理总览</h3><p class="cl-gap">美西 · 2核2GB · 内测阶段</p><p class="cl-caption">演示指标，非实际服务器检测结果</p></section><div class="cl-grid">${box(label('活跃成员','7 / 20'))}${box(label('全服播放','2 / '+state.capacity))}</div>${box(`<h3>需要关注</h3><div class="cl-list">示例动画：等待Emby索引确认</div><div class="cl-list">备份：最近演练状态待核验</div>`)}${box(`<h3>管理入口</h3><div class="cl-grid cl-gap">${go('用户积分','users')}${go('任务水位','tasks')}${go('自由限额','capacity')}${go('规则设置','settings')}</div>`)} `;
+      if(state.page==='users')return box(`<div class="cl-row"><h3>U10001 · demo_user</h3><span class="cl-tag">活动成员</span></div><div class="cl-list">${row('可用积分',state.balance)}</div><div class="cl-list">${row('冻结积分',0)}</div><label class="cl-gap">目标可用余额<input id="cl-target" type="number" min="0" max="100000" value="${esc(state.target)}"></label><label class="cl-gap">调整原因<input id="cl-reason" type="text" maxlength="80" value="${esc(state.reason)}" placeholder="例如：迁移补偿（演示）"></label><div class="cl-gap">${primary('预览积分调整','adjust-preview')}</div><p class="cl-caption">正式操作需权限、原因、版本校验与审计，不覆盖账本。</p>`);
+      if(state.page==='capacity')return box(`<h3>全服同播限制</h3><div class="cl-gap">${label('当前实际使用','2路')}</div><label class="cl-gap">新上限：<span id="cl-cap-value">${state.capacity}路</span><input id="cl-cap" type="range" min="1" max="8" value="${state.capacity}"></label><p id="cl-cap-hint" class="cl-caption">降低上限只限制新增，不随机踢已有会话。</p><div class="cl-gap">${primary('预览发布效果','capacity-preview')}</div>`)+box(`<h3>资源推荐</h3><p class="cl-gap">保持后台重任务并发1，先收集72小时证据。</p><p class="cl-caption">带宽、网盘限额未知；不会自动提高可售人数。</p>`);
+      if(state.page==='tasks')return box(`<h3>媒体任务水位</h3><div class="cl-list">示例剧集S01E08 · 四阶段完成</div><div class="cl-list">示例动画S02E03 · 文件已取得，索引待确认</div><div class="cl-list">示例分享 · 已暂停，待重新授权</div>`)+box(`<h3>调度原则</h3><p class="cl-gap">播放签发优先；一个Token只有一个收件者；故障不触发全库删除。</p>`);
+      return box(`<h3>签到与商品</h3><div class="cl-list">${row('每日随机钱包','10～20分，等概率')}</div><div class="cl-list">${row('本期活动分','每天固定10分')}</div><div class="cl-list">${row('月卡 / 季卡 / 年卡','300 / 850 / 3000分')}</div><div class="cl-list">${row('保号方式锁定','20天')}</div><div class="cl-list">${row('22天额外保底','默认关闭')}</div>`)+box(`<h3>安全与数据</h3><div class="cl-grid cl-gap"><button type="button" data-action="backup">备份与迁移</button><button type="button" data-action="security">安全与审计</button></div>`);
+    }
+    function render(){
+      role.value=state.role;root.classList.toggle('cl-compact',state.compact);
+      root.querySelector('#cl-subtitle').textContent=state.role==='admin'?'服务与成员管理':'你的个人影音空间';
+      content.innerHTML=(state.role==='admin'?adminPage():userPage())+(state.confirm?box(`<div role="dialog" aria-label="月卡兑换确认"><h3>确认兑换月卡</h3><p class="cl-gap">演示扣300分：${state.balance} → ${state.balance-300}</p><p>30天免签到、免观影，原同播配额不变。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel">取消</button><button class="cl-primary" type="button" data-action="confirm">确认演示兑换</button></div></div>`):'')+(state.receipt?`<div class="cl-receipt" role="status" aria-live="polite">${esc(state.receipt)}</div>`:'');
+      const pages=state.role==='admin'?[['home','总览'],['users','用户'],['tasks','任务'],['capacity','容量'],['settings','设置']]:[['home','首页'],['media','追更'],['checkin','签到'],['shop','商店'],['mine','我的']];
+      nav.innerHTML=pages.map(([p,n])=>`<button type="button" data-action="go" data-page="${p}" aria-pressed="${state.page===p}">${n}</button>`).join('');
+    }
+    function remember(){window.openai?.setWidgetState?.({modelContent:{panelPreviewRole:state.role,panelPreviewPage:state.page},privateContent:{role:state.role}})?.catch(()=>{});}
+    role.addEventListener('change',()=>{state.role=role.value;state.page='home';state.confirm=false;state.receipt='';render();remember();});
+    root.addEventListener('input',e=>{if(e.target.id==='cl-target')state.target=e.target.value;if(e.target.id==='cl-reason')state.reason=e.target.value;if(e.target.id==='cl-cap'){root.querySelector('#cl-cap-value').textContent=e.target.value+'路';root.querySelector('#cl-cap-hint').textContent=Number(e.target.value)<2?'已有2路将保持；暂停新增直到低于新上限。':'限制新播放准入；不代表已验证承载能力。';}});
+    root.addEventListener('click',e=>{
+      const button=e.target.closest('[data-action]');if(!button||button.disabled)return;const a=button.dataset.action;state.receipt='';
+      if(a==='go'){state.page=button.dataset.page;state.confirm=false;}
+      else if(a==='go-checkin'){state.page='checkin';}
+      else if(a==='checkin'&&!state.signed){state.signed=true;state.balance+=16;state.activity+=10;state.receipt='演示：今日＋16分，钱包达到300分；活动分另加10。';}
+      else if(a==='redeem'){state.confirm=true;}
+      else if(a==='cancel'){state.confirm=false;}
+      else if(a==='confirm'&&state.balance>=300){state.balance-=300;state.exempt=true;state.confirm=false;state.receipt='演示兑换完成：30天免保号播放，未产生真实订单。';}
+      else if(a==='mode'){state.receipt=state.exempt?'已演示设置期满观影偏好；免保号期间不考核。':'已演示预约：下期改为观影，最早12月3日生效，本期不重置。';}
+      else if(a==='adjust-preview'){const target=Number(root.querySelector('#cl-target').value);const reason=root.querySelector('#cl-reason').value.trim();state.receipt=(!Number.isInteger(target)||target<0||target>100000)?'请输入0～100000的整数。':!reason?'请填写调整原因。':`仅预览：可用积分${state.balance} → ${target}，差额${target-state.balance}；正式提交需再次验证。`;}
+      else if(a==='capacity-preview'){const value=Number(root.querySelector('#cl-cap').value);state.capacity=value;state.receipt=`仅演示配置为${value}路。`+(value<2?'已有2路保持，暂停新增。':'仍需后端准入与容量验证。');}
+      else if(a==='task'){state.receipt='示例任务：源已发现、文件已取得、Emby已可见、播放探测通过。';}
+      else if(a==='backup'){state.receipt='正式面板分预检、加密备份、校验、隔离恢复和切换；本演示不执行。';}
+      else if(a==='security'){state.receipt='正式敏感操作通过HTTPS验证安全码/管理员MFA；演示不收集任何凭据。';}
+      else if(a==='devices'){state.receipt='示例：电视、手机已授权2台，设备上限3台，同播上限1路。';}
+      else if(a==='orders'){state.receipt='演示数据不含真实订单或积分流水。';}
+      else if(a==='other-product'){state.receipt='示例余额不足；季卡850分、年卡3000分，均免活动考核。';}
+      render();remember();
+    });
+    window.addEventListener('openai:set_globals',event=>{const incoming=event.detail?.globals?.widgetState?.privateContent;if(incoming?.role==='user'||incoming?.role==='admin'){state.role=incoming.role;state.page='home';state.confirm=false;state.receipt='';render();}});
+    render();
+    if(globalThis.Tweak){const design={radius:18,compact:false};const tweak=new Tweak({container:root,onChange:()=>{root.style.setProperty('--cl-radius',design.radius+'px');state.compact=design.compact;render();}});tweak.addSlider(design,'radius',{label:'卡片圆角',min:10,max:24,unit:'px'});tweak.addToggle(design,'compact',{label:'紧凑布局'});}
+  })();
+  </script>
+</div>

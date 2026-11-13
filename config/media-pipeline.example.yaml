@@ -1,0 +1,47 @@
+# v4设计输入；每个适配器的实际字段/API仍需按固定版本对接。
+schema_version: 4
+profile: CLOUD_SHARE_LIGHTWEIGHT
+owners:
+  acquisition_and_directory_jobs: OPENSTRM
+  metadata: EMBY
+  user_entitlements_and_points: SINGLE_USER_CENTER
+  telegram_updates_and_business_notifications: CLOUDBOT
+source_mapping:
+  stable_readable_origin_required: true
+  when_no_existing_valid_origin: INTERNAL_OPENLIST_AFTER_VALIDATION
+  origin_publicly_exposed: false
+  fake_mount_path_allowed: false
+  persist_expiring_signed_url_in_strm: false
+paths:
+  published_host: /srv/cloud-emby/media/published
+  emby_published: /media
+  emby_media_read_only: true
+  staging_separate_from_library: true
+metadata:
+  pipeline_generates_full_nfo_required: false
+  copy_trusted_existing_sidecars: true
+  emby_online_fill_missing: true
+  emby_save_nfo_and_images_to_readonly_media: false
+  respect_manual_locks: true
+  incomplete_artwork_blocks_playable_release: false
+automation:
+  known_share_poll_minutes: 20
+  jitter_enabled: true
+  active_acquisition_workers: 1
+  emby_refresh_debounce_seconds: 90
+  successful_complete_reconciliation_hours: 24
+  search_every_missing_episode_every_minute: false
+  old_episode_backfill_separate_from_new_release_monitor: true
+  repeat_successful_transfer_on_retry: false
+publication:
+  require_unambiguous_episode_identity: true
+  require_emby_item_visible_before_notification: true
+  require_playback_probe_before_available: true
+  prevent_native_source_deletion_from_bypassing_quarantine: true
+telegram:
+  share_one_token_between_pollers: false
+  native_media_tool_inbound_bot_enabled: false
+  separate_admin_bot_if_needed_requires_distinct_token: true
+emby_events:
+  official_webhooks_require_license_verification: true
+  start_stop_events_equal_continuous_watch_time: false

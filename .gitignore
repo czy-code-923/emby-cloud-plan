@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+secrets/
+runtime/
+backups/
+logs/
+*.db
+*.sqlite*
+*.dump
+*.pem
+*.key
+*.p12
+*.token
+__pycache__/
+.DS_Store
+Thumbs.db

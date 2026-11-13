@@ -1,0 +1,55 @@
+# v3：积分兑换和购买均为限期免保号播放；XTR未定价，真实购买关闭。
+schema_version: 3
+catalog_version: proposal-v3-2026-11-13
+products:
+  - sku: EXEMPT_PLAY_30D_POINTS
+    title: 积分月卡（30天免保号播放）
+    enabled: true
+    price: {unit: POINTS, amount: 300}
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 30, checkin_required: false, watch_required: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: EXEMPT_PLAY_90D_POINTS
+    title: 积分季卡（90天免保号播放）
+    enabled: true
+    price: {unit: POINTS, amount: 850}
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 90, checkin_required: false, watch_required: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: EXEMPT_PLAY_365D_POINTS
+    title: 积分年卡（365天免保号播放）
+    enabled: true
+    price: {unit: POINTS, amount: 3000}
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 365, checkin_required: false, watch_required: false}
+    stacking: APPEND_CONTIGUOUS_SAME_TIER
+  - sku: EXEMPT_PLAY_30D_STARS
+    title: 播放月卡（30天免保号）
+    enabled: false
+    price: {unit: XTR, amount: null}
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 30, registered_devices: 3, concurrent_streams: 1}
+  - sku: EXEMPT_PLAY_365D_STARS
+    title: 播放年卡（365天免保号）
+    enabled: false
+    price: {unit: XTR, amount: null}
+    effect: {type: EXEMPT_PLAYBACK, duration_days: 365, registered_devices: 3, concurrent_streams: 1}
+  - sku: REGISTER_AND_EXEMPT_PLAY_30D
+    title: 注册并开通30天免保号播放
+    enabled: false
+    price: {unit: XTR, amount: null}
+    eligibility: [PURCHASE_REGISTRATION_PATH_OPEN, MEMBER_CAPACITY_RESERVED]
+    effect: {type: REGISTER_AND_EXEMPT_PLAYBACK, duration_days: 30, includes_registration: true}
+  - sku: DATA_RETENTION_90D
+    title: 仅账号资料保留90天（无播放）
+    enabled: false
+    price: {unit: XTR, amount: null}
+    effect: {type: ACCOUNT_DATA_PROTECTION, duration_days: 90, grants_playback: false}
+  - sku: EXTRA_DEVICE_30D
+    title: 额外授权设备1台30天（不增加同播）
+    enabled: false
+    price: {unit: POINTS, amount: null}
+    eligibility: [ACTIVE_PLAYBACK_ENTITLEMENT, HARD_DEVICE_ADMISSION_VERIFIED]
+    effect: {type: ADDITIONAL_DEVICE_QUOTA, count: 1, duration_days: 30, additional_streams: 0}
+  - sku: EXTRA_STREAM_30D
+    title: 额外同播1路30天
+    enabled: false
+    price: {unit: XTR, amount: null}
+    eligibility: [HARD_CONCURRENCY_ADMISSION_VERIFIED, GLOBAL_AND_NODE_CAPACITY_RESERVED]
+    effect: {type: ADDITIONAL_STREAM_QUOTA, count: 1, duration_days: 30}

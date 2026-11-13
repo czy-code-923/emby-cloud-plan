@@ -1,0 +1,137 @@
+# v3设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
+schema_version: 3
+policy_version: proposal-v3-2026-11-13
+timezone: Asia/Shanghai
+service:
+  id: personal-cloud
+  maintenance: false
+  video_transcoding_enabled: false
+  automatic_stream_proxy_fallback: false
+registration:
+  enabled: true
+  allowed_paths: [INVITE]
+  supported_paths: [OPEN, INVITE, PURCHASE]
+  review_required: false
+  member_limit: 20
+  successful_registrations_per_day: 3
+  pending_reservations_limit: 2
+  reservation_minutes: 15
+  telegram_identity_unique: true
+free_membership:
+  enabled: true
+  cycle_days: 20
+  initial_play_days: 20
+  registered_devices: 3
+  concurrent_streams: 1
+  return_after_exempt: AUTO_IF_RESERVED_SEAT
+retention:
+  model: SELECTED_ACTIVITY_OR_EXEMPT_GRANT
+  modes: [CHECKIN_POINTS, WATCH]
+  mode_selection_required_for_free: true
+  mode_lock_days: 20
+  next_mode_selection: QUEUED_AT_CYCLE_BOUNDARY
+  mode_switch_resets_deadline: false
+  unselected_activity_satisfies_cycle: false
+  checkin:
+    enabled: true
+    cycle_activity_score_required: 20
+    daily_activity_score: 10
+    wallet_spending_reduces_activity_score: false
+    admin_wallet_adjustment_counts_as_activity: false
+  viewing:
+    enabled: true
+    required_seconds: 1800
+    minimum_continuous_segment_seconds: 120
+    maximum_sample_gap_seconds: 90
+    merge_overlapping_user_intervals: true
+    count_paused: false
+    count_seek_jumps: false
+    late_event_accept_hours: 24
+  exempt_sources: [POINTS_REDEMPTION, PURCHASE, ADMIN_GRANT]
+  exempt_playback_skips_checkin_and_watch: true
+  optional_checkin_during_exemption: true
+  grace_days: 7
+  grace_play_enabled: true
+  grace_play_once_per_cycle: true
+  grace_capacity_failure_holds_cleanup: true
+  minimum_data_retention_days: 30
+  automatic_physical_deletion: false
+  collection_failure_hold_after_minutes: 10
+  incident_extension_buffer_hours: 24
+points:
+  daily_checkin_reward: 10
+  viewing_rewards_enabled: false
+  transferable: false
+  cash_withdrawal: false
+  expires: false
+  administrator_set_available_balance: true
+  adjustments_require_reason_and_expected_version: true
+  auto_renew:
+    globally_allowed: true
+    user_default_opt_in: false
+    administrator_user_permission_required: true
+security:
+  user_security_code_enabled: true
+  security_code_channel: HTTPS_PANEL_ONLY
+  recovery_code_count: 8
+  recovery_codes_one_time: true
+  failed_attempts_limit: 5
+  lock_minutes: 15
+  sensitive_action_step_up_seconds: 300
+  administrator_requires_independent_mfa: true
+devices:
+  self_service_revokes_per_rolling_7_days: 2
+  device_rebind_cooldown_hours: 24
+  first_device_auto_authorize_if_capacity: true
+  exceeding_capacity_replaces_old_device: false
+playback:
+  custom_hard_admission_enabled: false
+  lease_seconds: 120
+  heartbeat_target_seconds: 30
+  pause_releases_after_seconds: 90
+  existing_session_failure_cache_seconds: 300
+  database_failure_admits_new_sessions: false
+  anonymous_redirect_enabled: false
+  global_new_session_limit: 2 # 内测初值，非硬件保证
+  per_node_limit_enabled: true
+  per_storage_account_limit_enabled: true
+online_statistics:
+  cache_seconds: 30
+  online_activity_window_seconds: 300
+  active_playback_window_seconds: 90
+  public_details_enabled: false
+commerce:
+  real_payments_enabled: false
+  digital_goods_payment_route: TELEGRAM_STARS
+  payment_currency: XTR
+  partial_refunds_enabled: false
+  price_must_be_configured_before_publish: true
+tasks:
+  heavy_background_workers: 1
+  postgres_pool_connections: 4
+  scan_debounce_seconds: 90
+  metadata_retry_limit: 5
+  source_missing_confirm_successful_scans: 2
+  source_missing_minimum_separation_hours: 24
+  index_quarantine_days: 7
+  bulk_missing_circuit_breaker_ratio: 0.10
+notifications:
+  retention_reminder_days: [7, 3, 1]
+  entitlement_reminder_days: [3, 1]
+  quiet_hours: {start: '22:00', end: '08:00'}
+  security_and_payment_bypass_quiet_hours: true
+  marketing_opt_in: false
+  library_batch_minutes: 10
+operations:
+  disk_warning_percent: 75
+  disk_pause_import_percent: 85
+  disk_stop_publish_percent: 90
+  pause_heavy_tasks_available_ram_mib: 200
+  inactive_cleanup_globally_paused: false
+  sales_globally_paused: true
+capacity_recommendation:
+  enabled: true
+  changes_automatically_applied: false
+  observation_hours: 72
+  can_raise_sold_capacity_without_approval: false
+  emergency_actions: [PAUSE_IMPORT, PAUSE_REGISTRATION, PAUSE_SALES]

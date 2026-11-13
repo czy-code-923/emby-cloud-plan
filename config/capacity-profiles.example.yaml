@@ -1,0 +1,63 @@
+# 资源档位初值；不是压测结果，不代表可售并发；按cgroup有效资源识别。
+schema_version: 3
+recommendation:
+  observation_hours: 72
+  evidence_required_for_sales_capacity: true
+  automatic_limit_increase: false
+  automatic_destructive_cleanup: false
+  scope: EFFECTIVE_HOST_OR_CONTAINER
+profiles:
+  XS:
+    min_memory_mib: 1024
+    min_effective_cpus: 1
+    complete_single_host_stack_recommended: false
+    bootstrap_stream_limit: 1
+    heavy_workers: 1
+    video_transcoding: false
+  S:
+    min_memory_mib: 2048
+    min_effective_cpus: 2
+    bootstrap_stream_limit: 2
+    heavy_workers: 1
+    postgres_pool: 4
+    video_transcoding: false
+  M:
+    min_memory_mib: 4096
+    min_effective_cpus: 2
+    bootstrap_stream_limit: 3
+    heavy_workers: 2
+    postgres_pool: 6
+    video_transcoding: false
+  L:
+    min_memory_mib: 8192
+    min_effective_cpus: 4
+    bootstrap_stream_limit: 6
+    heavy_workers: 2
+    postgres_pool: 8
+    video_transcoding: false
+  XL:
+    min_memory_mib: 16384
+    min_effective_cpus: 8
+    bootstrap_stream_limit: 10
+    heavy_workers: 4
+    postgres_pool: 12
+    video_transcoding: false # 识别GPU后仍需单独测试，不能自动开启
+limits:
+  registered_members: 20
+  active_members: 20
+  registration_daily: 3
+  global_concurrent_streams: 2
+  per_user_concurrent_streams: 1
+  playback_starts_per_user_per_day: null
+  per_user_registered_devices: 3
+  video_transcode_processes: 0
+  proxy_traffic_monthly_gb: null # 未知值不猜；由供应商计费口径确定
+  node_limits: []
+  storage_account_limits: []
+semantics:
+  null_limit: UNLIMITED
+  unknown_measurement: ABSENT_VALUE_WITH_UNKNOWN_STATUS
+  zero_limit: DENY
+  lowering_limit: APPLY_TO_NEW_ADMISSIONS
+  keep_existing_sessions_by_default: true
+  permit_individual_override_above_global_hard_limit: false

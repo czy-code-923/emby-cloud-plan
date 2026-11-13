@@ -1,5 +1,11 @@
 # 结构示例，无真实禁用客户端名单；说明与已执行拦截分开。
 schema_version: 5
+telegram_surface:
+  cash_catalog_prices_checkout_and_purchase_urls_enabled: false
+  shared_footer_purchase_link_enabled: false
+  full_cash_order_links_enabled: false
+  account_panel_cash_checkout_routes_enabled: false
+  source_policy: INDEPENDENT_SHOP_ADDRESS_MANUALLY_DISTRIBUTED
 help_center:
   enabled: true
   public_categories: [START, PLAYBACK, CLIENTS, RETENTION_POINTS, PURCHASE_CODES, TROUBLESHOOTING, PRIVACY]

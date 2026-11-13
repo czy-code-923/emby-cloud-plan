@@ -1,6 +1,6 @@
-# v5.1设计示例；现金只在网页，价格留空/销售关闭；Stars SKU仅停用历史候选。
+# v5.2设计示例；独立网页售卖，TG不提供链接；Stars SKU仅停用历史候选。
 schema_version: 5
-catalog_version: proposal-v5.1-2026-11-13
+catalog_version: proposal-v5.2-2026-11-13
 defaults:
   quantity_per_order: 1
   points_delivery: DIRECT_GRANT

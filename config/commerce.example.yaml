@@ -1,4 +1,4 @@
-# v5.1待开发规格；现金购买统一独立网页，TG外链/兑码；不启用真实收款。
+# v5.2待开发规格；独立网址手动告知，TG无购买外链；不启用真实收款。
 schema_version: 5
 real_payments_enabled: false
 entrypoints:
@@ -12,16 +12,25 @@ entrypoints:
     stars_checkout_enabled: false
     manual_red_packet_and_qr_checkout_enabled: false
     external_purchase_link:
-      enabled_in_design: true
-      url: https://shop.example.com
-      button_type: ORDINARY_HTTPS_URL
+      enabled_in_design: false
+      url: null
+      button_type: NONE
       embedded_web_app_checkout: false
-      configurable_and_independently_switchable: true
+      current_policy: NO_AUTOMATED_PURCHASE_LINK
+      change_requires_new_policy_review: true
       secret_or_uid_in_query: false
       destination_host_allowlist_required: true
-      platform_rules_status: EXTERNAL_LINK_EXEMPTION_NOT_CONFIRMED
-    existing_order_status_and_code_claims_enabled: true
+      platform_rules_status: NO_OFFICIAL_EXEMPTION_CONFIRMED
+    show_cash_catalog_prices_order_links: false
+    independent_shop_url_distributed_by: OPERATOR_MANUALLY
+    account_entitlement_and_code_status_enabled: true
     code_claim_preview_and_explicit_confirm: true
+    paid_emby_code_claims_supported_in_design: true
+    paid_emby_code_claims_enabled: false # 平台适用未获确认；可在独立网页核销。
+    free_and_admin_code_claims_enabled: true
+    sold_code_platform_status: NOT_CONFIRMED_AS_EXEMPT
+    cash_codes_unlock_paid_bot_features: false
+    full_cash_order_details_on: STANDALONE_WEB
 channels:
   - id: ALIPAY_RED_PACKET_MANUAL
     desired_default: true
@@ -97,6 +106,8 @@ fulfillment:
   reserve_capacity_until_claim_or_resolution: true
   honor_sold_registration_codes: true
 notifications:
+  customer_cash_order_channels: [WEB_INBOX]
+  telegram_customer_cash_purchase_notifications_enabled: false
   available_channels: [ADMIN_INBOX, TELEGRAM_PRIVATE, RESTRICTED_TELEGRAM_GROUP, EMAIL, HTTPS_WEBHOOK]
   enabled_channels: [ADMIN_INBOX]
   destinations: []

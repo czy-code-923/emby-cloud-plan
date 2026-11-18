@@ -2,6 +2,16 @@
 schema_version: 6
 console:
   standalone_web: true
+  separate_from_telegram_panel: true
+  direct_browser_access: true
+  example_origin: https://admin.example.com
+  telegram_client_or_bot_required: false
+  authentication: INDEPENDENT_ADMIN_ACCOUNT_AND_MFA
+  accepts_telegram_panel_session_as_admin: false
+  frontend_entrypoint_and_session_audience: ADMIN_WEB
+  host_only_admin_cookie: true
+  all_owned_settings_available_here: true
+  telegram_admin_shortcuts_are_optional_subset: true
   backend_implemented: false
   reuse_single_business_center: true
   own_duplicate_points_or_expiry_database: false

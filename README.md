@@ -1,10 +1,12 @@
 # 个人云盘 Emby 与 Telegram 服务完整方案
 
-版本：6.0 · 更新日期：2026-11-18 · 状态：设计与交互原型，尚未部署、实机压测或完成安全验收。
+版本：6.1 · 更新日期：2026-11-18 · 状态：设计与交互原型，尚未部署、实机压测或完成安全验收。
 
 以现有 **美西 2核2GB VPS＋网盘**起步，先跑通直播放、自动整理刮削、增量更新和 Telegram 自助服务。注册支持开放、邀请、购买及其组合；后续升级服务器时沿用同一套用户和权益模型。
 
 本仓库存放方案、规则示例和验收清单。配置示例是拟开发系统的设计输入，不是已经实现的软件配置。真实域名、密钥、网盘凭据和用户数据不应提交。
+
+**TG面板与网页总控是两个独立界面。**TG面板面向用户自助，可选管理员快捷摘要；网页总控通过浏览器直接访问`admin.example.com`（示例），独立管理员登录＋MFA，统一管理所有项目设置，包括TG本身。无需先打开Telegram或依赖Bot登录；两者复用业务后端事实，分别使用权限/API入口和会话。独立购买网站另作为第三个入口，见第22篇的职责表。
 
 ## 推荐决策
 
@@ -56,8 +58,8 @@
 | [22 可视化总控](docs/22-可视化总控后台与设置发布.md) | 19个模块、schema表单、权限/草稿/发布/回执、受限执行器 |
 | [23 防护与总控验收](docs/23-防护与总控实施验收.md) | 正常播放器、攻击/故障矩阵、误伤/资源与发布检查 |
 | [24 发电外链选择](docs/24-TG发电外链当前选择.md) | 2026-11-18规则复核、外链草稿/有效状态与默认决定 |
-| [可点击面板原型](ui/panel-preview.html) | 本地浏览器打开的演示；GitHub文件页面只展示源码 |
-| [可点击总控后台](ui/admin-console-preview.html) | 本地独立浏览器预览；防护编辑、回放、模块/外链Gate与发布演示 |
+| [TG用户面板原型](ui/panel-preview.html) | TG自助与受限快捷管理示意，包含独立购买页设计切换控件；不充当总控 |
+| [独立网页总控原型](ui/admin-console-preview.html) | 浏览器直接打开；所有模块设置与防护发布示意，独立于TG面板 |
 | [积分计算脚本](scripts/calculate_checkin.py) | 标准库确定性计算，结果在analysis/checkin-economy.json |
 | [防护离线模型](scripts/verify_anti_abuse_model.py) | 无网络的顺序模型，部分边界结果在analysis/anti-abuse-model.json；不等于实机安全测试 |
 | [本地验收记录](analysis/verification.md) | 文档、规则、积分模型、面板交互与布局的核验范围及待实测项目 |
@@ -66,6 +68,7 @@
 | [Telegram购买规则核验](analysis/telegram-commerce-review-2026-11-13.md) | 官方FAQ、开发者条款、BotNews证据及v5.2无外链决定 |
 | [v5.2验证记录](analysis/v5.2-verification.md) | 移除购买链接后的文档/配置和演示核销核验 |
 | [v6验证记录](analysis/v6-verification.md) | 新防护契约、离线模型、总控原型与配置一致性 |
+| [v6.1界面分工核验](analysis/v6.1-verification.md) | TG面板与独立网页总控的入口/登录/权限/会话分离 |
 | [策略示例](config/policy.example.yaml) | 注册、保号、积分、设备与调度参数 |
 | [商品示例](config/catalog.example.yaml) | 商品与权益效果，真实支付关闭 |
 | [资源档位示例](config/capacity-profiles.example.yaml) | 1GB至16GB档位、自由限额与推荐保护 |

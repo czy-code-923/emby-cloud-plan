@@ -38,11 +38,11 @@
     @media(max-width:360px){#cloud-panel-v4{padding:8px 0}#cloud-panel-v4 .cl-content{padding:0 10px 12px}#cloud-panel-v4 .cl-box{padding:13px}#cloud-panel-v4 .cl-preview{padding:9px 12px}}
   </style>
   <section class="cl-shell" aria-label="CloudBot面板设计预览">
-    <div class="cl-preview"><span>v5.2交互原型 · 演示数据</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理员</option></select></label><label>设计页切换（非Bot功能）<select id="cl-surface" aria-label="预览入口"><option value="telegram">TG面板</option><option value="standalone">独立网页商店</option></select></label></div>
-    <header class="cl-head"><div class="cl-logo" aria-hidden="true">C</div><div><h2>Cloud Library</h2><div class="cl-small" id="cl-subtitle">你的个人影音空间</div></div></header>
+    <div class="cl-preview"><span>TG面板 · v6.1演示</span><label>预览身份<select id="cl-role" aria-label="预览身份"><option value="user">用户</option><option value="admin">管理快捷（受限）</option></select></label><label>设计页切换（非Bot功能）<select id="cl-surface" aria-label="预览入口"><option value="telegram">TG面板</option><option value="standalone">独立网页商店</option></select></label></div>
+    <header class="cl-head"><div class="cl-logo" aria-hidden="true">C</div><div><h2>Cloud Library · TG面板</h2><div class="cl-small" id="cl-subtitle">你的个人影音空间</div></div></header>
     <main id="cl-content" class="cl-content"></main>
     <nav id="cl-nav" class="cl-nav" aria-label="面板导航"></nav>
-    <div class="cl-notice" role="status" id="cl-status">本预览不连接真实服务，不产生积分或订单。</div>
+    <div class="cl-notice" role="status" id="cl-status">TG自助与受限快捷原型；全部设置由独立网页总控管理。</div>
   </section>
   <script>
   (()=>{
@@ -105,7 +105,7 @@
     }
     function render(){
       role.value=state.role;root.querySelector('#cl-surface').value=state.surface;root.classList.toggle('cl-compact',state.compact);
-      root.querySelector('#cl-subtitle').textContent=state.role==='admin'?'服务与成员管理':'你的个人影音空间';
+      root.querySelector('#cl-subtitle').textContent=state.role==='admin'?'受限TG快捷 · 非网页总控':'TG用户自助面板';
       content.innerHTML=pageExtras()+(state.role==='admin'?adminPage():userPage())+(state.confirm?box(`<div role="dialog" aria-label="月卡兑换确认"><h3>确认兑换月卡</h3><p class="cl-gap">演示扣300分：${state.balance} → ${state.balance-300}</p><p>30天免签到、免观影，原同播配额不变。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel">取消</button><button class="cl-primary" type="button" data-action="confirm">确认演示兑换</button></div></div>`):'')+(state.reviewConfirm?box(`<div role="dialog" aria-label="人工核款确认"><h3>演示核款确认</h3><p class="cl-gap">正式需要真实到账引用与MFA；本次不领取红包、不发真实消息。</p><div class="cl-grid cl-gap"><button type="button" data-action="cancel-review">取消</button><button class="cl-primary" type="button" data-action="approve-demo">确认演示发单次码</button></div></div>`):'')+(state.receipt?`<div class="cl-receipt" role="status" aria-live="polite">${esc(state.receipt)}</div>`:'');
       const pages=state.role==='admin'?[['home','总览'],['users','用户'],['tasks','任务'],['capacity','容量'],['settings','设置']]:[['home','首页'],['media','追更'],['checkin','签到'],['shop',state.surface==='telegram'?'兑换':'商店'],['mine','我的']];
       nav.innerHTML=pages.map(([p,n])=>`<button type="button" data-action="go" data-page="${p}" aria-pressed="${state.page===p}">${n}</button>`).join('');

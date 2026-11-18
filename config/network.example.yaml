@@ -35,6 +35,10 @@ edge:
   untrusted_forwarded_headers_ignored: true
   internal_service_ports_public: false
 admin:
+  independent_web_console: true
+  session_audience: ADMIN_WEB
+  requires_telegram_init_data: false
+  telegram_session_grants_admin_access: false
   preferred_access: VPN_OR_SSH_TUNNEL
   public_access_enabled: false
   source_allowlist: []

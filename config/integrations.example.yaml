@@ -1,5 +1,5 @@
 # 接口默认关闭；打开需独立身份、目标和实施验收，不是现成产品配置。
-schema_version: 5
+schema_version: 6
 external_points:
   enabled: false
   adapter_types: [GAME_REWARD]

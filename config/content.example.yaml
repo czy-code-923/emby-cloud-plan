@@ -1,5 +1,5 @@
 # 结构示例，无真实禁用客户端名单；说明与已执行拦截分开。
-schema_version: 5
+schema_version: 6
 telegram_surface:
   cash_catalog_prices_checkout_and_purchase_urls_enabled: false
   shared_footer_purchase_link_enabled: false

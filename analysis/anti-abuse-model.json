@@ -1,0 +1,163 @@
+{
+  "model_version": "v6-2026-11-18",
+  "scope": "serial offline reference, enforcing candidate limits only; production behavior initially observe",
+  "network_requests": 0,
+  "limitations": [
+    "no real authentication or server",
+    "no thread/process atomicity test",
+    "no range protocol or segment rate test",
+    "no cache eviction, in-flight waiting, DDoS or end-to-end client test"
+  ],
+  "burst_summary": {
+    "SIGN_NEW": 1,
+    "REUSE_AUTHORIZED": 19,
+    "RATE_RAW": 80
+  },
+  "checks": [
+    {
+      "scenario": "100 simultaneous repeated controls",
+      "actual": {
+        "SIGN_NEW": 1,
+        "REUSE_AUTHORIZED": 19,
+        "RATE_RAW": 80
+      },
+      "expected": {
+        "SIGN_NEW": 1,
+        "REUSE_AUTHORIZED": 19,
+        "RATE_RAW": 80
+      },
+      "passed": true
+    },
+    {
+      "scenario": "only one upstream sign for burst",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "scenario": "revoked principal cannot use cached redirect",
+      "actual": "DENY_AUTH",
+      "expected": "DENY_AUTH",
+      "passed": true
+    },
+    {
+      "scenario": "old epoch denied despite cache",
+      "actual": "DENY_AUTH",
+      "expected": "DENY_AUTH",
+      "passed": true
+    },
+    {
+      "scenario": "ten normal same-context retries",
+      "actual": {
+        "SIGN_NEW": 1,
+        "REUSE_AUTHORIZED": 9
+      },
+      "expected": {
+        "SIGN_NEW": 1,
+        "REUSE_AUTHORIZED": 9
+      },
+      "passed": true
+    },
+    {
+      "scenario": "120 authorized segments are not new starts",
+      "actual": {
+        "SEGMENT_EXISTING": 120
+      },
+      "expected": {
+        "SEGMENT_EXISTING": 120
+      },
+      "passed": true
+    },
+    {
+      "scenario": "segments did not increase signing",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "scenario": "foreign item denied even while other item cached",
+      "actual": "DENY_ACL",
+      "expected": "DENY_ACL",
+      "passed": true
+    },
+    {
+      "scenario": "second user gets separate authorized result",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "source version change is not reused",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "profile change is not reused",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "signing context change is not reused",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "twelve distinct items within ten minutes",
+      "actual": {
+        "SIGN_NEW": 8,
+        "RATE_UNIQUE": 4
+      },
+      "expected": {
+        "SIGN_NEW": 8,
+        "RATE_UNIQUE": 4
+      },
+      "passed": true
+    },
+    {
+      "scenario": "ten-minute left boundary releases distinct item",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "first limited start",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "new-start budget prevents next item",
+      "actual": "RATE_NEW_START",
+      "expected": "RATE_NEW_START",
+      "passed": true
+    },
+    {
+      "scenario": "sixty-second left boundary releases start budget",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "source budget shared across users",
+      "actual": "RATE_SOURCE",
+      "expected": "RATE_SOURCE",
+      "passed": true
+    },
+    {
+      "scenario": "coalescing interval is end-exclusive",
+      "actual": "SIGN_NEW",
+      "expected": "SIGN_NEW",
+      "passed": true
+    },
+    {
+      "scenario": "anonymous access denied",
+      "actual": "DENY_AUTH",
+      "expected": "DENY_AUTH",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

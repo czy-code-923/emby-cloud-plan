@@ -1,6 +1,6 @@
-# v5设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
-schema_version: 5
-policy_version: proposal-v5.2-2026-11-13
+# v6设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
+schema_version: 6
+policy_version: proposal-v6-2026-11-18
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -167,3 +167,12 @@ capacity_recommendation:
   observation_hours: 72
   can_raise_sold_capacity_without_approval: false
   emergency_actions: [PAUSE_IMPORT, PAUSE_REGISTRATION, PAUSE_SALES]
+anti_abuse:
+  runtime_implemented: false
+  behavior_mode: OBSERVE
+  baseline_auth_and_object_acl_always_required: true
+  detailed_contract: anti-abuse.example.yaml
+admin_console:
+  backend_implemented: false
+  all_owned_supported_settings_registered: true
+  detailed_contract: admin-console.example.yaml

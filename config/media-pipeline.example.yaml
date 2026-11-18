@@ -1,5 +1,5 @@
 # v5设计输入；每个适配器的实际字段/API仍需按固定版本对接。
-schema_version: 5
+schema_version: 6
 profile: CLOUD_SHARE_LIGHTWEIGHT
 owners:
   acquisition_and_directory_jobs: OPENSTRM

@@ -1,6 +1,6 @@
 # v5.2设计示例；独立网页售卖，TG不提供链接；Stars SKU仅停用历史候选。
-schema_version: 5
-catalog_version: proposal-v5.2-2026-11-13
+schema_version: 6
+catalog_version: proposal-v6-2026-11-18
 defaults:
   quantity_per_order: 1
   points_delivery: DIRECT_GRANT

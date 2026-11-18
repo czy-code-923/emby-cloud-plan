@@ -1,0 +1,56 @@
+# v6待开发总控设置注册表；所有secret写接口和外部执行需真实后端，不是成品面板。
+schema_version: 6
+console:
+  standalone_web: true
+  backend_implemented: false
+  reuse_single_business_center: true
+  own_duplicate_points_or_expiry_database: false
+  production_access: VPN_OR_ALLOWED_SOURCE_AND_INDEPENDENT_MFA
+  static_frontend_build_outside_vps: true
+  schema_generated_forms_with_specialized_workflows: true
+sections:
+  - {id: overview, label: 总览, permission: READ_ASSIGNED_SUMMARIES}
+  - {id: users_roles, label: 用户与角色, config: policy.example.yaml, permission: IDENTITY_OR_OWNER}
+  - {id: registration, label: 注册邀请, config: policy.example.yaml, permission: REGISTRATION_ADMIN}
+  - {id: entitlements, label: 权益保号, config: policy.example.yaml, permission: ENTITLEMENT_ADMIN}
+  - {id: points_codes, label: 积分兑换码, config: policy.example.yaml, permission: POINTS_OR_CODE_ADMIN}
+  - {id: catalog_promotions, label: 商品活动, config: catalog.example.yaml, permission: COMMERCE_PUBLISH}
+  - {id: payments_fulfillment, label: 核款履约, config: commerce.example.yaml, permission: FINANCE_CONFIRM_PAYMENT}
+  - {id: telegram_links, label: TG与外链, config: commerce.example.yaml, permission: OWNER_POLICY_REVIEW}
+  - {id: content_clients, label: 帮助公告客户端, config: content.example.yaml, permission: CONTENT_OR_OPERATOR}
+  - {id: media, label: 媒体追更, config: media-pipeline.example.yaml, permission: MEDIA_OPERATOR}
+  - {id: storage_routes, label: 网盘播放线路, config: media-pipeline.example.yaml, permission: STORAGE_ADMIN}
+  - {id: devices_sessions, label: 设备与会话, config: policy.example.yaml, permission: PLAYBACK_OPERATOR}
+  - {id: abuse_rules, label: 防扫库防连点, config: anti-abuse.example.yaml, permission: SECURITY_RULE_PUBLISH}
+  - {id: abuse_events, label: 安全事件, config: anti-abuse.example.yaml, permission: SECURITY_RESPOND}
+  - {id: capacity, label: 资源人数同播, config: capacity-profiles.example.yaml, permission: CAPACITY_OPERATOR}
+  - {id: network_tls, label: 域名IP证书, config: network.example.yaml, permission: OWNER_NETWORK}
+  - {id: backup_migration, label: 备份迁移, config: integrations.example.yaml, permission: OWNER_BACKUP}
+  - {id: external_points, label: 游戏积分接口, config: integrations.example.yaml, permission: OWNER_INTEGRATION}
+  - {id: system_releases, label: 系统发布审计, permission: OWNER_RELEASE}
+publication:
+  states: [DRAFT, VALIDATED, PREVIEWED, CONFIRMED, DESIRED_COMMITTED, APPLYING, APPLIED, PARTIAL, FAILED, ROLLED_BACK]
+  expected_version_draft_hash_and_idempotency_required: true
+  conflict_preserves_user_input: true
+  high_risk_mfa_reason_confirmation: true
+  desired_and_applied_version_separate: true
+  timeout_equals_applied: false
+  rollback_creates_new_config_version: true
+  rollback_restores_old_business_database: false
+executor:
+  fixed_operation_ids_only: true
+  allowed_operations: [APPLY_BUSINESS_RULES, APPLY_EDGE_TEMPLATE, RELOAD_VALIDATED_EDGE, APPLY_CONTAINER_BUDGET, ROTATE_BOUND_CERT, START_BACKUP, PREFLIGHT_MIGRATION]
+  arbitrary_shell_sql_paths_or_proxy_config: false
+  docker_socket_exposed_to_web: false
+secrets:
+  write_only_references: true
+  preview_or_audit_contains_plaintext: false
+  stored_in_browser_local_storage: false
+external_purchase_link_gate:
+  requested_by_user: true
+  desired_label: 发电
+  supports_draft_and_preview: true
+  effective_enabled: false
+  evidence_status: NO_CONFIRMED_EXEMPTION_2026_11_18
+  owner_checkbox_equals_platform_approval: false
+  implementation_contract: commerce.example.yaml

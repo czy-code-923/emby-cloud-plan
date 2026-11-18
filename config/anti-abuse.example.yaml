@@ -1,0 +1,91 @@
+# v6设计输入，非Emby/Caddy可直接加载的防护配置；行为先观察、鉴权和硬边界始终执行。
+schema_version: 6
+policy_version: anti-abuse-v6-2026-11-18
+runtime_implemented: false
+behavior_mode: OBSERVE
+observation_hours: 72
+authenticated_identity_and_object_acl_required: true
+route_profile:
+  state: REQUIRES_DEPLOYED_VERSION_CLIENT_VALIDATION
+  include_emby_prefix_and_aliases: true
+  every_public_media_route_must_be_classified: true
+  trust_client_supplied_uid_or_play_session_id: false
+  expose_admin_api_key_or_origin_ports: false
+edge:
+  preferred_existing_proxy: CADDY_WITH_VALIDATED_GATEWAY
+  native_rate_module_assumed_in_standard_caddy: false
+  alternative: NGINX_LIMIT_REQ_AND_LIMIT_CONN_REPLACE_EDGE
+  stacking_two_public_proxies_required: false
+  trusted_proxy_sources_only: true
+  coarse_ip_request_rate_per_second: 60
+  coarse_ip_request_burst: 120
+  ip_rate_is_not_user_identity: true
+  unknown_host_rejected: true
+  request_headers_max_kib: 16
+  api_body_max_kib: 64
+  uploads_use_separate_limits: true
+metadata:
+  default_page_size: 50
+  max_page_size: 100
+  max_batch_ids: 50
+  search_length_min: 2
+  search_length_max: 80
+  list_uid_requests_10s: 20
+  list_uid_requests_60s: 120
+  search_uid_requests_60s: 20
+  image_uid_requests_10s: 120
+  unique_detail_items_10m: 300
+  unique_detail_action: OBSERVE_OR_RATE_LIMIT_AFTER_REVIEW
+  off_permission_items_in_any_media_response: false
+playback:
+  raw_start_attempts_uid_item_10s: 20
+  coalesce_seconds: 3
+  coalesce_wait_timeout_seconds: 2
+  max_waiters_per_key: 20
+  max_waiters_global: 64
+  coalesce_key_fields: [VERIFIED_UID, VERIFIED_SESSION_CONTEXT, ITEM, SOURCE_ACCOUNT, SOURCE_VERSION, PROFILE, AUTH_EPOCH, REQUIRED_SIGNING_CONTEXT]
+  untrusted_play_session_id_changes_key: false
+  auth_and_acl_before_cache: true
+  new_starts_uid_60s: 10
+  new_unique_items_uid_10m: 8
+  unique_items_mode: OBSERVE
+  repeated_result_counts_as_new_start: false
+  source_signing_inflight_max: 1
+  source_signing_calls_60s: 30
+  upstream_timeout_seconds: 5
+  same_logical_playback_uses_one_lease: true
+  seek_or_valid_segment_counts_as_new_start: false
+  revoked_auth_can_read_cached_redirect: false
+data_plane:
+  segment_requests_per_second: 20
+  segment_burst: 60
+  segment_budget_per: VERIFIED_PLAYBACK_CONTEXT
+  heartbeat_budget_separate: true
+  websocket_messages_limited_separately: true
+  download_policy: DISABLED_UNLESS_EXPLICITLY_AUTHORIZED
+  html_or_javascript_challenge_for_native_media: false
+  upstream_302_immediate_revocation_guaranteed: false
+actions:
+  rejection_status: 429
+  retry_after_required: true
+  initial_cooldown_seconds: 30
+  repeated_cooldown_seconds: 300
+  temporary_ip_block_seconds: 600
+  automatically_permanent_ban_or_delete: false
+  automatic_subnet_ban: false
+  temporary_rule_bypass_requires_reason_expiry_scope: true
+runtime_budgets:
+  single_executing_gateway_initially: true
+  shared_atomic_budget_required_for_multiple_gateways: true
+  behavior_state_cache_max_mib: 16
+  max_behavior_keys: 10000
+  arbitrary_unknown_id_cache_growth: false
+  baseline_auth_failure_admits_new_play: false
+  limiter_failure_allows_unbounded_new_signing: false
+  existing_playback_fallback_contract: policy.example.yaml
+observability:
+  aggregate_seconds: 60
+  sample_attack_requests_instead_of_unbounded_db_rows: true
+  count_coalesced_requests_separately_from_attacks: true
+  log_full_tokens_play_urls_or_cookies: false
+  preview_impact_and_desired_applied_versions: true

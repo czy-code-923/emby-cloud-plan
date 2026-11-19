@@ -1,5 +1,5 @@
 # 资源档位初值；不是压测结果，不代表可售并发；按cgroup有效资源识别。
-schema_version: 6
+schema_version: 7
 recommendation:
   observation_hours: 72
   evidence_required_for_sales_capacity: true

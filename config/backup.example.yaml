@@ -1,0 +1,64 @@
+# v7备份/恢复设计输入；尚无执行器。远程传输开关由integrations统一管理。
+schema_version: 7
+backup_policy:
+  id: primary-recovery
+  backend_implemented: false
+  base_local_backup_required_before_inviting_users: true
+  timezone: Asia/Shanghai
+  schedules:
+    local_full_interval_hours: 24
+    business_interval_minutes_when_trading: 60
+    before_schema_or_program_update: true
+    random_jitter_minutes: 10
+    overlapping_runs_allowed: false
+  retention:
+    daily_count: 7
+    weekly_count: 4
+    monthly_count: 3
+    enforce_actual_disk_budget: true
+    delete_last_verified_recovery_point: false
+    prune_requires_ownership_path_and_reference_checks: true
+  profiles: [BUSINESS_RECOVERY, MEDIA_CONFIG]
+  consistency:
+    postgres: CONSISTENT_LOGICAL_DUMP_WITH_SEPARATE_ROLES_MANIFEST
+    sqlite: SUPPORTED_ONLINE_BACKUP_OR_QUIESCED_WITH_WAL_HANDLED
+    coordinated_watermark_required: true
+    active_database_file_copy_without_wal_allowed: false
+    secrets_envelope_separate_key_required: true
+  manifest:
+    per_file_size_sha256_and_source_identity: true
+    versions_schemas_counts_control_totals_and_watermarks: true
+    authenticated_encryption_or_trusted_signature_required: true
+    checksum_alone_proves_origin: false
+  resource_budget:
+    heavy_workers: 1
+    compression_workers: 1
+    shares_heavy_job_and_change_coordinator: true
+    max_archive_bytes: null # 必须依据本机空间与数据规模填写，null为未就绪而非无限。
+    resource_unknown_blocks_destructive_or_large_actions: true
+  remote_transport:
+    contract: integrations.example.yaml
+    interface_switches_owned_by: remote_backup
+    policy_reference: primary-recovery
+    disabling_remote_transport_disables_local_backup: false
+  restore:
+    isolated_rehearsal_required: true
+    sample_rehearsal_interval_days: 30
+    production_requires_owner_mfa_and_manifest_binding: true
+    disable_sales_claims_retention_notifications_media_writes: true
+    compare_latest_claim_revoke_payment_watermarks: true
+    revoke_sessions_and_ephemeral_tickets: true
+    automatically_restore_old_database_after_app_failure: false
+    migration_target_writer_automatic_promotion: false
+    recovery_point_after_write_reconciliation_required: true
+  targets_not_promises:
+    initial_rpo_hours: 24
+    transaction_business_rpo_hours: 1
+    initial_rto_hours: 4
+    measured_evidence_required: true
+  visibility:
+    states: [CREATED, CRYPTO_VERIFIED, REMOTE_RECEIPTED, RESTORE_VERIFIED, FAILED]
+    one_success_boolean_replaces_all_states: false
+    download_role: OWNER_BACKUP
+    short_lived_bounded_download_ticket: true
+    full_backup_sent_to_telegram: false

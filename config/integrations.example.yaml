@@ -1,5 +1,5 @@
 # 接口默认关闭；打开需独立身份、目标和实施验收，不是现成产品配置。
-schema_version: 6
+schema_version: 7
 external_points:
   enabled: false
   adapter_types: [GAME_REWARD]
@@ -30,6 +30,9 @@ external_points:
   reenable_automatically_replays_held_events: false
   paid_random_games_cashout_or_user_transfers: false
 remote_backup:
+  backup_policy_ref: primary-recovery
+  backup_policy_contract: backup.example.yaml
+  schedule_fields_are_derived_from_backup_policy: true
   push_enabled: false
   pull_api_enabled: false
   preferred_mode: ENCRYPTED_SNAPSHOT_PUSH

@@ -1,5 +1,5 @@
 # example.com仅作占位；没有进行DNS/TLS配置或开启公网IP访问。
-schema_version: 6
+schema_version: 7
 domains:
   media: emby.example.com
   account: account.example.com

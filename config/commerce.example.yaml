@@ -1,5 +1,5 @@
 # v6待开发规格；新增外链草稿能力但规则Gate保持关闭，不启用真实收款。
-schema_version: 6
+schema_version: 7
 real_payments_enabled: false
 entrypoints:
   standalone_web:

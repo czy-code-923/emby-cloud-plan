@@ -1,5 +1,5 @@
-# v6待开发总控设置注册表；所有secret写接口和外部执行需真实后端，不是成品面板。
-schema_version: 6
+# v7待开发总控设置注册表；全部模块归属不表示表单/执行器已实现。
+schema_version: 7
 console:
   standalone_web: true
   separate_from_telegram_panel: true
@@ -35,9 +35,14 @@ sections:
   - {id: abuse_events, label: 安全事件, config: anti-abuse.example.yaml, permission: SECURITY_RESPOND}
   - {id: capacity, label: 资源人数同播, config: capacity-profiles.example.yaml, permission: CAPACITY_OPERATOR}
   - {id: network_tls, label: 域名IP证书, config: network.example.yaml, permission: OWNER_NETWORK}
-  - {id: backup_migration, label: 备份迁移, config: integrations.example.yaml, permission: OWNER_BACKUP}
+  - {id: backup_migration, label: 备份恢复迁移, config: backup.example.yaml, permission: OWNER_BACKUP}
   - {id: external_points, label: 游戏积分接口, config: integrations.example.yaml, permission: OWNER_INTEGRATION}
   - {id: system_releases, label: 系统发布审计, permission: OWNER_RELEASE}
+  - {id: notifications, label: 通知中心, config: operations.example.yaml, permission: NOTIFICATION_ADMIN}
+  - {id: update_assistant, label: 更新助手, config: update-assistant.example.yaml, permission: RELEASE_APPLY}
+  - {id: jobs_observability, label: 任务监控, config: operations.example.yaml, permission: OPERATIONS_ADMIN}
+  - {id: privacy_exports, label: 隐私工单导出, config: operations.example.yaml, permission: OWNER_PRIVACY_EXPORT}
+  - {id: secrets_adapters, label: 凭据适配器, config: operations.example.yaml, permission: OWNER_SECRET_ADAPTER}
 publication:
   states: [DRAFT, VALIDATED, PREVIEWED, CONFIRMED, DESIRED_COMMITTED, APPLYING, APPLIED, PARTIAL, FAILED, ROLLED_BACK]
   expected_version_draft_hash_and_idempotency_required: true
@@ -50,6 +55,8 @@ publication:
 executor:
   fixed_operation_ids_only: true
   allowed_operations: [APPLY_BUSINESS_RULES, APPLY_EDGE_TEMPLATE, RELOAD_VALIDATED_EDGE, APPLY_CONTAINER_BUDGET, ROTATE_BOUND_CERT, START_BACKUP, PREFLIGHT_MIGRATION]
+  backup_update_workflow_operations: [VERIFY_BACKUP, STAGE_ISOLATED_RESTORE, PREFLIGHT_RESTORE, PREFLIGHT_UPDATE, FETCH_VERIFIED_RELEASE, SCHEDULE_UPDATE, APPLY_VERIFIED_RELEASE, ROLLBACK_COMPATIBLE_APP]
+  operation_permission_and_safe_state_required: true
   arbitrary_shell_sql_paths_or_proxy_config: false
   docker_socket_exposed_to_web: false
 secrets:
@@ -64,3 +71,147 @@ external_purchase_link_gate:
   evidence_status: NO_CONFIRMED_EXEMPTION_2026_11_18
   owner_checkbox_equals_platform_approval: false
   implementation_contract: commerce.example.yaml
+settings_coverage:
+  design_only: true
+  detail: docs/25-网页总控全部功能与字段清单.md
+  inventory_script: scripts/verify_plan.py
+  inventory_output: analysis/control-surface-inventory.json
+  config_schema_version_equals_document_version: true
+  all_files_and_top_level_keys_must_be_registered: true
+  inventory_mode: DESIGN_OWNERSHIP_REQUIRES_FIELD_METADATA_AT_IMPLEMENTATION
+  allowed_field_classes: [EDITABLE_POLICY, DEDICATED_WORKFLOW, READ_ONLY_INVARIANT, SECRET_REFERENCE, EXTERNAL_CAPABILITY]
+  field_metadata_required_before_runtime_publish: [TYPE_UNIT_RANGE, SCOPE_PRECEDENCE, READ_WRITE_PERMISSION, SECRET_CLASS, CONSTRAINTS_DEPENDENCIES, RISK, APPLY_TARGET, DESIRED_APPLIED_VERSION]
+  all_constraints_are_user_toggleable: false
+  root_owners:
+    policy.example.yaml:
+      schema_version: system_releases
+      policy_version: system_releases
+      timezone: system_releases
+      service: system_releases
+      registration: registration
+      free_membership: entitlements
+      retention: entitlements
+      points: points_codes
+      security: users_roles
+      devices: devices_sessions
+      playback: devices_sessions
+      online_statistics: overview
+      commerce: payments_fulfillment
+      extensions: external_points
+      user_content: content_clients
+      network_access: network_tls
+      tasks: jobs_observability
+      notifications: notifications
+      operations: capacity
+      capacity_recommendation: capacity
+      anti_abuse: abuse_rules
+      admin_console: system_releases
+      backup: backup_migration
+      updates: update_assistant
+      operations_detail: jobs_observability
+    catalog.example.yaml:
+      schema_version: system_releases
+      catalog_version: catalog_promotions
+      defaults: catalog_promotions
+      products: catalog_promotions
+      promotions: catalog_promotions
+    capacity-profiles.example.yaml:
+      schema_version: system_releases
+      recommendation: capacity
+      profiles: capacity
+      limits: capacity
+      semantics: capacity
+    media-pipeline.example.yaml:
+      schema_version: system_releases
+      profile: media
+      owners: media
+      source_mapping: storage_routes
+      paths: media
+      metadata: media
+      automation: media
+      publication: media
+      telegram: telegram_links
+      emby_events: media
+    commerce.example.yaml:
+      schema_version: system_releases
+      real_payments_enabled: payments_fulfillment
+      entrypoints: payments_fulfillment
+      channels: payments_fulfillment
+      orders: payments_fulfillment
+      promotions: catalog_promotions
+      review: payments_fulfillment
+      fulfillment: points_codes
+      notifications: notifications
+      refunds: payments_fulfillment
+      inventory: catalog_promotions
+    content.example.yaml:
+      schema_version: system_releases
+      telegram_surface: telegram_links
+      help_center: content_clients
+      announcements: content_clients
+      client_policy: content_clients
+      editor_security: content_clients
+    integrations.example.yaml:
+      schema_version: system_releases
+      external_points: external_points
+      remote_backup: backup_migration
+      integration_controls: system_releases
+    network.example.yaml:
+      schema_version: system_releases
+      domains: network_tls
+      binding: network_tls
+      ip_access: network_tls
+      edge: network_tls
+      admin: users_roles
+      web_sessions: users_roles
+      certificate_monitor: network_tls
+    anti-abuse.example.yaml:
+      schema_version: system_releases
+      policy_version: abuse_rules
+      runtime_implemented: abuse_rules
+      behavior_mode: abuse_rules
+      observation_hours: abuse_rules
+      authenticated_identity_and_object_acl_required: abuse_rules
+      route_profile: abuse_rules
+      edge: abuse_rules
+      metadata: abuse_rules
+      playback: abuse_rules
+      data_plane: abuse_rules
+      actions: abuse_events
+      runtime_budgets: capacity
+      observability: jobs_observability
+    admin-console.example.yaml:
+      schema_version: system_releases
+      console: users_roles
+      sections: system_releases
+      publication: system_releases
+      executor: system_releases
+      secrets: secrets_adapters
+      external_purchase_link_gate: telegram_links
+      settings_coverage: system_releases
+      shared_setting_aliases: system_releases
+    backup.example.yaml:
+      schema_version: system_releases
+      backup_policy: backup_migration
+    update-assistant.example.yaml:
+      schema_version: system_releases
+      update_assistant: update_assistant
+    operations.example.yaml:
+      schema_version: system_releases
+      notifications: notifications
+      jobs_observability: jobs_observability
+      privacy_exports: privacy_exports
+      secrets_adapters: secrets_adapters
+shared_setting_aliases:
+  representation: SOURCE_IS_DERIVED_VIEW_OF_CANONICAL_TARGET_NOT_SECOND_WRITABLE_VALUE
+  pairs:
+    - {source: 'integrations.example.yaml:remote_backup.business_interval_minutes_when_trading', target: 'backup.example.yaml:backup_policy.schedules.business_interval_minutes_when_trading'}
+    - {source: 'integrations.example.yaml:remote_backup.full_interval_hours', target: 'backup.example.yaml:backup_policy.schedules.local_full_interval_hours'}
+    - {source: 'policy.example.yaml:tasks.heavy_background_workers', target: 'operations.example.yaml:jobs_observability.global_heavy_job_concurrency'}
+    - {source: 'policy.example.yaml:notifications.quiet_hours', target: 'operations.example.yaml:notifications.default_quiet_hours'}
+    - {source: 'policy.example.yaml:extensions.remote_backup_push_enabled', target: 'integrations.example.yaml:remote_backup.push_enabled'}
+    - {source: 'policy.example.yaml:extensions.remote_backup_pull_enabled', target: 'integrations.example.yaml:remote_backup.pull_api_enabled'}
+    - {source: 'policy.example.yaml:extensions.external_points_enabled', target: 'integrations.example.yaml:external_points.enabled'}
+    - {source: 'policy.example.yaml:commerce.real_payments_enabled', target: 'commerce.example.yaml:real_payments_enabled'}
+    - {source: 'policy.example.yaml:updates.effective_enabled', target: 'update-assistant.example.yaml:update_assistant.effective_enabled'}
+    - {source: 'policy.example.yaml:updates.program_repository', target: 'update-assistant.example.yaml:update_assistant.program_repository.full_name'}

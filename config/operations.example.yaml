@@ -1,0 +1,51 @@
+# v7通知/任务/隐私/凭据的总控设计输入，不代表真实后端配置。
+schema_version: 7
+notifications:
+  event_dispatcher: SINGLE_DURABLE_OUTBOX
+  available_targets: [ADMIN_INBOX, TELEGRAM_PRIVATE, RESTRICTED_TELEGRAM_GROUP, EMAIL, HTTPS_WEBHOOK]
+  configured_targets: []
+  admin_inbox_for_unresolved_payments_required: true
+  targets_require_ownership_verification_and_scopes: true
+  default_quiet_hours: {start: '22:00', end: '08:00'}
+  timezone: Asia/Shanghai
+  security_and_finance_alerts_bypass_quiet_hours: true
+  retry_with_backoff_and_dead_letter: true
+  delivery_idempotency_and_recipient_throttling_required: true
+  disable_channel_cancels_orders_or_refunds: false
+  include_payment_secrets_full_codes_or_backup_keys: false
+  customer_cash_order_channel_contract: commerce.example.yaml
+jobs_observability:
+  global_heavy_job_concurrency: 1
+  shared_change_coordinator: [UPDATE, RESTORE, MIGRATION, NETWORK_CUTOVER]
+  heavy_budget_participants: [MEDIA_RESCAN, BACKUP, UPDATE_STAGING, RESTORE, MIGRATION]
+  persistent_operation_and_job_ids: true
+  final_commit_checks_epoch_and_fencing: true
+  retry_limit: 5
+  bounded_queue_and_payload_bytes_required: true
+  cancel_rolls_back_already_committed_claim_or_payment: false
+  pause_cleanup_when_watch_collection_unhealthy: true
+  probes_reveal_secrets_or_mutate_real_customer_money: false
+  clock_drift_detection: true
+  diagnostics: REDACTED_AND_ROLE_SCOPED
+privacy_exports:
+  self_export_enabled_in_design: true
+  full_population_export_permission: OWNER_PRIVACY_EXPORT
+  short_lived_downloads_and_object_acl_required: true
+  watching_raw_days: 7
+  watching_aggregate_days: 90
+  session_ip_log_days: 30
+  financial_retention: OPERATOR_CONFIGURED_FOR_ACTUAL_NEEDS_AND_APPLICABLE_RULES
+  account_closure_blindly_deletes_claim_payment_revoke_facts: false
+  support_attachments_private_and_size_bounded: true
+  audit_export_and_download: true
+secrets_adapters:
+  secret_values_write_only: true
+  secret_ref_not_plaintext_in_settings: true
+  connection_test_destinations_allowlisted: true
+  two_key_rotation_with_revocation_epoch: true
+  expires_scope_health_and_last_validation_visible: true
+  capability_states: [SUPPORTED_TESTED, SUPPORTED_UNTESTED, EXTERNAL_MANUAL, UNSUPPORTED, UNIMPLEMENTED]
+  third_party_version_and_license_matrix_required: true
+  adapter_disable_drains_inflight_and_preserves_facts: true
+  owner_recovery_independent_from_telegram: true
+  last_owner_self_lock_requires_local_recovery_path: true

@@ -1,0 +1,193 @@
+"""Build/check the v7 design deliverable; requires PyYAML, never contacts a service.
+
+This checks documentation/configuration ownership and conservative example defaults.
+It does not test a running backend, real authentication, updates or disaster recovery.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from collections import Counter
+from pathlib import Path
+from urllib.parse import unquote
+
+try:
+    import yaml
+except ImportError as exc:
+    raise SystemExit("This design checker requires PyYAML in the local environment.") from exc
+
+ROOT = Path(__file__).resolve().parents[1]
+VERSION = 7
+DATE = "2026-11-19"
+
+
+class UniqueLoader(yaml.SafeLoader):
+    """Reject duplicated YAML keys rather than silently dropping an earlier value."""
+
+
+def unique_mapping(loader, node, deep=False):
+    result = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if key in result:
+            raise ValueError(f"Duplicated YAML key {key!r}")
+        result[key] = loader.construct_object(value_node, deep=deep)
+    return result
+
+
+UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, unique_mapping)
+
+
+def leaves(value, path=""):
+    if isinstance(value, dict) and value:
+        for key, child in value.items():
+            yield from leaves(child, f"{path}.{key}" if path else str(key))
+    elif isinstance(value, list) and value:
+        for index, child in enumerate(value):
+            yield from leaves(child, f"{path}[{index}]")
+    else:
+        yield path, value
+
+
+def read_ref(configs, reference):
+    filename, path = reference.split(":", 1)
+    value = configs[filename]
+    for key in path.split("."):
+        value = value[key]
+    return value
+
+
+def render_compiled(chapters):
+    intro = (
+        "# 个人云盘 Emby 与 Telegram 服务完整优化方案\n\n"
+        f"版本：{VERSION}\n\n更新日期：{DATE}\n\n"
+        "最终设计：美西2C2G＋网盘、Emby自动刮削/追更、TG自助、注册/保号/积分、"
+        "独立购买/收款发码、帮助/客户端、资源/防护/域名、备份/迁移均保留。"
+        "独立网页总控通过独立管理员账号/MFA管理24模块和全部项目设置，TG面板是另一个入口。\n\n"
+        "更新助手支持未来可信程序仓库自动检查/验证拉取、预检/备份/维护应用及兼容回退；"
+        "程序仓库尚未创建、当前未配置且不执行更新，现有方案仓库不充当程序源。"
+        "TG购买外链沿用2026-11-18核验后的有效关闭状态，独立网址由运营者手动告知。\n\n"
+        "本文件是27篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
+        "当前默认/遗漏闭环/实施顺序见第27篇，所有总控字段见第25篇，更新助手见第26篇；"
+        "本地设计核验见../analysis/v7-verification.md。\n\n## 分篇目录\n\n"
+    )
+    toc = "".join(f"- [{p.stem}]({p.name})\n" for p in chapters)
+    return intro + toc + "\n" + "\n\n---\n\n".join(p.read_text(encoding="utf-8").rstrip() for p in chapters) + "\n"
+
+
+def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--rebuild", action="store_true", help="Regenerate the compiled design and field ownership inventory")
+    parser.add_argument("--export", type=Path, help="Also save the compiled Markdown to this explicit file")
+    args = parser.parse_args()
+    checks = []
+
+    def require(condition, label):
+        if not condition:
+            raise AssertionError(label)
+        checks.append(label)
+
+    configs = {p.name: yaml.load(p.read_text(encoding="utf-8"), Loader=UniqueLoader) for p in sorted((ROOT / "config").glob("*.yaml"))}
+    admin = configs["admin-console.example.yaml"]
+    modules = {section["id"] for section in admin["sections"]}
+    require(len(admin["sections"]) == len(modules) == 24, "24 unique independent-web-console modules")
+    require(all(c["schema_version"] == VERSION for c in configs.values()), "all example design schemas v7")
+    roots = admin["settings_coverage"]["root_owners"]
+    require(set(configs) == set(roots), "all config files explicitly registered, no implicit owner fallback")
+    inventory = []
+    for filename, config in configs.items():
+        require(set(config) == set(roots[filename]), f"all top-level keys explicitly owned: {filename}")
+        for root_key, owner in roots[filename].items():
+            require(owner in modules, f"valid module: {filename}:{root_key}")
+            for path, value in leaves(config[root_key], root_key):
+                inventory.append({"file": filename, "path": path, "module": owner,
+                                  "example_type": type(value).__name__,
+                                  "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"})
+    require(set(row["module"] for row in inventory) == modules, "every console module owns design fields")
+    for pair in admin["shared_setting_aliases"]["pairs"]:
+        require(read_ref(configs, pair["source"]) == read_ref(configs, pair["target"]), f"derived alias matches canonical: {pair['source']}")
+    for section in admin["sections"]:
+        if "config" in section:
+            require(section["config"] in configs, f"module config exists: {section['id']}")
+
+    update = configs["update-assistant.example.yaml"]["update_assistant"]
+    policy = configs["policy.example.yaml"]
+    commerce = configs["commerce.example.yaml"]
+    backup = configs["backup.example.yaml"]["backup_policy"]
+    require(not update["runtime_implemented"] and not update["effective_enabled"], "updater remains a design, not enabled")
+    require(update["initial_status"] == "UNCONFIGURED" and update["program_repository"]["full_name"] is None
+            and not update["program_repository"]["created"], "future program repo explicitly absent")
+    require(not update["documentation_repository_is_program_source"], "documentation repo never used as software source")
+    require(not update["automation"]["auto_apply_enabled"] and update["scope"]["auto_apply_components"] == [], "no default auto-apply authorization")
+    require(not update["acquisition"]["production_worktree_git_pull"] and not update["acquisition"]["build_on_2c2g_production_host"], "isolated fetch and prebuilt production artifacts")
+    require(update["trust"]["manifest_signature_and_artifact_digest_required"], "trusted provenance and digest required by design")
+    require(not update["rollback"]["automatic_old_business_database_restore"]
+            and update["rollback"]["after_new_writes_require_reconciliation"], "app rollback preserves new business writes")
+    require(update["execution"]["executor_separate_from_web_lifecycle"]
+            and update["execution"]["durable_checkpoints_and_fenced_single_writer"], "independent durable single-executor update workflow")
+    require(not update["execution"]["web_can_access_docker_socket"], "no Docker socket in the web backend")
+    require(not backup["remote_transport"]["disabling_remote_transport_disables_local_backup"], "remote switch does not disable base backup")
+    require(backup["restore"]["compare_latest_claim_revoke_payment_watermarks"], "restoration checks latest claim/revoke/payment watermarks")
+    require(not commerce["real_payments_enabled"] and not commerce["entrypoints"]["telegram_bot_and_mini_app"]["external_purchase_link"]["effective_enabled"], "cash and Telegram purchase link remain effectively off")
+    require(policy["retention"]["mode_lock_days"] == 20 and policy["free_membership"]["cycle_days"] == 20, "20-day selected activity policy retained")
+    require(policy["points"]["checkin_reward"]["minimum"] == 10 and policy["points"]["checkin_reward"]["maximum"] == 20, "10-20 integer wallet reward retained")
+    require(admin["console"]["standalone_web"] and not admin["console"]["telegram_client_or_bot_required"]
+            and not admin["console"]["accepts_telegram_panel_session_as_admin"], "standalone admin auth remains separate from Telegram")
+
+    chapters = sorted((ROOT / "docs").glob("[0-9][0-9]-*.md"))
+    require([int(p.name[:2]) for p in chapters] == list(range(1, 28)), "27 consecutively numbered plan chapters")
+    compiled = render_compiled(chapters)
+    inventory_document = {"version": VERSION, "date": DATE, "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
+                          "config_files": len(configs), "console_modules": len(modules),
+                          "field_paths": len(inventory), "by_module": dict(sorted(Counter(row["module"] for row in inventory).items())),
+                          "fields": inventory}
+    inventory_text = json.dumps(inventory_document, ensure_ascii=False, indent=2) + "\n"
+    if args.rebuild:
+        (ROOT / "docs" / "完整方案.md").write_text(compiled, encoding="utf-8", newline="\n")
+        (ROOT / "analysis" / "control-surface-inventory.json").write_text(inventory_text, encoding="utf-8", newline="\n")
+    require((ROOT / "docs" / "完整方案.md").read_text(encoding="utf-8") == compiled, "compiled plan matches all final chapters")
+    require((ROOT / "analysis" / "control-surface-inventory.json").read_text(encoding="utf-8") == inventory_text, "field inventory reproducible and current")
+
+    for p in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")), *sorted((ROOT / "analysis").glob("*.md"))]:
+        contents = p.read_text(encoding="utf-8")
+        require(sum(1 for line in contents.splitlines() if line.lstrip().startswith("```")) % 2 == 0, f"balanced Markdown fences: {p.name}")
+        for raw in re.findall(r"(?<!!)\[[^\]\n]+\]\(([^)]+)\)", contents):
+            target = raw.strip("<>")
+            if target.startswith(("http:", "https:", "mailto:", "#")):
+                continue
+            target = unquote(target.split("#", 1)[0])
+            require((p.parent / target).exists(), f"local link exists: {p.name} -> {target}")
+
+    fragment = (ROOT / "ui" / "admin-console.fragment.html").read_text(encoding="utf-8")
+    module_block = re.search(r"const modules=\[([\s\S]*?)\n    \];", fragment)
+    require(module_block is not None, "admin prototype module registry exists")
+    ui_modules = re.findall(r"\['([a-z_]+)'\s*,", module_block.group(1))
+    require(len(ui_modules) == 24 and set(ui_modules) == modules, "24 prototype module IDs match the configuration")
+    require("程序仓库未创建" in fragment and "未配置" in fragment, "updater prototype honestly marks absent program source")
+    wrapper = (ROOT / "ui" / "admin-console-preview.html").read_text(encoding="utf-8")
+    require(fragment in wrapper, "standalone admin preview embeds current fragment")
+    original = ROOT / "reference" / "emby-v1-original.markdown"
+    source = Path("E:/1111陈朝阳/emby/emby.markdown")
+    if source.exists():
+        require(original.read_bytes() == source.read_bytes(), "original user source remains byte-exact")
+    if args.export:
+        args.export.parent.mkdir(parents=True, exist_ok=True)
+        args.export.write_text(compiled, encoding="utf-8", newline="\n")
+        require(args.export.read_bytes() == (ROOT / "docs" / "完整方案.md").read_bytes(), "export byte-matches final compiled plan")
+    report = {"date": DATE, "design_checks_passed": len(checks), "config_files": len(configs),
+              "console_modules": len(modules), "field_paths": len(inventory), "chapters": len(chapters),
+              "compiled_sha256": hashlib.sha256(compiled.encode()).hexdigest(),
+              "scope": "Documentation and design examples only; no runtime security/update/restore test",
+              "checks": checks}
+    validation = ROOT / ".validation"
+    validation.mkdir(exist_ok=True)
+    (validation / "v7-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({k: v for k, v in report.items() if k != "checks"}, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

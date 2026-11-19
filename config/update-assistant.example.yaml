@@ -1,0 +1,108 @@
+# v7未来程序更新设计；程序仓库未创建，本文件不执行任何下载或部署。
+schema_version: 7
+update_assistant:
+  runtime_implemented: false
+  effective_enabled: false
+  initial_status: UNCONFIGURED
+  design_mode: CHECK_ONLY
+  supported_modes: [OFF, CHECK_ONLY, AUTO_DOWNLOAD_MANUAL_APPLY, AUTO_APPLY_IN_WINDOW]
+  documentation_repository: czy-code-923/emby-cloud-plan
+  documentation_repository_is_program_source: false
+  program_repository:
+    created: false
+    full_name: null
+    stable_repository_id: null
+    stable_owner_id: null
+    read_credential_ref: null
+    missing_identity_blocks_check_download_and_apply: true
+  discovery:
+    mechanism: GITHUB_PUBLISHED_RELEASE_WITH_VERIFIED_MANIFEST
+    channel: stable
+    interval_hours: 6
+    jitter_percent: 20
+    use_etag_and_bounded_backoff: true
+    allow_drafts: false
+    allow_prereleases: false
+    moving_branch_or_tag_is_install_authority: false
+  acquisition:
+    preferred: CI_PREBUILT_OCI_AND_STATIC_ASSETS
+    automatically_fetch_pinned_source_snapshot_when_configured: true
+    source_checkout_separate_from_runtime_data_and_secrets: true
+    production_worktree_git_pull: false
+    build_on_2c2g_production_host: false
+    submodules_lfs_and_remote_compose_includes_default: DISABLED
+    maximum_download_mbps: 5
+    maximum_parallel_downloads: 1
+    maximum_staging_bytes: null # 未配置则阻止大下载，不表示无上限。
+    extract_path_symlink_filecount_size_checks_required: true
+  trust:
+    scheme: REQUIRED_BEFORE_ACTIVATION
+    accepted_schemes: [VERIFIED_BUILD_ATTESTATION, PINNED_KEY_SIGNED_MANIFEST]
+    trusted_identity_ref: null
+    pin_signer_repo_owner_workflow_source_commit_and_predicate: true
+    manifest_signature_and_artifact_digest_required: true
+    checksum_from_same_download_alone_is_trust: false
+    expiry_revocation_release_sequence_and_security_floor_required: true
+    candidate_can_modify_executor_or_trust_roots: false
+    missing_or_stale_trust_blocks_auto_apply: true
+  scope:
+    eligible_components: [BUSINESS_API, WEB_FRONTENDS, BUSINESS_WORKER]
+    auto_apply_components: []
+    automatically_update_emby_or_storage_adapters: false
+    automatically_update_postgres_major_docker_or_os: false
+    executor_self_update: MANUAL_SEPARATE_TRUST_BOUNDARY
+  automation:
+    auto_apply_enabled: false
+    owner_preapproved_policy_required: true
+    version_number_or_security_label_alone_authorizes_apply: false
+    destructive_schema_migration_auto_allowed: false
+    timezone: Asia/Shanghai
+    maintenance_window: {start: '03:00', end: '05:00'}
+    window_interval: START_INCLUSIVE_END_EXCLUSIVE
+    active_playback_policy: DEFER_UNTIL_IDLE_OR_RESCHEDULE
+    emergency_force_requires_independent_owner_action: true
+    pinned_version: null
+    denied_releases: []
+  preflight:
+    validated_source_artifact_template_and_compatibility_required: true
+    estimate_actual_peak_disk_and_memory_required: true
+    resource_safety_headroom_must_be_estimated: true
+    update_point_snapshot_after_quiesce_required: true
+    previous_scheduled_backup_alone_sufficient: false
+    current_backup_crypto_and_watermark_verification_required: true
+    remote_receipt_before_schema_change_required_by_initial_policy: true
+    schema_changing_release_requires_restore_rehearsal_evidence: true
+    current_unresolved_ledger_or_claim_anomaly_blocks_apply: true
+    migration_and_restore_and_network_cutover_mutual_exclusion: true
+    unknown_resource_budget_blocks_apply: true
+    global_docker_prune_or_volume_delete: false
+  execution:
+    executor_separate_from_web_lifecycle: true
+    web_can_access_docker_socket: false
+    fixed_operations_local_reviewed_templates_only: true
+    operation_id_expected_version_manifest_hash_required: true
+    durable_checkpoints_and_fenced_single_writer: true
+    expired_lease_alone_authorizes_second_executor: false
+    changing_program_overwrites_secrets_or_business_volumes: false
+    webhook_ack_only_after_durable_acceptance: true
+    quiesce_and_reconcile_inflight_business_writes: true
+    two_full_stacks_on_2c2g_required: false
+    zero_downtime_promised: false
+    cancellation_only_at_safe_checkpoint: true
+  health:
+    container_running_equals_success: false
+    checks: [SCHEMA, API_FRONTEND_PAIR, ADMIN_USER_PERMISSION_ISOLATION, EMBY_PROBE, LEDGER_CONTROL_TOTALS, CLAIM_PAYMENT_WATERMARKS, SINGLE_WORKER_AND_BOT_RECEIVER]
+    observation_minutes: 15
+    real_customer_charge_or_claim_as_probe: false
+  rollback:
+    retain_previous_known_good_artifact: true
+    application_only_if_current_schema_compatible: true
+    automatic_old_business_database_restore: false
+    after_new_writes_require_reconciliation: true
+    incompatible_failure_state: NEEDS_RECOVERY
+    independent_local_rescue_required: true
+  observability:
+    audit_manifest_policy_approver_backup_checkpoint_result: true
+    secret_in_urls_logs_or_notifications: false
+    notification_contract: operations.example.yaml
+    user_facing_ui_shows_desired_actual_and_runtime_implemented: true

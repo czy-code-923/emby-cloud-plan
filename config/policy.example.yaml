@@ -1,6 +1,6 @@
-# v6设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
-schema_version: 6
-policy_version: proposal-v6-2026-11-18
+# v7设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
+schema_version: 7
+policy_version: proposal-v7-2026-11-19
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -176,3 +176,11 @@ admin_console:
   backend_implemented: false
   all_owned_supported_settings_registered: true
   detailed_contract: admin-console.example.yaml
+backup:
+  detailed_contract: backup.example.yaml
+updates:
+  effective_enabled: false
+  program_repository: null
+  detailed_contract: update-assistant.example.yaml
+operations_detail:
+  detailed_contract: operations.example.yaml

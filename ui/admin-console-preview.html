@@ -17,7 +17,7 @@
     #emby-control-v6 .ec-compact .ec-box{padding:12px}
     @media(max-width:650px){#emby-control-v6 .ec-shell{grid-template-columns:1fr}#emby-control-v6 nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-right:0;border-bottom:1px solid var(--ec-line)}#emby-control-v6 main{padding:12px}#emby-control-v6 header{padding:16px}#emby-control-v6 .ec-grid{grid-template-columns:1fr}#emby-control-v6 .ec-box{padding:14px}}
   </style>
-  <header><div><h2>Cloud Library · 独立网页总控</h2><p class="ec-dim">浏览器独立后台 · v6.1原型 · 不依赖Telegram</p></div><span class="ec-tag" id="ec-version">演示配置 v1 · 观察模式</span></header>
+  <header><div><h2>Cloud Library · 独立网页总控</h2><p class="ec-dim">浏览器独立后台 · v7原型 · 24模块 · 不依赖Telegram</p></div><span class="ec-tag" id="ec-version">演示配置 v1 · 观察模式</span></header>
   <div class="ec-shell"><nav id="ec-nav" aria-label="总控导航"></nav><main id="ec-main"></main></div>
   <footer>所有发布、回放和审计均为本地演示；没有实际鉴权、执行器、防护或收款。正式功能按方案逐项实施与验收。</footer>
   <script>
@@ -45,26 +45,33 @@
       ['network_tls','域名IP证书','证书告警提前天数','14','域名控制权/TLS验证，裸IP默认关'],
       ['backup_migration','备份迁移','业务备份间隔（分钟）','60','加密快照/回执/恢复验证，禁双主'],
       ['external_points','游戏积分接口','来源日预算','500','默认关闭，验签/去重/预算/epoch'],
-      ['system_releases','系统发布审计','观察时长（小时）','72','保存/期望/实际应用版本分别显示']
+      ['system_releases','系统发布审计','观察时长（小时）','72','保存/期望/实际应用版本分别显示'],
+      ['notifications','通知中心','投递重试次数','5','持久站内待办不依赖TG，支付秘密不进通知'],
+      ['update_assistant','更新助手','检查间隔（小时）','6','程序仓库未创建，未配置不下载或应用'],
+      ['jobs_observability','任务监控','全局重任务并发','1','更新/恢复/迁移/域名切换协调，取消有安全边界'],
+      ['privacy_exports','隐私工单导出','短时下载有效分钟','5','本人导出、分级保留、账务与核销事实不能盲删'],
+      ['secrets_adapters','凭据适配器','凭据到期告警天数','7','只写密钥引用，轮换、scope、能力与许可状态']
     ];
     const stored=window.openai?.widgetState?.privateContent;
-    const tabs=[['security','防护策略'],['settings','全部设置'],['link','TG发电外链'],['events','安全事件'],['release','发布与审计']];
-    const state={page:tabs.some(x=>x[0]===stored?.page)?stored.page:'security',raw:20,merge:3,unique:8,observe:true,version:1,applied:1,baseline:{raw:20,merge:3,unique:8,observe:true},result:'',error:'',confirmation:null,section:'registration',values:Object.fromEntries(modules.map(m=>[m[0],m[3]])),link:'',linkLabel:'发电',linkSaved:false,audit:[],blocked:true};
+    const tabs=[['security','防护策略'],['settings','全部设置'],['backup','备份与恢复'],['updates','更新助手'],['link','TG发电外链'],['events','安全事件'],['release','发布与审计']];
+    const state={page:tabs.some(x=>x[0]===stored?.page)?stored.page:'security',raw:20,merge:3,unique:8,observe:true,version:1,applied:1,baseline:{raw:20,merge:3,unique:8,observe:true},result:'',error:'',confirmation:null,section:'registration',values:Object.fromEntries(modules.map(m=>[m[0],m[3]])),link:'',linkLabel:'发电',linkSaved:false,audit:[],blocked:true,updateMode:'CHECK_ONLY'};
     function remember(){window.openai?.setWidgetState?.({modelContent:{adminConsolePage:state.page},privateContent:{page:state.page}})?.catch(()=>{});}
     function security(){return box(`<div class="ec-row"><h3>防扫库与重复点击</h3><span class="ec-tag">${state.observe?'观察，不执行行为处罚':'执行候选限制'} · 演示</span></div><p class="ec-dim ec-spaced">鉴权和对象权限始终需要；行为阈值在真实客户端回放后才执行。</p><div class="ec-grid"><label>同集控制请求／10秒<input id="ec-raw" type="number" min="1" max="100" value="${state.raw}"></label><label>同上下文合并窗口／秒<input id="ec-merge" type="number" min="1" max="10" value="${state.merge}"></label><label>不同条目新签发／10分钟<input id="ec-unique" type="number" min="2" max="120" value="${state.unique}"></label><label>模式<select id="ec-observe"><option value="true" ${state.observe?'selected':''}>观察</option><option value="false" ${state.observe?'':'selected'}>执行候选（演示）</option></select></label></div><div class="ec-actions">${action('预览防护发布','preview-security',true)}</div>`)+box(`<h3>脱敏样例回放</h3><p class="ec-dim ec-spaced">只在本地计算，不向Emby或网盘发请求。假设同一合法上下文、无其他瓶颈。</p><div class="ec-actions">${action('同集连点100次','burst')}${action('不同剧集12次','scan')}${action('合法分片120次','segments')}${action('缓存后撤销权限','revoke')}</div>${state.result?`<div class="ec-result" role="status">${escape(state.result)}</div>`:''}`)+box(`<h3>数据请求单独保护</h3><p class="ec-spaced">Range拖动、字幕、HLS分片、心跳不按每次新开播计数；302签发后的CDN字节不全经过VPS。</p><p class="ec-dim ec-spaced">初始网关风控状态预算16MiB、10000键；实际部署与峰值待验证。</p>`);}
-    function settings(){const m=modules.find(m=>m[0]===state.section);return box(`<h3>统一设置注册表 · 19个模块</h3><label class="ec-spaced">设置分组<select id="ec-section">${modules.map(x=>`<option value="${x[0]}" ${x[0]===state.section?'selected':''}>${x[1]}</option>`).join('')}</select></label><p class="ec-dim ec-spaced">各模块以同一后端事实、schema表单和专用工作流实现；这里仅展示一个代表字段。</p>`)+box(`<h3>${m[1]}</h3><p class="ec-spaced">${m[4]}</p><label class="ec-spaced">${m[2]}<input id="ec-setting-value" maxlength="80" value="${escape(state.values[m[0]])}"></label><p class="ec-dim ec-spaced">正式字段的类型、单位、范围、scope和应用目标由服务端校验；原型值不用于部署。</p><div class="ec-actions">${action('保存该字段演示草稿','save-setting',true)}</div>`);}
+    function settings(){const m=modules.find(m=>m[0]===state.section);return box(`<h3>统一设置注册表 · 24个模块</h3><label class="ec-spaced">设置分组<select id="ec-section">${modules.map(x=>`<option value="${x[0]}" ${x[0]===state.section?'selected':''}>${x[1]}</option>`).join('')}</select></label><p class="ec-dim ec-spaced">全部功能的字段与操作清单见方案第25篇；这里每模块仅展示一个代表字段。真实表单、权限和执行器尚未实现。</p>`)+box(`<h3>${m[1]}</h3><p class="ec-spaced">${m[4]}</p><label class="ec-spaced">${m[2]}<input id="ec-setting-value" maxlength="80" value="${escape(state.values[m[0]])}"></label><p class="ec-dim ec-spaced">正式字段的类型、单位、范围、scope和应用目标由服务端校验；原型值不用于部署。</p><div class="ec-actions">${action('保存该字段演示草稿','save-setting',true)}</div>`);}
+    function backup(){return box(`<div class="ec-row"><h3>备份、恢复与迁移</h3><span class="ec-tag">执行器未连接</span></div><p class="ec-spaced">本机一致备份与异地传输独立管理。升级调用同一备份服务；关闭异地接口不会关闭本机计划。</p><div class="ec-line">策略：每日完整配置／索引，有交易时每60分钟业务快照（设计初值）</div><div class="ec-line">保留：7日／4周／3月，受实际磁盘预算约束</div><div class="ec-line">异地推送与拉取：默认关闭；生成、加密校验、回执、恢复验证分别记录</div><div class="ec-actions">${action('预览备份流程','preview-backup',true)}${action('正式恢复（未实现）','restore',false,true)}</div>`)+box(`<h3>恢复前必须核对</h3><p class="ec-spaced">隔离环境、可解密快照、支付／claim／撤销最新水位、控制总额和新写入对账；恢复先停相关写入与收件者，防双主。</p><p class="ec-dim ec-spaced">这里没有生成或上传备份，RPO／RTO须真实演练后才能承诺。</p>`);}
+    function updates(){const modes=[['OFF','关闭'],['CHECK_ONLY','只自动检查'],['AUTO_DOWNLOAD_MANUAL_APPLY','自动下载，手动应用'],['AUTO_APPLY_IN_WINDOW','维护窗口限定自动应用']];return box(`<div class="ec-row"><h3>更新助手</h3><span class="ec-tag">UNCONFIGURED · 未配置</span></div><p class="ec-spaced">程序仓库未创建；现有仓库仅存方案，不作为生产程序源。未配置时不发检查或下载请求。</p><div class="ec-line">实际程序版本／候选版本：未连接／无候选</div><div class="ec-line">可信仓库身份／签名根：待配置，执行器：未实现</div><label class="ec-spaced">未来自动化模式（仅演示草稿）<select id="ec-update-mode">${modes.map(([id,label])=>`<option value="${id}" ${id===state.updateMode?'selected':''}>${label}</option>`).join('')}</select></label><div class="ec-actions">${action('检查前置条件','check-update',true)}${action('应用更新（未就绪）','apply-update',false,true)}${action('程序回退（未就绪）','rollback-app',false,true)}</div>`)+box(`<h3>完整执行流程</h3><div class="ec-line">可信Release／精确commit → 验身份、签名与摘要 → 资源／兼容预检</div><div class="ec-line">变更互斥 → 排空写入 → 一致备份验证 → 维护应用 → 健康检查</div><div class="ec-line">观察／恢复任务 → 成功；失败仅在schema兼容时回退程序</div><p class="ec-spaced">程序回退、配置回滚、数据恢复分开；已有新订单／核销后，不自动恢复旧数据库。更新执行器独立于网页生命周期，并提供本地救援。</p><p class="ec-dim ec-spaced">2C2G拉CI预构建产物，允许短维护，不承诺零停机。只预览方案，不实际拉仓库。</p>`);}
     function link(){return box(`<div class="ec-row"><h3>TG发电／购买外链</h3><span class="ec-tag">有效关闭 · 规则待确认</span></div><p class="ec-spaced">技术上可做普通URL按钮；交付注册码、续期码或白名单时仍是购买。</p><div class="ec-grid"><label>草稿按钮名<input id="ec-link-label" maxlength="20" value="${escape(state.linkLabel)}"></label><label>草稿HTTPS地址<input id="ec-link-url" type="url" value="${escape(state.link)}" placeholder="https://shop.example.com"></label></div><div class="ec-actions">${action('保存外链演示草稿','save-link',true)}${action('尝试发布（检查Gate）','publish-link')}</div><p class="ec-dim ec-spaced">2026-11-18官方核验未确认豁免；本轮不会打开网址，Owner勾选不等于平台许可。独立网址人工告知方案保留。</p>`)+box(`<h3>发布前的条件</h3><div class="ec-line">域名控制权、HTTPS与目的地校验</div><div class="ec-line">商品／渠道实际就绪，链接不含身份、码或secret</div><div class="ec-line">具体平台适用证据复核；当前尚未满足</div>`);}
     function events(){return box(`<h3>安全事件 · 虚构样例</h3><div class="ec-line">E-DEMO-1 · U10001 · 同集重复控制请求 · 观察命中</div><div class="ec-line">动作：候选30秒新开播冷却，已有合法流不随机终止</div><div class="ec-line">原始IP、Token和完整播放URL未展示</div><div class="ec-actions">${action(state.blocked?'预览撤销示例限制':'示例已撤限','unblock',false,!state.blocked)}</div>`)+box(`<h3>误伤处理</h3><p class="ec-spaced">先查规则、路由与客户端回放；临时例外写明范围、原因和到期。真实撤令牌不能保证收回已签发的上游302。</p>`);}
     function release(){return box(`<h3>配置应用状态</h3><div class="ec-line">演示期望版本 v${state.version} · 演示应用版本 v${state.applied}</div><div class="ec-line">真实执行器：未连接，不代表VPS已应用</div><div class="ec-actions">${action('演示回滚防护配置','rollback',false,state.version===1)}</div>`)+box(`<h3>本地演示审计</h3>${state.audit.length?state.audit.map(x=>`<div class="ec-line">${escape(x)}</div>`).join(''):'<p class="ec-dim ec-spaced">尚无演示操作。正式审计来自后端，不由浏览器自报。</p>'}`);}
     function render(){
       root.querySelector('#ec-version').textContent=`演示配置 v${state.applied} · ${state.baseline.observe?'观察模式':'候选执行'}`;
       nav.innerHTML=tabs.map(([id,name])=>`<button type="button" data-page="${id}" aria-pressed="${state.page===id}">${name}</button>`).join('');
-      const page={security,settings,link,events,release}[state.page];
+      const page={security,settings,backup,updates,link,events,release}[state.page];
       main.innerHTML=page()+(state.confirmation?box(`<div role="dialog" aria-label="防护配置发布确认"><h3>确认演示发布</h3><p class="ec-spaced">原始请求 ${state.raw}/10秒，合并${state.merge}秒，不同条目${state.unique}/10分钟；${state.observe?'观察':'候选执行'}。只改变本地演示。</p><p class="ec-dim ec-spaced">正式提交需expected_version、原因、MFA和执行器回执。</p><div class="ec-actions">${action('取消','cancel')}${action('确认演示发布','confirm-security',true)}</div></div>`):'')+(state.error?`<div class="ec-result" role="alert">${escape(state.error)}</div>`:'');
     }
     function valid(){return Number.isInteger(state.raw)&&state.raw>=1&&state.raw<=100&&Number.isInteger(state.merge)&&state.merge>=1&&state.merge<=10&&Number.isInteger(state.unique)&&state.unique>=2&&state.unique<=120;}
     root.addEventListener('input',e=>{const ids={'ec-raw':'raw','ec-merge':'merge','ec-unique':'unique'};if(ids[e.target.id])state[ids[e.target.id]]=e.target.value===''?NaN:Number(e.target.value);if(e.target.id==='ec-setting-value')state.values[state.section]=e.target.value;if(e.target.id==='ec-link-url')state.link=e.target.value;if(e.target.id==='ec-link-label')state.linkLabel=e.target.value;});
-    root.addEventListener('change',e=>{if(e.target.id==='ec-observe')state.observe=e.target.value==='true';if(e.target.id==='ec-section'){state.section=e.target.value;state.error='';render();}});
+    root.addEventListener('change',e=>{if(e.target.id==='ec-observe')state.observe=e.target.value==='true';if(e.target.id==='ec-update-mode'){state.updateMode=e.target.value;state.error='仅调整演示草稿；程序仓库未配置、有效更新保持关闭。';render();}if(e.target.id==='ec-section'){state.section=e.target.value;state.error='';render();}});
     root.addEventListener('click',e=>{
       const b=e.target.closest('button');if(!b||b.disabled)return;
       if(b.dataset.page){state.page=b.dataset.page;state.confirmation=null;state.error='';render();remember();return;}
@@ -81,6 +88,8 @@
       else if(a==='segments')state.result='120次合法分片属于已有播放：新增开播0、新签发0；真实数据速率/令牌/会话预算仍需执行。';
       else if(a==='revoke')state.result='先验证撤销epoch和对象权限：缓存即使命中，也拒绝新授权。已有上游302不能保证即时收回。';
       else if(a==='save-setting'){if(!state.values[state.section].trim())state.error='演示字段不能为空。';else{state.audit.unshift(`${state.section} · 保存演示草稿，尚未应用`);state.error='该模块演示草稿已保存；未改变真实配置。';}}
+      else if(a==='preview-backup'){state.error='设计流程：生成一致快照 → 加密与控制总额校验 → 可选异地回执 → 隔离恢复验证。未生成任何文件或执行恢复。';state.audit.unshift('预览备份流程 · 无真实任务');}
+      else if(a==='check-update'){state.error='UNCONFIGURED：程序仓库未创建／未配置，执行器未实现；未发请求、未下载、未改变程序或数据。';state.audit.unshift('更新前置检查 · 程序源未配置，停止');}
       else if(a==='save-link'){try{const url=new URL(state.link);if(url.protocol!=='https:'||url.hostname!=='shop.example.com'||url.username||url.password||url.search||url.hash)throw new Error();state.linkSaved=true;state.audit.unshift('TG外链 · 已存演示草稿，规则Gate关闭');state.error='演示草稿已存。实际域名控制权和规则适用尚未确认，有效开关仍关闭。';}catch{state.error='演示仅接受 https://shop.example.com，无身份、query或片段。不会打开网址。';}}
       else if(a==='publish-link'){state.error='POLICY_REVIEW_REQUIRED：当前规则适用未确认，拒绝发布外链；用户端保持无购买链接。';state.audit.unshift('TG外链发布被Gate阻止 · 无真实操作');}
       else if(a==='unblock'){state.blocked=false;state.audit.unshift('E-DEMO-1 · 演示撤限 · 实际用户未变');}
@@ -93,5 +102,4 @@
   })();
   </script>
 </div>
-
 </body></html>

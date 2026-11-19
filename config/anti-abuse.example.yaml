@@ -1,5 +1,5 @@
 # v6设计输入，非Emby/Caddy可直接加载的防护配置；行为先观察、鉴权和硬边界始终执行。
-schema_version: 6
+schema_version: 7
 policy_version: anti-abuse-v6-2026-11-18
 runtime_implemented: false
 behavior_mode: OBSERVE

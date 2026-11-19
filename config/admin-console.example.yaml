@@ -76,7 +76,7 @@ settings_coverage:
   detail: docs/25-网页总控全部功能与字段清单.md
   inventory_script: scripts/verify_plan.py
   inventory_output: analysis/control-surface-inventory.json
-  config_schema_version_equals_document_version: true
+  config_schema_version_equals_document_version: false
   config_schema_version: 8
   all_files_and_top_level_keys_must_be_registered: true
   inventory_mode: DESIGN_OWNERSHIP_REQUIRES_FIELD_METADATA_AT_IMPLEMENTATION

@@ -1,10 +1,10 @@
 {
-  "version": 8,
+  "version": "8.1",
   "date": "2026-11-19",
   "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
   "config_files": 16,
   "console_modules": 24,
-  "field_paths": 1775,
+  "field_paths": 1851,
   "by_module": {
     "abuse_events": 8,
     "abuse_rules": 157,
@@ -13,7 +13,7 @@
     "catalog_promotions": 207,
     "content_clients": 49,
     "devices_sessions": 14,
-    "entitlements": 143,
+    "entitlements": 174,
     "external_points": 35,
     "jobs_observability": 33,
     "media": 29,
@@ -21,7 +21,7 @@
     "notifications": 40,
     "overview": 4,
     "payments_fulfillment": 102,
-    "points_codes": 40,
+    "points_codes": 85,
     "privacy_exports": 10,
     "registration": 116,
     "secrets_adapters": 17,
@@ -8777,6 +8777,13 @@
     },
     {
       "file": "policy.example.yaml",
+      "path": "points.checkin_reward.expectation_scope",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
       "path": "points.checkin_reward.server_secure_random",
       "module": "points_codes",
       "example_type": "bool",
@@ -8876,6 +8883,314 @@
     {
       "file": "policy.example.yaml",
       "path": "points.exempt_card_auto_purchase.may_compete_with_activity_A_same_window",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.enabled",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.points",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.scope",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.affected_sources[0]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.affected_sources[1]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.affected_sources[2]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.affected_sources[3]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.source_classification_is_server_owned",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.exempt_credits[0]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.exempt_credits[1]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.exempt_credits[2]",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.truncate_new_reward_to_remaining_space",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.record_raw_actual_unissued_reason_and_day",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.zero_reward_still_records_checkin",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.retry_after_A_debit_redraws_or_tops_up_same_day",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.existing_above_cap_balance_is_reduced",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.full_refund_or_promised_credit_is_lost_to_cap",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.cap_must_reach_highest_enabled_savable_points_sku",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.reward_soft_cap.cap_disabled_or_unlimited_requires_explicit_owner_policy",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.active_preset",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.objective",
+      "module": "points_codes",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.auto_change_prices_or_rewards",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.enabled_as_effective_default",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.daily_raw_range[0]",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.daily_raw_range[1]",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.activity_A_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.exempt_month_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.exempt_quarter_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.exempt_year_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.RETENTION.reward_soft_cap",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.enabled_as_effective_default",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.daily_raw_range[0]",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.daily_raw_range[1]",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.activity_A_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.exempt_month_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.exempt_quarter_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.exempt_year_price",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.presets.BALANCED_POINTS.reward_soft_cap",
+      "module": "points_codes",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.preset_is_draft_until_cross_module_publication",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.stronger_changes_default_effective_next_window",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.increased_A_price_requires_new_user_consent",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.honor_old_orders_codes_awards_and_window_snapshots",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.B_free_route_is_disabled_by_points_tuning",
+      "module": "points_codes",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "points.economy.lowering_A_only_rewards_without_sticky_window_policy_supported",
       "module": "points_codes",
       "example_type": "bool",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
@@ -10478,6 +10793,90 @@
     },
     {
       "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.policy",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.threshold_hours",
+      "module": "entitlements",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.applies_when_actual_change_and_target_not_qualified",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.includes_first_tail_selection_if_target_not_qualified",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.show_old_new_mode_progress_missing_amount_and_exact_deadline",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.previous_mode_qualification_is_implicit_fallback",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.preview_ttl_seconds",
+      "module": "entitlements",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.bind_window_end_mode_wallet_progress_policy_epoch_and_risk_choice",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.newly_crossed_risk_threshold_requires_fresh_preview",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.stale_or_cancelled_preview_changes_mode_or_starts_cooldown",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.lack_of_acknowledgement_changes_mode",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.modes.late_change_guard.future_window_change_required_by_default",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
       "path": "retention.checkin_A.enabled",
       "module": "entitlements",
       "example_type": "bool",
@@ -11060,6 +11459,139 @@
     {
       "file": "retention.example.yaml",
       "path": "retention.expiry_and_recovery.no_tail_opt_in_after_paid_expiry_silently_defaults_to_A",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.hours",
+      "module": "entitlements",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.states[0]",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.states[1]",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.states[2]",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.states[3]",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.interval",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.shifts_original_end_or_adds_to_success_duration",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.temporary_play_requires_existing_activity_participation",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.included_in_existing_seven_day_grace_not_added_after_it",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.final_failure_waits_for_buffer_and_verified_pending_jobs",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.ontime_qualification_proof_may_commit_during_buffer",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.client_clock_or_client_send_time_is_proof",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.late_checkin_uses_real_local_date_and_original_daily_idempotency",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.make_up_rewards_or_backdate_a_missed_signin",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.late_action_auto_debit_under_expired_consent",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.late_rescue_requires_fresh_explicit_confirmation",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.grace_or_incident_beyond_buffer_has_separate_explicit_workflow",
+      "module": "entitlements",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.success_formula",
+      "module": "entitlements",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "retention.example.yaml",
+      "path": "retention.expiry_and_recovery.closing_buffer.same_request_settles_more_than_one_window",
       "module": "entitlements",
       "example_type": "bool",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"

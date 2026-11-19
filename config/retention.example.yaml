@@ -1,4 +1,4 @@
-# v8最终保号契约；用户已确认：原到期+30天，A余额够300即可，无签到天数硬门槛。
+# v8.1保号契约；延续原到期+30天、A够300，补临近切换与收尾缓冲。
 schema_version: 8
 retention:
   runtime_implemented: false
@@ -29,6 +29,19 @@ retention:
     stop_then_restart_participation_bypasses_mode_cooldown: false
     old_cycle_boundary_reservation_model_active: false
     unspent_window_progress_available_after_legitimate_mode_change: true
+    late_change_guard:
+      policy: WARN_AND_REQUIRE_EXPLICIT_RISK_ACK
+      threshold_hours: 72
+      applies_when_actual_change_and_target_not_qualified: true
+      includes_first_tail_selection_if_target_not_qualified: true
+      show_old_new_mode_progress_missing_amount_and_exact_deadline: true
+      previous_mode_qualification_is_implicit_fallback: false
+      preview_ttl_seconds: 120
+      bind_window_end_mode_wallet_progress_policy_epoch_and_risk_choice: true
+      newly_crossed_risk_threshold_requires_fresh_preview: true
+      stale_or_cancelled_preview_changes_mode_or_starts_cooldown: false
+      lack_of_acknowledgement_changes_mode: false
+      future_window_change_required_by_default: false
   checkin_A:
     enabled: true
     required_available_points: 300
@@ -110,6 +123,23 @@ retention:
     rescue_expiry_formula: FAILED_WINDOW_OLD_END_PLUS_30_DAYS
     incident_holds_cleanup_and_records_shifted_window_bounds: true
     no_tail_opt_in_after_paid_expiry_silently_defaults_to_A: false
+    closing_buffer:
+      hours: 24
+      states: [OPEN, CLOSING, SETTLED, GRACE_OR_FAILED]
+      interval: END_INCLUSIVE_BUFFER_END_EXCLUSIVE
+      shifts_original_end_or_adds_to_success_duration: false
+      temporary_play_requires_existing_activity_participation: true
+      included_in_existing_seven_day_grace_not_added_after_it: true
+      final_failure_waits_for_buffer_and_verified_pending_jobs: true
+      ontime_qualification_proof_may_commit_during_buffer: true
+      client_clock_or_client_send_time_is_proof: false
+      late_checkin_uses_real_local_date_and_original_daily_idempotency: true
+      make_up_rewards_or_backdate_a_missed_signin: false
+      late_action_auto_debit_under_expired_consent: false
+      late_rescue_requires_fresh_explicit_confirmation: true
+      grace_or_incident_beyond_buffer_has_separate_explicit_workflow: true
+      success_formula: ORIGINAL_END_PLUS_30_DAYS
+      same_request_settles_more_than_one_window: false
   migration:
     preserve_last_actual_mode_change_and_next_switch_at: true
     preserve_wallet_grants_consumed_window_ids_and_watch_allocations: true

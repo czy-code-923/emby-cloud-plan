@@ -1,4 +1,4 @@
-"""v8 deterministic retention state model; no real DB, Telegram or Emby calls.
+"""v8.1 deterministic retention state model; no real DB, Telegram or Emby calls.
 
 Checks rule interactions and sequential orderings, not authentication, collection
 accuracy, distributed locks, real concurrency or a production entitlement engine.
@@ -15,6 +15,9 @@ DAY = 86400
 SPAN = RULE['window']['duration_days'] * DAY
 COST = RULE['checkin_A']['automatic_debit_points']
 COOLDOWN = RULE['modes']['actual_change_cooldown_days'] * DAY
+POINTS = yaml.safe_load((ROOT / 'config/policy.example.yaml').read_text(encoding='utf-8'))['points']
+SOFT_CAP = POINTS['reward_soft_cap']['points']
+BUFFER = RULE['expiry_and_recovery']['closing_buffer']['hours'] * 3600
 
 
 @dataclass
@@ -26,6 +29,7 @@ class Member:
     participating: bool = True
     consent: bool = True
     consent_ceiling: int = COST
+    renewal_price: int = COST
     next_switch: int = 20 * DAY
     immune_end: int = 0
     permanent: bool = False
@@ -40,18 +44,43 @@ class Member:
     grants: list = field(default_factory=list)
     renewals: list = field(default_factory=list)
     applied_end: int = 30 * DAY
+    reward_results: dict = field(default_factory=dict)
+    rescue_watch_seconds: int = 0
+    buffer_eligible: bool | None = None
+
+    def __post_init__(self):
+        if self.buffer_eligible is None:
+            self.buffer_eligible = self.participating
 
     def selection_visible(self, now):
         if self.permanent:
             return False
         return now >= self.immune_end or 0 < self.end - now < SPAN
 
-    def choose(self, mode, now, consent=False):
+    def mode_preview(self, target, now):
+        missing = max(0, self.renewal_price - self.balance) if target == 'CHECKIN_POINTS' else max(0, 1800 - self.valid_watch_seconds(now))
+        risk = (target != self.mode and 0 < self.end - now <= RULE['modes']['late_change_guard']['threshold_hours'] * 3600 and missing > 0)
+        return {'target': target, 'created_at': now, 'expires_at': now + 120, 'risk': risk, 'missing': missing,
+                'fingerprint': (self.version, self.mode_version, self.end, self.mode, self.balance, self.frozen, self.valid_watch_seconds(now), self.renewal_price)}
+
+    def choose(self, mode, now, consent=False, preview=None, acknowledge_risk=False):
         if not self.selection_visible(now):
             return 'SELECTION_HIDDEN'
+        if now >= self.end and not self.buffer_eligible:
+            return 'POST_EXPIRY_PARTICIPATION_REQUIRES_SEPARATE_RECOVERY'
         actual_change = mode != self.mode
         if actual_change and self.mode is not None and now < self.next_switch:
             return 'COOLDOWN'
+        current_preview = self.mode_preview(mode, now)
+        if preview is not None:
+            if (now >= preview['expires_at'] or preview['target'] != mode
+                    or preview['fingerprint'] != current_preview['fingerprint'] or preview['risk'] != current_preview['risk']):
+                return 'PREVIEW_STALE_OR_EXPIRED'
+        if current_preview['risk']:
+            if preview is None:
+                return 'LATE_CHANGE_PREVIEW_REQUIRED'
+            if not acknowledge_risk:
+                return 'RISK_ACK_REQUIRED'
         if mode == 'CHECKIN_POINTS' and not consent:
             return 'CONSENT_REQUIRED'
         if actual_change or self.mode is None:
@@ -62,6 +91,8 @@ class Member:
             self.mode_version += 1
         self.participating = True
         self.consent = mode == 'CHECKIN_POINTS'
+        if now < self.end:
+            self.buffer_eligible = True
         return 'MODE_SELECTED'
 
     def signed_in_window(self):
@@ -73,9 +104,11 @@ class Member:
             return 'ORIGINAL_CHECKIN'
         self.signed_dates.add(date)
         self.signed_times.append(now)
-        self.balance += reward
+        actual = min(reward, max(0, SOFT_CAP - self.balance - self.frozen))
+        self.balance += actual
         self.version += 1
-        self.ledger.append(('CHECKIN', reward, date))
+        self.reward_results[date] = {'raw': reward, 'actual': actual, 'unissued': reward - actual}
+        self.ledger.append(('CHECKIN', actual, date))
         return 'CHECKIN_COMMITTED'
 
     def valid_watch_seconds(self, now):
@@ -88,7 +121,8 @@ class Member:
                 right = b
         return total
 
-    def settle(self, now, expected_end=None, expected_mode_version=None, simulate_abort=False):
+    def settle(self, now, expected_end=None, expected_mode_version=None, simulate_abort=False,
+               trusted_qualified_at=None, rescue_confirmed=False):
         if self.banned or not self.participating or self.permanent:
             return 'NOT_AUTHORIZED'
         if expected_end is not None and expected_end != self.end:
@@ -98,29 +132,38 @@ class Member:
         old = self.end
         if now < old - SPAN:
             return 'FUTURE_WINDOW'
-        if now >= old:
-            return 'EXPIRED_NO_SILENT_DEBIT'
+        closing = now >= old
+        if closing:
+            if now >= old + BUFFER:
+                return 'EXPIRED_NO_SILENT_DEBIT'
+            if not self.buffer_eligible:
+                return 'NOT_AUTHORIZED'
+            proof = trusted_qualified_at is not None and old - SPAN <= trusted_qualified_at < old and 0 <= now - trusted_qualified_at <= BUFFER
+            if not proof and not rescue_confirmed:
+                return 'CLOSING_EXPLICIT_RESCUE_REQUIRED'
         if old in self.closed_windows:
             return 'ALREADY_SETTLED'
         if self.mode == 'CHECKIN_POINTS':
-            if not self.consent or COST > self.consent_ceiling:
+            if not self.consent or self.renewal_price > self.consent_ceiling:
                 return 'CONSENT_REQUIRED'
-            if self.balance < COST:
+            if self.balance < self.renewal_price:
                 return 'INSUFFICIENT'
         elif self.mode == 'WATCH':
-            if self.valid_watch_seconds(now) < RULE['watch_B']['required_valid_seconds']:
+            valid = self.valid_watch_seconds(now) + (self.rescue_watch_seconds if closing and rescue_confirmed else 0)
+            if valid < RULE['watch_B']['required_valid_seconds']:
                 return 'WATCH_INCOMPLETE'
         else:
             return 'NO_MODE'
         if simulate_abort:
             return 'ABORT_WITHOUT_COMMIT'
         if self.mode == 'CHECKIN_POINTS':
-            self.balance -= COST
-            self.ledger.append(('ACTIVITY_A_DEBIT', -COST, old))
+            self.balance -= self.renewal_price
+            self.ledger.append(('ACTIVITY_A_DEBIT', -self.renewal_price, old))
         self.closed_windows.add(old)
         self.end = old + SPAN
         self.version += 1
         self.grants.append(('ACTIVITY_RENEWAL', old, self.end))
+        self.rescue_watch_seconds = 0
         self.renewals.append({'mode': self.mode, 'old_end': old, 'new_end': self.end, 'signed_days': sum(old - SPAN <= t < old for t in self.signed_times)})
         return 'RENEWED'
 
@@ -136,6 +179,7 @@ class Member:
         self.immune_end = self.end
         self.participating = False
         self.consent = False
+        self.buffer_eligible = False
         self.mode_version += 1
         self.version += 1
         self.ledger.append(('MANUAL_EXEMPT_CARD', -price, old))
@@ -179,7 +223,7 @@ def main():
     aborted = Member(balance=300)
     check(aborted.settle(0, simulate_abort=True) == 'ABORT_WITHOUT_COMMIT' and aborted.end == 30 * DAY and aborted.balance == 300 and not aborted.ledger, 'failed modeled transaction leaves money and expiry unchanged')
     expired = Member(balance=300)
-    check(expired.settle(30 * DAY) == 'EXPIRED_NO_SILENT_DEBIT' and expired.balance == 300, 'deadline is end-exclusive and no later silent charge')
+    check(expired.settle(30 * DAY) == 'CLOSING_EXPLICIT_RESCUE_REQUIRED' and expired.balance == 300, 'deadline remains end-exclusive; closing buffer cannot silently debit a late request')
 
     b = Member(mode='WATCH', consent=False)
     b.watch = [(DAY, DAY + 1799)]
@@ -239,13 +283,76 @@ def main():
     banned = Member(balance=300, banned=True)
     check(banned.settle(0) == 'NOT_AUTHORIZED', 'security ban blocks activity settlement')
 
-    report = {'version': 8, 'date': '2026-11-19', 'scope': 'SEQUENTIAL_RULE_MODEL_NOT_RUNTIME_OR_DB_CONCURRENCY_TEST',
+    late = Member(balance=299)
+    snapshot = late.mode, late.next_switch, late.balance
+    check(late.choose('WATCH', 29 * DAY) == 'LATE_CHANGE_PREVIEW_REQUIRED' and (late.mode, late.next_switch, late.balance) == snapshot, 'D29 incomplete B requires risk preview and leaves state unchanged')
+    preview = late.mode_preview('WATCH', 29 * DAY)
+    check(preview['risk'] and preview['missing'] == 1800, 'late preview shows target 30 minute deficit')
+    check(late.choose('WATCH', 29 * DAY, preview=preview) == 'RISK_ACK_REQUIRED' and late.next_switch == 20 * DAY, 'no risk acknowledgement does not consume unlocked right')
+    check(late.choose('WATCH', 29 * DAY, preview=preview, acknowledge_risk=True) == 'MODE_SELECTED' and late.next_switch == 49 * DAY, 'explicit late risk confirmation keeps immediate switch semantics')
+    check(late.settle(29 * DAY) == 'WATCH_INCOMPLETE', 'late switch does not fallback silently to A')
+    stale = Member(balance=299)
+    preview = stale.mode_preview('WATCH', 29 * DAY)
+    check(stale.choose('WATCH', 29 * DAY + 120, preview=preview, acknowledge_risk=True) == 'PREVIEW_STALE_OR_EXPIRED', 'risk ticket expires at 120 seconds boundary')
+    threshold = Member(balance=299)
+    preview = threshold.mode_preview('WATCH', 27 * DAY - 1)
+    check(not preview['risk'] and threshold.choose('WATCH', 27 * DAY, preview=preview) == 'PREVIEW_STALE_OR_EXPIRED', 'crossing the last 72 hour threshold requires fresh preview')
+    changed = Member(balance=299)
+    preview = changed.mode_preview('WATCH', 29 * DAY)
+    changed.checkin(29 * DAY)
+    check(changed.choose('WATCH', 29 * DAY, preview=preview, acknowledge_risk=True) == 'PREVIEW_STALE_OR_EXPIRED', 'wallet or progress version change invalidates old risk preview')
+
+    closing = Member(balance=284)
+    check(closing.checkin(30 * DAY) == 'CHECKIN_COMMITTED' and closing.balance == 300, 'buffer checkin credits its real new local date')
+    check(closing.signed_in_window() == 0, 'buffer checkin is not backdated into old window count')
+    check(closing.settle(30 * DAY) == 'CLOSING_EXPLICIT_RESCUE_REQUIRED', 'late wallet qualification needs fresh explicit rescue authorization')
+    check(closing.settle(30 * DAY, rescue_confirmed=True) == 'RENEWED' and closing.end == 60 * DAY and closing.balance == 0, 'rescue uses original expiry plus 30 not rescue time plus 30')
+    check(closing.checkin(30 * DAY + 1) == 'ORIGINAL_CHECKIN' and closing.balance == 0, 'buffer and renewed window share same daily idempotency')
+    ontime = Member(balance=300)
+    check(ontime.settle(30 * DAY + 60, trusted_qualified_at=30 * DAY - 1) == 'RENEWED' and ontime.end == 60 * DAY, 'trusted timely qualification may commit after worker delay within buffer')
+    no_proof = Member(balance=300)
+    check(no_proof.settle(30 * DAY + 1, trusted_qualified_at=30 * DAY + 1) == 'CLOSING_EXPLICIT_RESCUE_REQUIRED', 'post-deadline timestamp is not timely qualification proof')
+    boundary = Member(balance=300)
+    check(boundary.settle(31 * DAY, rescue_confirmed=True) == 'EXPIRED_NO_SILENT_DEBIT', '24 hour closing buffer ends exclusively; longer grace is a separate workflow')
+    noon = Member(end=30 * DAY + DAY // 2, balance=284)
+    noon.checkin(noon.end + 1)
+    check(noon.checkin(noon.end + 2) == 'ORIGINAL_CHECKIN', 'same local date around noon cutoff cannot earn twice')
+    check(noon.settle(noon.end + 1, rescue_confirmed=True) == 'RENEWED' and noon.end == 60 * DAY + DAY // 2, 'noon cutover still preserves original expiry time')
+    noon_both = Member(end=30 * DAY + DAY // 2, balance=0)
+    noon_both.checkin(noon_both.end - 1)
+    check(noon_both.checkin(noon_both.end + 1) == 'ORIGINAL_CHECKIN' and noon_both.balance == 16, 'before and after noon cutoff on one real date award only once')
+    midnight = Member(balance=0)
+    midnight.checkin(midnight.end - 1)
+    check(midnight.checkin(midnight.end) == 'CHECKIN_COMMITTED' and midnight.balance == 32 and midnight.signed_in_window() == 1, 'midnight cutover allows new real date but does not backdate it into old window')
+
+    cap = Member(balance=3595, participating=False)
+    cap.checkin(0)
+    check(cap.balance == 3600 and cap.reward_results[0] == {'raw': 16, 'actual': 5, 'unissued': 11}, 'organic reward clips to remaining total-wallet soft cap')
+    full = Member(balance=3600)
+    full.checkin(0)
+    check(full.reward_results[0]['actual'] == 0 and full.signed_in_window() == 1, 'zero reward at soft cap still records signed date')
+    full.settle(0)
+    check(full.balance == 3300 and full.checkin(1) == 'ORIGINAL_CHECKIN' and full.balance == 3300, 'A debit after capped checkin cannot reopen that day reward')
+    frozen_cap = Member(balance=3500, frozen=100, participating=False)
+    frozen_cap.checkin(0)
+    check(frozen_cap.balance == 3500, 'frozen points cannot create reward cap headroom')
+    legacy = Member(balance=4000, participating=False)
+    legacy.checkin(0)
+    check(legacy.balance == 4000 and legacy.reward_results[0]['actual'] == 0, 'existing balance above cap is preserved not confiscated')
+    legacy.balance += 100  # Model a lawful refund outside organic reward issuance.
+    check(legacy.balance == 4100, 'non-reward lawful credits are not swallowed by organic soft cap')
+    new_price = Member(balance=600, renewal_price=450, consent_ceiling=300)
+    check(new_price.settle(0) == 'CONSENT_REQUIRED' and new_price.balance == 600, 'old 300-point consent cannot pay a 450-point preset')
+    new_price.consent_ceiling = 450
+    check(new_price.settle(0) == 'RENEWED' and new_price.balance == 150, 'fresh 450 consent permits only the corresponding 450 debit')
+
+    report = {'version': '8.1', 'date': '2026-11-19', 'scope': 'SEQUENTIAL_RULE_MODEL_NOT_RUNTIME_OR_DB_CONCURRENCY_TEST',
               'checks_passed': len(checks), 'checks': checks,
               'example_A': {'initial_available': 284, 'daily_reward': 16, 'automatic_debit': 300, 'final_available': a.balance,
                             'old_end_day': 30, 'new_end_day': a.end // DAY, 'settled_signed_days': a.renewals[0]['signed_days']},
               'example_B': {'cost_points': 0, 'first_new_end_day': 60},
               'not_tested': ['real signature/auth/nonce and DB transactions', 'thread/process/distributed races',
-                             'real Emby session sampling and paused/seek validation', 'late event adjudication and grace rescue',
+                             'real Emby session sampling and paused/seek validation', 'authenticity of server qualification evidence and longer grace workflow',
                              'refund recomputation and production migration', '32-bit/clock/timezone/DST platform issues']}
     (ROOT / 'analysis/retention-model.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(json.dumps({k: v for k, v in report.items() if k not in ('checks', 'not_tested')}, ensure_ascii=False, indent=2))

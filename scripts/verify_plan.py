@@ -1,4 +1,4 @@
-"""Build/check the v8 design deliverable; requires PyYAML, never contacts a service.
+"""Build/check the v8.1 design deliverable; requires PyYAML, never contacts a service.
 
 This checks documentation/configuration ownership and conservative example defaults.
 It does not test a running backend, real authentication, updates or disaster recovery.
@@ -20,7 +20,7 @@ except ImportError as exc:
     raise SystemExit("This design checker requires PyYAML in the local environment.") from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = 8
+VERSION = "8.1"
 SCHEMA_VERSION = 8
 DATE = "2026-11-19"
 
@@ -75,9 +75,11 @@ def render_compiled(chapters):
         "100+邀请码注册采用有界数据库队列、单开户worker、轮巡/配额/资源保护，见第28篇。\n\n"
         "v8纠正保号：30天窗A授权够300自动扣分/B有效30分钟免费续，原到期＋30天；"
         "20天仅实际更换A/B后的冷却，解锁权保留。免保号不足30天才自愿选择，旧活动分废止。\n\n"
-        "本文件是29篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
+        "v8.1增加末72小时目标未达标的风险确认、原P后24小时收尾（不改P/不叠7天）、"
+        "30次与30天区别、留存型300/奖励软上限3600及默认关闭的450收紧预设。\n\n"
+        "本文件是30篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
         "当前默认/遗漏闭环/实施顺序见第27篇，所有总控字段见第25篇，更新助手见第26篇；"
-        "当前保号以第29/03/14/15篇及retention配置为准；本地核验见../analysis/v8-verification.md，保留旧版本历史。\n\n## 分篇目录\n\n"
+        "当前保号以第29/03/14/15篇及retention配置为准，边界与积分经济由第30篇补充；本地核验见../analysis/v8.1-verification.md，保留旧版本历史。\n\n## 分篇目录\n\n"
     )
     toc = "".join(f"- [{p.stem}]({p.name})\n" for p in chapters)
     return intro + toc + "\n" + "\n\n---\n\n".join(p.read_text(encoding="utf-8").rstrip() for p in chapters) + "\n"
@@ -181,9 +183,32 @@ def main():
             and not keep["exempt"]["exact_30_days_or_permanent_exemption_shows_selection"], "exempt selection remains optional and only below 30 days")
     require(keep["settlement"]["atomic_debit_grant_window_close_end_update_outbox"] and not keep["settlement"]["background_retry_can_consume_a_second_300_points"], "automatic debit and expiry must commit once together")
     require(keep["manual_cards"]["balance_preview_conflict_requires_new_confirmation"] and not keep["manual_cards"]["same_wallet_points_spent_twice"], "manual exempt card and automatic A cannot double-spend a stale wallet preview")
+    late = keep['modes']['late_change_guard']
+    buffer = keep['expiry_and_recovery']['closing_buffer']
+    cap = policy['points']['reward_soft_cap']
+    economy = policy['points']['economy']
+    require(late['threshold_hours'] == 72 and late['policy'] == 'WARN_AND_REQUIRE_EXPLICIT_RISK_ACK'
+            and not late['lack_of_acknowledgement_changes_mode'], 'late incomplete mode change needs explicit bound risk acknowledgement')
+    require(late['preview_ttl_seconds'] == 120 and late['newly_crossed_risk_threshold_requires_fresh_preview'], 'expired or newly risky preview cannot change mode')
+    require(buffer['hours'] == 24 and not buffer['shifts_original_end_or_adds_to_success_duration']
+            and buffer['included_in_existing_seven_day_grace_not_added_after_it'], 'closing buffer preserves original end and never creates 8-day grace')
+    require(not buffer['late_action_auto_debit_under_expired_consent'] and buffer['late_rescue_requires_fresh_explicit_confirmation']
+            and buffer['late_checkin_uses_real_local_date_and_original_daily_idempotency'], 'late input needs fresh rescue consent with real date idempotency')
+    require(cap['enabled'] and cap['points'] == 3600 and cap['scope'] == 'AVAILABLE_PLUS_FROZEN'
+            and not cap['existing_above_cap_balance_is_reduced'], 'organic reward cap controls new issuance without confiscating old balance')
+    require(not cap['full_refund_or_promised_credit_is_lost_to_cap'] and not cap['retry_after_A_debit_redraws_or_tops_up_same_day'], 'cap cannot swallow lawful credit or reopen capped daily reward')
+    enabled_prices = [p['price']['amount'] for p in configs['catalog.example.yaml']['products']
+                      if p.get('enabled') and p.get('price', {}).get('unit') == 'POINTS']
+    require(cap['points'] >= max(enabled_prices), 'cap still permits saving for highest enabled points SKU')
+    require(economy['active_preset'] == 'RETENTION' and not economy['auto_change_prices_or_rewards']
+            and not economy['presets']['BALANCED_POINTS']['enabled_as_effective_default'], 'retention remains effective default and 450 preset is draft only')
+    require(economy['presets']['RETENTION']['activity_A_price'] == keep['checkin_A']['automatic_debit_points']
+            and economy['presets']['RETENTION']['reward_soft_cap'] == cap['points'], 'active preset agrees with actual A price and reward cap')
+    require(all(p['reward_soft_cap'] >= p['exempt_year_price'] for p in economy['presets'].values())
+            and economy['increased_A_price_requires_new_user_consent'], 'preset year-card affordability and renewed price consent are explicit')
 
     chapters = sorted((ROOT / "docs").glob("[0-9][0-9]-*.md"))
-    require([int(p.name[:2]) for p in chapters] == list(range(1, 30)), "29 consecutively numbered plan chapters")
+    require([int(p.name[:2]) for p in chapters] == list(range(1, 31)), "30 consecutively numbered plan chapters")
     compiled = render_compiled(chapters)
     inventory_document = {"version": VERSION, "date": DATE, "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
                           "config_files": len(configs), "console_modules": len(modules),
@@ -219,6 +244,8 @@ def main():
     require(tg_fragment in (ROOT / "ui" / "panel-preview.html").read_text(encoding="utf-8"), "TG standalone preview embeds current v8 fragment")
     require(all(x in tg_fragment for x in ["本窗已签到", "nextSwitch", "免保号剩余≥30天", "maybeRenew"])
             and "state.activity" not in tg_fragment and "预约下期观影" not in tg_fragment, "TG prototype uses real signed-day progress and new cooldown rather than old activity scores")
+    require(all(x in tg_fragment for x in ['cl-risk-ack', '临近结算风险', '收尾补救确认', 'rewardActual'])
+            and 'BALANCED_POINTS' in fragment and '3600' in fragment, 'risk buffer cap and draft economic controls are represented in the prototypes')
     original = ROOT / "reference" / "emby-v1-original.markdown"
     source = Path("E:/1111陈朝阳/emby/emby.markdown")
     if source.exists():
@@ -234,7 +261,7 @@ def main():
               "checks": checks}
     validation = ROOT / ".validation"
     validation.mkdir(exist_ok=True)
-    (validation / "v8-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (validation / "v8.1-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "checks"}, ensure_ascii=False, indent=2))
 
 

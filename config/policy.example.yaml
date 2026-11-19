@@ -1,6 +1,6 @@
 # v8设计输入；30天续期与20天实际切换冷却分开，详细契约唯一来源为retention示例。
 schema_version: 8
-policy_version: proposal-v8-2026-11-19
+policy_version: proposal-v8.1-2026-11-19
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -60,6 +60,7 @@ points:
     minimum: 10
     maximum: 20
     expected_daily_points: 15
+    expectation_scope: RAW_AWARD_BEFORE_REWARD_SOFT_CAP
     server_secure_random: true
     same_day_retry_returns_original_award: true
     monthly_22_day_topup_enabled: false
@@ -76,6 +77,48 @@ points:
     administrator_user_permission_required: true
     uses_activity_A_consent: false
     may_compete_with_activity_A_same_window: false
+  reward_soft_cap:
+    enabled: true
+    points: 3600
+    scope: AVAILABLE_PLUS_FROZEN
+    affected_sources: [CHECKIN, GAME_REWARD, INVITE_REWARD, ORGANIC_BONUS]
+    source_classification_is_server_owned: true
+    exempt_credits: [REFUND, ADMIN_COMPENSATION, CONTRACTUAL_PURCHASE_OR_CODE_CREDIT]
+    truncate_new_reward_to_remaining_space: true
+    record_raw_actual_unissued_reason_and_day: true
+    zero_reward_still_records_checkin: true
+    retry_after_A_debit_redraws_or_tops_up_same_day: false
+    existing_above_cap_balance_is_reduced: false
+    full_refund_or_promised_credit_is_lost_to_cap: false
+    cap_must_reach_highest_enabled_savable_points_sku: true
+    cap_disabled_or_unlimited_requires_explicit_owner_policy: true
+  economy:
+    active_preset: RETENTION
+    objective: ENGAGEMENT_RETENTION_NOT_FORCED_PAYMENT
+    auto_change_prices_or_rewards: false
+    presets:
+      RETENTION:
+        enabled_as_effective_default: true
+        daily_raw_range: [10, 20]
+        activity_A_price: 300
+        exempt_month_price: 300
+        exempt_quarter_price: 850
+        exempt_year_price: 3000
+        reward_soft_cap: 3600
+      BALANCED_POINTS:
+        enabled_as_effective_default: false
+        daily_raw_range: [10, 20]
+        activity_A_price: 450
+        exempt_month_price: 450
+        exempt_quarter_price: 1275
+        exempt_year_price: 4500
+        reward_soft_cap: 5400
+    preset_is_draft_until_cross_module_publication: true
+    stronger_changes_default_effective_next_window: true
+    increased_A_price_requires_new_user_consent: true
+    honor_old_orders_codes_awards_and_window_snapshots: true
+    B_free_route_is_disabled_by_points_tuning: false
+    lowering_A_only_rewards_without_sticky_window_policy_supported: false
 security:
   user_security_code_enabled: true
   security_code_channel: HTTPS_PANEL_ONLY

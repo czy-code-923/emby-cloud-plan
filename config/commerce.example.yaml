@@ -1,5 +1,5 @@
 # v6待开发规格；新增外链草稿能力但规则Gate保持关闭，不启用真实收款。
-schema_version: 7
+schema_version: 8
 real_payments_enabled: false
 entrypoints:
   standalone_web:
@@ -105,6 +105,10 @@ fulfillment:
   valid_for_claim_days: 30
   unused_expired_paid_code_resolution: MANUAL_REISSUE_OR_REFUND
   duration_starts_at: CLAIM_COMMIT
+  preserve_remaining_playback_and_append_full_duration: true
+  exemption_on_preserved_activity_remainder: EXPLICIT_BONUS_OVERLAY
+  reset_mode_change_cooldown: false
+  pause_tail_participation_when_exemption_extended: true
   renewal_stacking: APPEND_CONTIGUOUS_SAME_TIER
   verification_storage: HMAC
   delivery_plaintext_storage: SEPARATE_KEY_ENCRYPTED

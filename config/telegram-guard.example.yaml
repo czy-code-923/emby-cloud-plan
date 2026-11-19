@@ -1,5 +1,5 @@
 # v7.1设计输入；Bot防连点与媒体防护分开，尚无真实中间件。
-schema_version: 7
+schema_version: 8
 telegram_guard:
   runtime_implemented: false
   baseline_auth_bounds_idempotency_and_ingress_limits_required: true

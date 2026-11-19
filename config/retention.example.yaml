@@ -1,0 +1,119 @@
+# v8最终保号契约；用户已确认：原到期+30天，A余额够300即可，无签到天数硬门槛。
+schema_version: 8
+retention:
+  runtime_implemented: false
+  timezone: Asia/Shanghai
+  window:
+    duration_days: 30
+    interval: START_INCLUSIVE_END_EXCLUSIVE
+    anchor: CURRENT_PLAYBACK_END_MINUS_30_DAYS
+    renewal_duration_days: 30
+    success_expiry_formula: OLD_PLAYBACK_END_PLUS_30_DAYS
+    at_most_one_automatic_settlement_per_window: true
+    next_window_begins_at_old_end_not_early_success_time: true
+    future_window_evaluated_before_start: false
+    settled_window_and_consumed_watch_progress_reused: false
+    calendar_day_counter_is_distinct_signed_dates_inside_exact_window: true
+    ui_assumes_every_exact_30_day_interval_has_exactly_30_local_dates: false
+  modes:
+    supported: [CHECKIN_POINTS, WATCH]
+    selection_required_for_activity_member: true
+    actual_change_cooldown_days: 20
+    switch_effect: IMMEDIATE_AFTER_COOLDOWN_WITHOUT_CHANGING_WINDOW_OR_EXPIRY
+    first_selection_starts_cooldown: true
+    unchanged_selection_resets_cooldown: false
+    unused_switch_permission_expires: false
+    elapsed_multiple_cooldowns_banks_multiple_changes: false
+    renewal_purchase_exemption_or_migration_resets_cooldown: false
+    retained_last_mode_survives_participation_off: true
+    stop_then_restart_participation_bypasses_mode_cooldown: false
+    old_cycle_boundary_reservation_model_active: false
+    unspent_window_progress_available_after_legitimate_mode_change: true
+  checkin_A:
+    enabled: true
+    required_available_points: 300
+    automatic_debit_points: 300
+    minimum_current_window_checkin_days: 0
+    about_twenty_days_is_estimate_not_requirement: true
+    wallet_balance_may_include_prior_or_other_legal_sources: true
+    frozen_points_spendable: false
+    selecting_or_reenabling_A_requires_explicit_debit_consent: true
+    consent_binds_price_ceiling_duration_policy_and_service: true
+    price_increase_above_consent_ceiling_requires_reconsent: true
+    triggers: [WINDOW_START, CHECKIN_COMMITTED, WALLET_CHANGED, MODE_CHANGED, TAIL_OPT_IN, RECOVERY_RETRY]
+    insufficient_balance_creates_negative_debt: false
+    result_type: ACTIVITY_RENEWAL
+    result_automatically_becomes_exempt_card: false
+    withdraw_consent_blocks_next_uncommitted_debit: true
+    amount_comparison_uses_locked_current_balance: true
+  watch_B:
+    enabled: true
+    required_valid_seconds: 1800
+    renewal_points_cost: 0
+    minimum_continuous_segment_seconds: 120
+    maximum_sample_gap_seconds: 90
+    merge_overlapping_user_intervals: true
+    clip_intervals_to_window_and_allocate_once: true
+    count_paused_seek_jumps_or_mark_watched: false
+    preselection_valid_progress_in_same_unsettled_window_available: true
+    observation_failure_pauses_adverse_cleanup: true
+    result_type: ACTIVITY_RENEWAL
+    result_automatically_becomes_exempt_card: false
+    late_event_accept_hours: 24
+  exempt:
+    sources: [POINTS_REDEMPTION, PURCHASE, ADMIN_GRANT]
+    no_activity_obligation_while_effective: true
+    checkin_still_earns_wallet_points: true
+    default_participation: 'OFF'
+    selection_visible_only_when_playback_remaining_strictly_less_than_days: 30
+    exact_30_days_or_permanent_exemption_shows_selection: false
+    participation_in_tail_optional: true
+    remembered_mode_alone_authorizes_tail_debit: false
+    explicit_resume_same_mode_does_not_reset_cooldown: true
+    opt_in_uses_existing_last_30_day_window: true
+    opt_in_cancels_remaining_exempt_coverage: false
+    no_selection_creates_free_30_days_at_expiry: false
+    manual_card_or_admin_extension_reaches_30_days_pauses_tail_participation: true
+    renewed_activity_segment_starts_at_old_playback_end: true
+  manual_cards:
+    points_month_price: 300
+    months_duration_days: 30
+    direct_grant_type: EXEMPT_PLAYBACK
+    preserves_remaining_playback_and_appends_duration: true
+    exemption_effective_immediately_until_new_contiguous_end: true
+    extra_exemption_on_preserved_activity_remainder_is_explicit_bonus_overlay: true
+    snapshot_old_segments_overlay_and_policy_for_refund: true
+    supersede_unsettled_automatic_window_and_recompute: true
+    same_wallet_points_spent_twice: false
+    balance_preview_conflict_requires_new_confirmation: true
+  settlement:
+    account_wallet_mode_window_and_end_version_locked_together: true
+    unique_key: [MEMBERSHIP_ID, WINDOW_ID, AUTOMATIC_RENEWAL]
+    atomic_debit_grant_window_close_end_update_outbox: true
+    check_authorization_current_mode_consent_and_epoch_at_commit: true
+    background_retry_can_consume_a_second_300_points: false
+    manual_card_first_invalidates_old_automatic_candidate: true
+    automatic_first_conflicts_stale_manual_preview: true
+    emby_sync_uses_monotonic_desired_and_applied_versions: true
+    emby_failure_charges_again_or_erases_committed_renewal: false
+    progress_and_old_end_remain_in_audit: true
+  expiry_and_recovery:
+    safety_ban_overrides_all_grants: true
+    normal_expiry_freezes_playback_not_identity_or_support: true
+    data_retention_minimum_days: 30
+    physical_user_deletion_default: false
+    grace_days: 7
+    grace_play_once_per_failed_window: true
+    grace_play_requires_selected_activity_participation: true
+    grace_creates_new_window_or_resets_mode_cooldown: false
+    post_expiry_point_debit_requires_explicit_rescue_confirmation: true
+    rescue_expiry_formula: FAILED_WINDOW_OLD_END_PLUS_30_DAYS
+    incident_holds_cleanup_and_records_shifted_window_bounds: true
+    no_tail_opt_in_after_paid_expiry_silently_defaults_to_A: false
+  migration:
+    preserve_last_actual_mode_change_and_next_switch_at: true
+    preserve_wallet_grants_consumed_window_ids_and_watch_allocations: true
+    old_activity_score_is_new_wallet_or_automatic_renewal: false
+    old_20_day_entitlement_truncated: false
+    old_authorization_reused_as_v8_A_debit_consent: false
+    rollout_requires_rule_notice_and_explicit_A_consent: true

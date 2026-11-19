@@ -1,5 +1,5 @@
 # 接口默认关闭；打开需独立身份、目标和实施验收，不是现成产品配置。
-schema_version: 7
+schema_version: 8
 external_points:
   enabled: false
   adapter_types: [GAME_REWARD]
@@ -7,7 +7,9 @@ external_points:
   scopes: [points:event:submit, points:event:status]
   cannot_set_balance: true
   server_rule_decides_award: true
-  counts_as_checkin_activity: false
+  counts_as_signed_day: false
+  direct_retention_grant_or_expiry_write_scope: false
+  authorized_activity_A_may_react_to_wallet_change: true
   counts_as_watch_time: false
   auto_create_members: false
   secure_signature_required: true

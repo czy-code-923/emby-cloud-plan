@@ -1,11 +1,11 @@
 # v7未来程序更新设计；程序仓库未创建，本文件不执行任何下载或部署。
-schema_version: 7
+schema_version: 8
 update_assistant:
   runtime_implemented: false
   effective_enabled: false
   initial_status: UNCONFIGURED
   design_mode: CHECK_ONLY
-  supported_modes: [OFF, CHECK_ONLY, AUTO_DOWNLOAD_MANUAL_APPLY, AUTO_APPLY_IN_WINDOW]
+  supported_modes: ['OFF', CHECK_ONLY, AUTO_DOWNLOAD_MANUAL_APPLY, AUTO_APPLY_IN_WINDOW]
   documentation_repository: czy-code-923/emby-cloud-plan
   documentation_repository_is_program_source: false
   program_repository:

@@ -1,4 +1,4 @@
-"""Build/check the v7.1 design deliverable; requires PyYAML, never contacts a service.
+"""Build/check the v8 design deliverable; requires PyYAML, never contacts a service.
 
 This checks documentation/configuration ownership and conservative example defaults.
 It does not test a running backend, real authentication, updates or disaster recovery.
@@ -20,8 +20,8 @@ except ImportError as exc:
     raise SystemExit("This design checker requires PyYAML in the local environment.") from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "7.1"
-SCHEMA_VERSION = 7
+VERSION = 8
+SCHEMA_VERSION = 8
 DATE = "2026-11-19"
 
 
@@ -73,9 +73,11 @@ def render_compiled(chapters):
         "TG购买外链沿用2026-11-18核验后的有效关闭状态，独立网址由运营者手动告知。\n\n"
         "新增TG防连点/防爆破、真实身份跨入口预算、内存档位与手动/推荐/边界自动模式；"
         "100+邀请码注册采用有界数据库队列、单开户worker、轮巡/配额/资源保护，见第28篇。\n\n"
-        "本文件是28篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
+        "v8纠正保号：30天窗A授权够300自动扣分/B有效30分钟免费续，原到期＋30天；"
+        "20天仅实际更换A/B后的冷却，解锁权保留。免保号不足30天才自愿选择，旧活动分废止。\n\n"
+        "本文件是29篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
         "当前默认/遗漏闭环/实施顺序见第27篇，所有总控字段见第25篇，更新助手见第26篇；"
-        "本地专项核验见../analysis/v7.1-verification.md，保留v7核验历史。\n\n## 分篇目录\n\n"
+        "当前保号以第29/03/14/15篇及retention配置为准；本地核验见../analysis/v8-verification.md，保留旧版本历史。\n\n## 分篇目录\n\n"
     )
     toc = "".join(f"- [{p.stem}]({p.name})\n" for p in chapters)
     return intro + toc + "\n" + "\n\n---\n\n".join(p.read_text(encoding="utf-8").rstrip() for p in chapters) + "\n"
@@ -98,7 +100,7 @@ def main():
     admin = configs["admin-console.example.yaml"]
     modules = {section["id"] for section in admin["sections"]}
     require(len(admin["sections"]) == len(modules) == 24, "24 unique independent-web-console modules")
-    require(all(c["schema_version"] == SCHEMA_VERSION for c in configs.values()), "all example design schemas remain v7, document version v7.1")
+    require(all(c["schema_version"] == SCHEMA_VERSION for c in configs.values()), "all current design examples use v8 schema")
     roots = admin["settings_coverage"]["root_owners"]
     require(set(configs) == set(roots), "all config files explicitly registered, no implicit owner fallback")
     inventory = []
@@ -136,7 +138,7 @@ def main():
     require(not backup["remote_transport"]["disabling_remote_transport_disables_local_backup"], "remote switch does not disable base backup")
     require(backup["restore"]["compare_latest_claim_revoke_payment_watermarks"], "restoration checks latest claim/revoke/payment watermarks")
     require(not commerce["real_payments_enabled"] and not commerce["entrypoints"]["telegram_bot_and_mini_app"]["external_purchase_link"]["effective_enabled"], "cash and Telegram purchase link remain effectively off")
-    require(policy["retention"]["mode_lock_days"] == 20 and policy["free_membership"]["cycle_days"] == 20, "20-day selected activity policy retained")
+    require(policy["retention"]["mode_lock_days"] == 20 and policy["free_membership"]["cycle_days"] == 30, "30-day window and 20-day actual mode-change cooldown are separate")
     require(policy["points"]["checkin_reward"]["minimum"] == 10 and policy["points"]["checkin_reward"]["maximum"] == 20, "10-20 integer wallet reward retained")
     require(admin["console"]["standalone_web"] and not admin["console"]["telegram_client_or_bot_required"]
             and not admin["console"]["accepts_telegram_panel_session_as_admin"], "standalone admin auth remains separate from Telegram")
@@ -166,9 +168,22 @@ def main():
             and queue["pressure"]["resume_cgroup_usage_at_most_percent"] < queue["pressure"]["pause_new_provisioning_cgroup_usage_percent"], "pressure protection has recovery hysteresis")
     require(queue["admission"]["status_poll_recommended_seconds"] * (1 - queue["admission"]["status_poll_jitter_percent"] / 100)
             >= queue["admission"]["status_poll_minimum_seconds"], "suggested jitter never goes below status minimum interval")
+    keep = configs["retention.example.yaml"]["retention"]
+    require(keep["window"]["duration_days"] == keep["window"]["renewal_duration_days"] == 30
+            and keep["window"]["success_expiry_formula"] == "OLD_PLAYBACK_END_PLUS_30_DAYS", "v8 renewal appends 30 days without losing current coverage")
+    require(keep["checkin_A"]["automatic_debit_points"] == 300 and keep["checkin_A"]["minimum_current_window_checkin_days"] == 0
+            and not policy["retention"]["checkin"]["activity_score_enabled"], "A only requires authorized available 300, no fixed signed-day or activity-score threshold")
+    require(keep["watch_B"]["required_valid_seconds"] == 1800 and keep["watch_B"]["renewal_points_cost"] == 0, "B uses valid 30 minutes without points")
+    require(keep["window"]["at_most_one_automatic_settlement_per_window"] and not keep["window"]["future_window_evaluated_before_start"], "early success cannot cascade into future automatic renewals")
+    require(not keep["modes"]["unused_switch_permission_expires"] and not keep["modes"]["unchanged_selection_resets_cooldown"]
+            and not keep["modes"]["renewal_purchase_exemption_or_migration_resets_cooldown"], "unused switch right survives and only actual selection/change starts cooldown")
+    require(keep["exempt"]["default_participation"] == "OFF" and keep["exempt"]["selection_visible_only_when_playback_remaining_strictly_less_than_days"] == 30
+            and not keep["exempt"]["exact_30_days_or_permanent_exemption_shows_selection"], "exempt selection remains optional and only below 30 days")
+    require(keep["settlement"]["atomic_debit_grant_window_close_end_update_outbox"] and not keep["settlement"]["background_retry_can_consume_a_second_300_points"], "automatic debit and expiry must commit once together")
+    require(keep["manual_cards"]["balance_preview_conflict_requires_new_confirmation"] and not keep["manual_cards"]["same_wallet_points_spent_twice"], "manual exempt card and automatic A cannot double-spend a stale wallet preview")
 
     chapters = sorted((ROOT / "docs").glob("[0-9][0-9]-*.md"))
-    require([int(p.name[:2]) for p in chapters] == list(range(1, 29)), "28 consecutively numbered plan chapters")
+    require([int(p.name[:2]) for p in chapters] == list(range(1, 30)), "29 consecutively numbered plan chapters")
     compiled = render_compiled(chapters)
     inventory_document = {"version": VERSION, "date": DATE, "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
                           "config_files": len(configs), "console_modules": len(modules),
@@ -200,6 +215,10 @@ def main():
     require(all(x in fragment for x in ["TG防连点", "资源调参", "注册排队", "RECOMMEND_MANUAL_APPLY", "AUTO_BOUNDED"]), "TG guard sizing and enrollment pages are present in admin prototype")
     wrapper = (ROOT / "ui" / "admin-console-preview.html").read_text(encoding="utf-8")
     require(fragment in wrapper, "standalone admin preview embeds current fragment")
+    tg_fragment = (ROOT / "ui" / "tg-panel.fragment.html").read_text(encoding="utf-8")
+    require(tg_fragment in (ROOT / "ui" / "panel-preview.html").read_text(encoding="utf-8"), "TG standalone preview embeds current v8 fragment")
+    require(all(x in tg_fragment for x in ["本窗已签到", "nextSwitch", "免保号剩余≥30天", "maybeRenew"])
+            and "state.activity" not in tg_fragment and "预约下期观影" not in tg_fragment, "TG prototype uses real signed-day progress and new cooldown rather than old activity scores")
     original = ROOT / "reference" / "emby-v1-original.markdown"
     source = Path("E:/1111陈朝阳/emby/emby.markdown")
     if source.exists():
@@ -215,7 +234,7 @@ def main():
               "checks": checks}
     validation = ROOT / ".validation"
     validation.mkdir(exist_ok=True)
-    (validation / "v7.1-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (validation / "v8-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "checks"}, ensure_ascii=False, indent=2))
 
 

@@ -1,5 +1,5 @@
 # v7备份/恢复设计输入；尚无执行器。远程传输开关由integrations统一管理。
-schema_version: 7
+schema_version: 8
 backup_policy:
   id: primary-recovery
   backend_implemented: false

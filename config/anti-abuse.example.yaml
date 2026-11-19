@@ -1,5 +1,5 @@
 # v7.1设计输入，非Emby/Caddy可直接加载的配置；媒体与TG各有独立预算。
-schema_version: 7
+schema_version: 8
 policy_version: anti-abuse-v7.1-2026-11-19
 runtime_implemented: false
 behavior_mode: OBSERVE

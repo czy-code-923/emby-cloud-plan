@@ -1,6 +1,6 @@
-# v7设计示例，不是Emby/OpenStrm/Twilight现有可加载配置。
-schema_version: 7
-policy_version: proposal-v7-2026-11-19
+# v8设计输入；30天续期与20天实际切换冷却分开，详细契约唯一来源为retention示例。
+schema_version: 8
+policy_version: proposal-v8-2026-11-19
 timezone: Asia/Shanghai
 service:
   id: personal-cloud
@@ -9,8 +9,12 @@ service:
   automatic_stream_proxy_fallback: false
 registration:
   enabled: true
-  allowed_paths: [INVITE]
-  supported_paths: [OPEN, INVITE, PURCHASE]
+  allowed_paths:
+  - INVITE
+  supported_paths:
+  - OPEN
+  - INVITE
+  - PURCHASE
   review_required: false
   member_limit: 20
   successful_registrations_per_day: 3
@@ -21,45 +25,35 @@ registration:
   invitation_batch_implicitly_raises_limits: false
 free_membership:
   enabled: true
-  cycle_days: 20
-  initial_play_days: 20
+  cycle_days: 30
+  initial_play_days: 30
   registered_devices: 3
   concurrent_streams: 1
-  return_after_exempt: AUTO_IF_RESERVED_SEAT
+  return_after_exempt: EXPLICIT_TAIL_OPT_IN_ONLY_NO_FREE_GIFT
 retention:
-  model: SELECTED_ACTIVITY_OR_EXEMPT_GRANT
-  modes: [CHECKIN_POINTS, WATCH]
-  mode_selection_required_for_free: true
+  detailed_contract: retention.example.yaml
+  model: THIRTY_DAY_WINDOW_SELECTED_AUTOMATIC_RENEWAL_OR_EXEMPT
+  modes:
+  - CHECKIN_POINTS
+  - WATCH
+  window_days: 30
+  renewal_days: 30
   mode_lock_days: 20
-  next_mode_selection: QUEUED_AT_CYCLE_BOUNDARY
-  mode_switch_resets_deadline: false
-  unselected_activity_satisfies_cycle: false
+  next_mode_selection: IMMEDIATE_AFTER_ACTUAL_CHANGE_COOLDOWN
+  unused_switch_permission_expires: false
   checkin:
-    enabled: true
-    cycle_activity_score_required: 20
-    daily_activity_score: 10
-    wallet_spending_reduces_activity_score: false
-    admin_wallet_adjustment_counts_as_activity: false
+    automatic_cost_points: 300
+    minimum_checkin_days: 0
+    activity_score_enabled: false
   viewing:
-    enabled: true
     required_seconds: 1800
-    minimum_continuous_segment_seconds: 120
-    maximum_sample_gap_seconds: 90
-    merge_overlapping_user_intervals: true
-    count_paused: false
-    count_seek_jumps: false
-    late_event_accept_hours: 24
-  exempt_sources: [POINTS_REDEMPTION, PURCHASE, ADMIN_GRANT]
-  exempt_playback_skips_checkin_and_watch: true
-  optional_checkin_during_exemption: true
+  exempt_default_participation: 'OFF'
+  exempt_selection_when_remaining_days_strictly_less_than: 30
+  automatic_settlements_per_window: 1
+  expiry_formula: OLD_END_PLUS_30_DAYS
   grace_days: 7
-  grace_play_enabled: true
-  grace_play_once_per_cycle: true
-  grace_capacity_failure_holds_cleanup: true
   minimum_data_retention_days: 30
   automatic_physical_deletion: false
-  collection_failure_hold_after_minutes: 10
-  incident_extension_buffer_hours: 24
 points:
   checkin_reward:
     distribution: DISCRETE_UNIFORM
@@ -76,10 +70,12 @@ points:
   expires: false
   administrator_set_available_balance: true
   adjustments_require_reason_and_expected_version: true
-  auto_renew:
+  exempt_card_auto_purchase:
     globally_allowed: true
     user_default_opt_in: false
     administrator_user_permission_required: true
+    uses_activity_A_consent: false
+    may_compete_with_activity_A_same_window: false
 security:
   user_security_code_enabled: true
   security_code_channel: HTTPS_PANEL_ONLY
@@ -102,7 +98,7 @@ playback:
   existing_session_failure_cache_seconds: 300
   database_failure_admits_new_sessions: false
   anonymous_redirect_enabled: false
-  global_new_session_limit: 2 # 内测初值，非硬件保证
+  global_new_session_limit: 2
   per_node_limit_enabled: true
   per_storage_account_limit_enabled: true
 online_statistics:
@@ -148,11 +144,18 @@ tasks:
   source_missing_confirm_successful_scans: 2
   source_missing_minimum_separation_hours: 24
   index_quarantine_days: 7
-  bulk_missing_circuit_breaker_ratio: 0.10
+  bulk_missing_circuit_breaker_ratio: 0.1
 notifications:
-  retention_reminder_days: [7, 3, 1]
-  entitlement_reminder_days: [3, 1]
-  quiet_hours: {start: '22:00', end: '08:00'}
+  retention_reminder_days:
+  - 7
+  - 3
+  - 1
+  entitlement_reminder_days:
+  - 3
+  - 1
+  quiet_hours:
+    start: '22:00'
+    end: 08:00
   security_and_payment_bypass_quiet_hours: true
   marketing_opt_in: false
   library_batch_minutes: 10
@@ -168,7 +171,10 @@ capacity_recommendation:
   changes_automatically_applied: false
   observation_hours: 72
   can_raise_sold_capacity_without_approval: false
-  emergency_actions: [PAUSE_IMPORT, PAUSE_REGISTRATION, PAUSE_SALES]
+  emergency_actions:
+  - PAUSE_IMPORT
+  - PAUSE_REGISTRATION
+  - PAUSE_SALES
 anti_abuse:
   runtime_implemented: false
   behavior_mode: OBSERVE

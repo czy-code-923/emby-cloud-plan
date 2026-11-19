@@ -1,5 +1,5 @@
-# v7待开发总控设置注册表；全部模块归属不表示表单/执行器已实现。
-schema_version: 7
+# v8待开发总控设置注册表；全部模块归属不表示表单/执行器已实现。
+schema_version: 8
 console:
   standalone_web: true
   separate_from_telegram_panel: true
@@ -22,7 +22,7 @@ sections:
   - {id: overview, label: 总览, permission: READ_ASSIGNED_SUMMARIES}
   - {id: users_roles, label: 用户与角色, config: policy.example.yaml, permission: IDENTITY_OR_OWNER}
   - {id: registration, label: 注册邀请与队列, config: registration-queue.example.yaml, permission: REGISTRATION_ADMIN}
-  - {id: entitlements, label: 权益保号, config: policy.example.yaml, permission: ENTITLEMENT_ADMIN}
+  - {id: entitlements, label: 权益保号, config: retention.example.yaml, permission: ENTITLEMENT_ADMIN}
   - {id: points_codes, label: 积分兑换码, config: policy.example.yaml, permission: POINTS_OR_CODE_ADMIN}
   - {id: catalog_promotions, label: 商品活动, config: catalog.example.yaml, permission: COMMERCE_PUBLISH}
   - {id: payments_fulfillment, label: 核款履约, config: commerce.example.yaml, permission: FINANCE_CONFIRM_PAYMENT}
@@ -76,8 +76,8 @@ settings_coverage:
   detail: docs/25-网页总控全部功能与字段清单.md
   inventory_script: scripts/verify_plan.py
   inventory_output: analysis/control-surface-inventory.json
-  config_schema_version_equals_document_version: false
-  config_schema_version: 7
+  config_schema_version_equals_document_version: true
+  config_schema_version: 8
   all_files_and_top_level_keys_must_be_registered: true
   inventory_mode: DESIGN_OWNERSHIP_REQUIRES_FIELD_METADATA_AT_IMPLEMENTATION
   allowed_field_classes: [EDITABLE_POLICY, DEDICATED_WORKFLOW, READ_ONLY_INVARIANT, SECRET_REFERENCE, EXTERNAL_CAPABILITY]
@@ -205,6 +205,9 @@ settings_coverage:
       jobs_observability: jobs_observability
       privacy_exports: privacy_exports
       secrets_adapters: secrets_adapters
+    retention.example.yaml:
+      schema_version: system_releases
+      retention: entitlements
     telegram-guard.example.yaml:
       schema_version: system_releases
       telegram_guard: abuse_rules
@@ -222,5 +225,9 @@ shared_setting_aliases:
     - {source: 'policy.example.yaml:extensions.remote_backup_pull_enabled', target: 'integrations.example.yaml:remote_backup.pull_api_enabled'}
     - {source: 'policy.example.yaml:extensions.external_points_enabled', target: 'integrations.example.yaml:external_points.enabled'}
     - {source: 'policy.example.yaml:commerce.real_payments_enabled', target: 'commerce.example.yaml:real_payments_enabled'}
+    - {source: 'policy.example.yaml:retention.window_days', target: 'retention.example.yaml:retention.window.duration_days'}
+    - {source: 'policy.example.yaml:retention.mode_lock_days', target: 'retention.example.yaml:retention.modes.actual_change_cooldown_days'}
+    - {source: 'policy.example.yaml:retention.checkin.automatic_cost_points', target: 'retention.example.yaml:retention.checkin_A.automatic_debit_points'}
+    - {source: 'policy.example.yaml:retention.viewing.required_seconds', target: 'retention.example.yaml:retention.watch_B.required_valid_seconds'}
     - {source: 'policy.example.yaml:updates.effective_enabled', target: 'update-assistant.example.yaml:update_assistant.effective_enabled'}
     - {source: 'policy.example.yaml:updates.program_repository', target: 'update-assistant.example.yaml:update_assistant.program_repository.full_name'}

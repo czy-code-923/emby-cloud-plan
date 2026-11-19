@@ -1,5 +1,5 @@
 # v7通知/任务/隐私/凭据的总控设计输入，不代表真实后端配置。
-schema_version: 7
+schema_version: 8
 notifications:
   event_dispatcher: SINGLE_DURABLE_OUTBOX
   available_targets: [ADMIN_INBOX, TELEGRAM_PRIVATE, RESTRICTED_TELEGRAM_GROUP, EMAIL, HTTPS_WEBHOOK]

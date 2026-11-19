@@ -1,5 +1,5 @@
 # v7.1注册高峰设计；数据库有界排队，不在RAM里同时开100个用户任务。
-schema_version: 7
+schema_version: 8
 registration_queue:
   runtime_implemented: false
   admission:

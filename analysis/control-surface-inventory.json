@@ -1,15 +1,15 @@
 {
-  "version": 7,
+  "version": "7.1",
   "date": "2026-11-19",
   "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
-  "config_files": 13,
+  "config_files": 15,
   "console_modules": 24,
-  "field_paths": 1369,
+  "field_paths": 1650,
   "by_module": {
     "abuse_events": 8,
-    "abuse_rules": 71,
+    "abuse_rules": 157,
     "backup_migration": 89,
-    "capacity": 73,
+    "capacity": 154,
     "catalog_promotions": 204,
     "content_clients": 49,
     "devices_sessions": 14,
@@ -23,10 +23,10 @@
     "payments_fulfillment": 102,
     "points_codes": 34,
     "privacy_exports": 10,
-    "registration": 11,
+    "registration": 116,
     "secrets_adapters": 17,
     "storage_routes": 5,
-    "system_releases": 304,
+    "system_releases": 313,
     "telegram_links": 15,
     "update_assistant": 110,
     "users_roles": 38
@@ -1175,6 +1175,13 @@
     },
     {
       "file": "admin-console.example.yaml",
+      "path": "settings_coverage.config_schema_version",
+      "module": "system_releases",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
       "path": "settings_coverage.all_files_and_top_level_keys_must_be_registered",
       "module": "system_releases",
       "example_type": "bool",
@@ -1526,6 +1533,13 @@
     {
       "file": "admin-console.example.yaml",
       "path": "settings_coverage.root_owners.capacity-profiles.example.yaml.semantics",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.capacity-profiles.example.yaml.telegram_workload",
       "module": "system_releases",
       "example_type": "str",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
@@ -1903,6 +1917,13 @@
     },
     {
       "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.anti-abuse.example.yaml.telegram_guard_contract",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
       "path": "settings_coverage.root_owners.admin-console.example.yaml.schema_version",
       "module": "system_releases",
       "example_type": "str",
@@ -2023,6 +2044,34 @@
     {
       "file": "admin-console.example.yaml",
       "path": "settings_coverage.root_owners.operations.example.yaml.secrets_adapters",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.telegram-guard.example.yaml.schema_version",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.telegram-guard.example.yaml.telegram_guard",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.registration-queue.example.yaml.schema_version",
+      "module": "system_releases",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "admin-console.example.yaml",
+      "path": "settings_coverage.root_owners.registration-queue.example.yaml.registration_queue",
       "module": "system_releases",
       "example_type": "str",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
@@ -2798,6 +2847,13 @@
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
     },
     {
+      "file": "anti-abuse.example.yaml",
+      "path": "telegram_guard_contract",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
       "file": "backup.example.yaml",
       "path": "schema_version",
       "module": "system_releases",
@@ -3247,6 +3303,13 @@
     },
     {
       "file": "capacity-profiles.example.yaml",
+      "path": "recommendation.automatic_limit_increase_scope",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
       "path": "profiles.XS.min_memory_mib",
       "module": "capacity",
       "example_type": "int",
@@ -3570,6 +3633,566 @@
     {
       "file": "capacity-profiles.example.yaml",
       "path": "semantics.permit_individual_override_above_global_hard_limit",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.runtime_implemented",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.mode",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.supported_modes[0]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.supported_modes[1]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.supported_modes[2]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.effective_resource_scope_and_timestamp_visible",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.show_saved_recommended_desired_applied_and_protective_values",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.initial_profile",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.state_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.maximum_state_keys",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.reply_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.inbox_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.registration_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.prefetch_refs",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.recommended_provisioning_workers",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.hash_concurrency",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XS.full_stack_recommended",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.state_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.maximum_state_keys",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.reply_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.inbox_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.registration_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.prefetch_refs",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.recommended_provisioning_workers",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.S.hash_concurrency",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.state_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.maximum_state_keys",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.reply_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.inbox_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.registration_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.prefetch_refs",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.recommended_provisioning_workers",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.M.hash_concurrency",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.state_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.maximum_state_keys",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.reply_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.inbox_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.registration_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.prefetch_refs",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.recommended_provisioning_workers",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.L.hash_concurrency",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.state_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.maximum_state_keys",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.reply_cache_mib",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.inbox_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.registration_outstanding",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.prefetch_refs",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.recommended_provisioning_workers",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.profiles.XL.hash_concurrency",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.enabled",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.owner_preapproved_ceiling_required",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.initially_auto_tunable[0]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.initially_auto_tunable[1]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.initially_auto_tunable[2]",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.queue_capacity_auto_increase_opt_in",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.provisioning_worker_auto_increase_opt_in",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.hash_concurrency_auto_increase_opt_in",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.member_daily_sales_playback_security_or_telegram_egress_auto_increase",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.min_max_current_and_reason_visible",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.effective_memory_is_min_of_applicable_host_and_cgroup_limits",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.resource_unknown_blocks_increase",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.memory_growth_requires_unused_budget_after_real_stack_peak",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.stable_before_growth_minutes",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.growth_step_percent_maximum",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.minimum_interval_between_growth_minutes",
+      "module": "capacity",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.forced_shrink_or_pause_may_be_immediate",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.queue_growth_requires_database_disk_and_backlog_age_evidence",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.worker_growth_requires_cpu_emby_latency_pool_and_hash_budget_evidence",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.container_memory_or_db_pool_automatically_expanded",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.preserve_cooldowns_nonces_idempotency_and_claim_facts_during_resize",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.auto_bounded.lowering_queue_cap_drops_already_admitted_tickets",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.pressure_guard.enabled_by_design_in_all_modes",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.pressure_guard.contract",
+      "module": "capacity",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.pressure_guard.manual_mode_disables_safety_pause",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.pressure_guard.runtime_implemented",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.memory_accounting.tg_state_and_reply_caches_are_separate_from_media_gateway_cache",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.memory_accounting.byte_cap_before_key_count",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.memory_accounting.configured_key_count_is_guaranteed_fit",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.memory_accounting.queue_records_are_durable_not_resident_tasks",
+      "module": "capacity",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "capacity-profiles.example.yaml",
+      "path": "telegram_workload.memory_accounting.budget_includes_rss_db_hash_parse_buffers_and_media_peaks",
       "module": "capacity",
       "example_type": "bool",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
@@ -7797,6 +8420,20 @@
     },
     {
       "file": "policy.example.yaml",
+      "path": "registration.queue_contract",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
+      "path": "registration.invitation_batch_implicitly_raises_limits",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
       "path": "free_membership.enabled",
       "module": "entitlements",
       "example_type": "bool",
@@ -8805,6 +9442,13 @@
     },
     {
       "file": "policy.example.yaml",
+      "path": "anti_abuse.telegram_contract",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "policy.example.yaml",
       "path": "admin_console.backend_implemented",
       "module": "system_releases",
       "example_type": "bool",
@@ -8857,6 +9501,1329 @@
       "path": "operations_detail.detailed_contract",
       "module": "jobs_observability",
       "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "schema_version",
+      "module": "system_releases",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.runtime_implemented",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.enabled_in_design",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.private_verified_identity_required",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.one_active_intent_per_identity_and_service",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.duplicate_submit_returns_original_ticket",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_limit",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[0]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[1]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[2]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[3]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[4]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.outstanding_includes[5]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.maximum_normalized_payload_kib",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.raw_password_security_code_or_invite_plaintext_persisted",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.ingress_limiter_contract",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.admission_and_outstanding_counter_atomic",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.queue_full_http_status",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.queue_full_retry_after_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.status_poll_minimum_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.status_poll_recommended_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.status_poll_jitter_percent",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.status_requires_ticket_owner",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.exact_queue_position_or_finish_time_promised",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.cancel_waiting_releases_own_reservations",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.cancel_provisioned_or_uncertain_job_blindly_deletes_account",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.eligibility_ticket_max_wait_hours",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.admission.expires_during_maintenance_or_capacity_incident",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.issuance_modes[0]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.issuance_modes[1]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.default_free_mode",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.code_count_equals_member_or_concurrent_stream_capacity",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.large_batch_preflight_requires_showing_policy_and_reserved_seats",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.free_pending_invite_use_reserved_until_success_or_resolution",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.member_seat_reserved_only_when_ready_to_provision",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.paid_registration_seat_reserved_before_sale",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.reserve_paid_claim_converts_existing_reservation_not_double_counts",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.consume_invite_only_after_account_and_policy_verified",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.waiting_intent_bypasses_expiry_or_revocation",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.invitations.sold_code_rights_survive_general_registration_close",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.durable_queue",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.initial_provisioning_workers",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.initial_prefetch_ticket_refs",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.claim_batch_size",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.idle_poll_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.idle_poll_jitter_percent",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.notifications_only_as_wakeup_hint",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.durable_rescan_after_restart",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.fair_order",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.max_consecutive_reserved_paid_when_free_ready",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.waiting_for_capacity_or_daily_quota_holds_worker",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.source_emby_and_hash_budgets_are_independent",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.claim_transaction_uses_skip_locked_and_fenced_lease",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.lease_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.heartbeat_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.external_request_timeout_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.database_connection_held_during_external_request",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.one_db_connection_per_waiting_user",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.global_worker_and_queue_caps_not_multiplied_by_replicas",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.dispatch.stop_after_claim_if_epoch_or_policy_revoked",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[0]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[1]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[2]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[3]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[4]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[5]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.stages[6]",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.timeout_or_unknown_create_result_state",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.unknown_result_blindly_retries_account_creation",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.existing_external_same_name_claimed_as_own_account",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.temporary_password_generated_only_when_needed_and_not_logged",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.final_password_set_via_one_time_https_activation",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.queue_admission_consumes_success_daily_quota",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.ready_slot_reserves_daily_quota_and_member_capacity_atomically",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.success_commits_daily_count_seat_invite_and_mapping",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.provisioning.zero_or_closed_policy_silently_reopens_for_free_users",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.maximum_known_safe_transient_retries",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.backoff_seconds[0]",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.backoff_seconds[1]",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.backoff_seconds[2]",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.backoff_seconds[3]",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.backoff_seconds[4]",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.per_job_jitter_required",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.policy_errors_wait_without_busy_retry",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.uncertain_external_effect_holds_reservation_until_reconciled",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.retries.lease_expiry_alone_proves_external_side_effect_absent",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.pause_new_provisioning_available_memory_below_mib",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.pause_new_provisioning_cgroup_usage_percent",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.resume_available_memory_at_least_mib",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.resume_cgroup_usage_at_most_percent",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.resume_stable_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.repeated_oom_or_swap_growth_pauses",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.registration_pause_kills_completed_accounts_or_playback",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.queue_cap_lowered_below_current_drops_existing_tickets",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.pressure.resume_unknown_metrics_automatically",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.autosizing.contract",
+      "module": "registration",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.autosizing.member_daily_sales_and_security_limits_auto_raise",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.autosizing.queue_capacity_requires_owner_ceiling_and_disk_evidence",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.autosizing.provisioning_workers_require_cpu_latency_and_db_evidence",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.observability.show_pending_active_waiting_daily_capacity_reconciling_and_oldest_age",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.observability.aggregate_queue_size_cached_seconds",
+      "module": "registration",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.observability.registration_failure_and_pause_reason_visible",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.observability.queue_backend_unavailable_creates_users_inline",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "registration-queue.example.yaml",
+      "path": "registration_queue.observability.huge_inmemory_waiter_array_or_sleep_per_user",
+      "module": "registration",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "schema_version",
+      "module": "system_releases",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.runtime_implemented",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.baseline_auth_bounds_idempotency_and_ingress_limits_required",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.behavioral_penalty_mode",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.security_failure_cooldowns_always_required",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.observation_hours",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.receiver",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.webhook_secret_header_required_if_used",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.webhook_max_connections",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.webhook_connection_limit_is_application_concurrency",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.allowed_updates[0]",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.allowed_updates[1]",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.allowed_updates[2]",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.maximum_body_kib",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.parse_concurrency",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.handler_concurrency",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.authenticated_accepts_per_second",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.authenticated_accept_burst",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.durable_inbox_outstanding_limit",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.normalized_payload_max_kib",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.pending_count_includes_queued_leased_and_retrying",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.one_coroutine_or_thread_per_pending_update",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.overflow_before_durable_accept",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.successful_ack_requires_durable_or_deliberate_safe_rejection",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.unexpected_update_is_rejected_without_unbounded_persistence",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.polling_offset_after_durable_acceptance_only",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.ingress.remote_shared_telegram_ip_is_user_identity",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.bucket_scope",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.verified_mini_app_identity_uses_same_user_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.arbitrary_callback_id_bypasses_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.chat_or_message_change_bypasses_user_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.require_object_permission_before_cached_result",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.identity.unknown_uid_creates_full_member_or_unbounded_cache",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.raw_uid_actions_10s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.raw_uid_actions_60s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.navigation_uid_10s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.navigation_uid_60s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.mutation_uid_10s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.mutation_uid_60s",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.queue_status_uid_min_interval_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.same_action_object_coalesce_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.coalesced_receipts_consume_raw_not_new_mutation_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.maximum_inflight_mutation_per_uid",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.administrator_basic_limits_exempt",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.rate_limits.cooldown_feedback_min_interval_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.opaque_reference_minimum_random_bits",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.bind_actor_action_object_version_epoch_and_context",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.confirmation_ttl_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.check_permission_and_revocation_before_reuse",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.stale_or_foreign_reference_runs_business_action",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.transport_update_idempotency_key[0]",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.transport_update_idempotency_key[1]",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.semantic_mutation_idempotency_persisted",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.recent_transport_id_retention_hours",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.processed_transport_receipt_max_rows",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.processed_receipt_cap_can_evict_old_completed_receipts",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.cap_eviction_deletes_unprocessed_or_semantic_business_facts",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.transport_dedup_budget_does_not_replace_ledger_claim_constraints",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.target_callback_answer_seconds_normal_load",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.callback_ack_equals_business_success",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.callbacks.reply_cache_may_contain_passwords_codes_or_payment_secrets",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.invitation_or_redeem_invalid_uid_10m",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.invalid_code_cooldown_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.invalid_response_distinguishes_exists_or_owner",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.attacker_supplied_target_uid_can_lock_other_identity",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.security_code_failure_contract",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.high_cost_hash_only_after_cheap_admission",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.temporary_cooldown_lift_requires_reason_expiry_and_scope",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.brute_force.automatic_permanent_ban_delete_or_subnet_block",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.outgoing_messages_per_second_proposal",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.ordinary_chat_messages_min_interval_seconds",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.group_messages_per_minute_proposal",
+      "module": "abuse_rules",
+      "example_type": "int",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.reserve_control_response_lane",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.answer_callback_has_separate_method_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.obey_actual_telegram_retry_after_and_method_scope",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.one_new_chat_message_per_duplicate_click",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.in_flight_or_duplicate_uses_bounded_ack_or_original_message",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.egress.notification_retry_queue_is_bounded_and_persistent",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.sizing_contract",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.registration_queue_contract",
+      "module": "abuse_rules",
+      "example_type": "str",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.byte_cap_precedes_key_count_cap",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.replay_or_cooldown_eviction_grants_fresh_write_budget",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.critical_limiter_state_failure_blocks_new_sensitive_writes",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.multi_replica_requires_shared_atomic_state_and_global_queue_caps",
+      "module": "abuse_rules",
+      "example_type": "bool",
+      "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
+    },
+    {
+      "file": "telegram-guard.example.yaml",
+      "path": "telegram_guard.resources.log_raw_code_token_or_callback_payload",
+      "module": "abuse_rules",
+      "example_type": "bool",
       "status": "DESIGN_OWNERSHIP_ONLY_RUNTIME_FIELD_METADATA_PENDING"
     },
     {

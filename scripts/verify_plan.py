@@ -1,4 +1,4 @@
-"""Build/check the v7 design deliverable; requires PyYAML, never contacts a service.
+"""Build/check the v7.1 design deliverable; requires PyYAML, never contacts a service.
 
 This checks documentation/configuration ownership and conservative example defaults.
 It does not test a running backend, real authentication, updates or disaster recovery.
@@ -20,7 +20,8 @@ except ImportError as exc:
     raise SystemExit("This design checker requires PyYAML in the local environment.") from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = 7
+VERSION = "7.1"
+SCHEMA_VERSION = 7
 DATE = "2026-11-19"
 
 
@@ -70,9 +71,11 @@ def render_compiled(chapters):
         "更新助手支持未来可信程序仓库自动检查/验证拉取、预检/备份/维护应用及兼容回退；"
         "程序仓库尚未创建、当前未配置且不执行更新，现有方案仓库不充当程序源。"
         "TG购买外链沿用2026-11-18核验后的有效关闭状态，独立网址由运营者手动告知。\n\n"
-        "本文件是27篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
+        "新增TG防连点/防爆破、真实身份跨入口预算、内存档位与手动/推荐/边界自动模式；"
+        "100+邀请码注册采用有界数据库队列、单开户worker、轮巡/配额/资源保护，见第28篇。\n\n"
+        "本文件是28篇完整设计的合订本，包含静态交互原型规格，未部署真实后端或通过生产验收。"
         "当前默认/遗漏闭环/实施顺序见第27篇，所有总控字段见第25篇，更新助手见第26篇；"
-        "本地设计核验见../analysis/v7-verification.md。\n\n## 分篇目录\n\n"
+        "本地专项核验见../analysis/v7.1-verification.md，保留v7核验历史。\n\n## 分篇目录\n\n"
     )
     toc = "".join(f"- [{p.stem}]({p.name})\n" for p in chapters)
     return intro + toc + "\n" + "\n\n---\n\n".join(p.read_text(encoding="utf-8").rstrip() for p in chapters) + "\n"
@@ -95,7 +98,7 @@ def main():
     admin = configs["admin-console.example.yaml"]
     modules = {section["id"] for section in admin["sections"]}
     require(len(admin["sections"]) == len(modules) == 24, "24 unique independent-web-console modules")
-    require(all(c["schema_version"] == VERSION for c in configs.values()), "all example design schemas v7")
+    require(all(c["schema_version"] == SCHEMA_VERSION for c in configs.values()), "all example design schemas remain v7, document version v7.1")
     roots = admin["settings_coverage"]["root_owners"]
     require(set(configs) == set(roots), "all config files explicitly registered, no implicit owner fallback")
     inventory = []
@@ -137,9 +140,35 @@ def main():
     require(policy["points"]["checkin_reward"]["minimum"] == 10 and policy["points"]["checkin_reward"]["maximum"] == 20, "10-20 integer wallet reward retained")
     require(admin["console"]["standalone_web"] and not admin["console"]["telegram_client_or_bot_required"]
             and not admin["console"]["accepts_telegram_panel_session_as_admin"], "standalone admin auth remains separate from Telegram")
+    tg = configs["telegram-guard.example.yaml"]["telegram_guard"]
+    queue = configs["registration-queue.example.yaml"]["registration_queue"]
+    sizing = configs["capacity-profiles.example.yaml"]["telegram_workload"]
+    require(not tg["runtime_implemented"] and not queue["runtime_implemented"], "TG guard and queue are design only")
+    require(tg["identity"]["bucket_scope"] == "VERIFIED_BOT_ID_AND_TELEGRAM_USER_ID"
+            and tg["identity"]["verified_mini_app_identity_uses_same_user_budget"], "TG identity budget shared across verified entrypoints")
+    require(tg["callbacks"]["check_permission_and_revocation_before_reuse"]
+            and tg["callbacks"]["semantic_mutation_idempotency_persisted"], "callback cache cannot bypass current auth or durable write idempotency")
+    require(not tg["resources"]["replay_or_cooldown_eviction_grants_fresh_write_budget"], "eviction never grants new sensitive write budget")
+    require(queue["admission"]["one_active_intent_per_identity_and_service"]
+            and queue["admission"]["admission_and_outstanding_counter_atomic"], "queue cap and identity uniqueness must be atomic")
+    require(set(queue["admission"]["outstanding_includes"]) >= {"LEASED", "RETRY_WAIT", "RECONCILING", "WAITING_CAPACITY"}, "queue cap counts leased and uncertain work, not only waiting")
+    require(queue["dispatch"]["initial_provisioning_workers"] == 1
+            and queue["dispatch"]["initial_prefetch_ticket_refs"] == 2, "S profile starts with one provisioning worker and two refs")
+    require(not queue["dispatch"]["one_db_connection_per_waiting_user"]
+            and not queue["observability"]["huge_inmemory_waiter_array_or_sleep_per_user"], "durable waiting queue does not imply per-user resident tasks or DB connections")
+    require(not queue["provisioning"]["unknown_result_blindly_retries_account_creation"], "unknown external create must reconcile before retry")
+    require(not queue["invitations"]["code_count_equals_member_or_concurrent_stream_capacity"], "100 invitation codes do not automatically raise capacity")
+    require(sizing["mode"] == "RECOMMEND_MANUAL_APPLY" and not sizing["auto_bounded"]["enabled"], "resource sizing default is recommendation with manual apply")
+    require(not sizing["auto_bounded"]["member_daily_sales_playback_security_or_telegram_egress_auto_increase"], "RAM upgrade cannot auto-raise business security or Telegram egress limits")
+    require(sizing["profiles"]["S"]["inbox_outstanding"] == tg["ingress"]["durable_inbox_outstanding_limit"]
+            and sizing["profiles"]["S"]["registration_outstanding"] == queue["admission"]["outstanding_limit"], "S profile defaults agree with inbox and registration caps")
+    require(queue["pressure"]["resume_available_memory_at_least_mib"] > queue["pressure"]["pause_new_provisioning_available_memory_below_mib"]
+            and queue["pressure"]["resume_cgroup_usage_at_most_percent"] < queue["pressure"]["pause_new_provisioning_cgroup_usage_percent"], "pressure protection has recovery hysteresis")
+    require(queue["admission"]["status_poll_recommended_seconds"] * (1 - queue["admission"]["status_poll_jitter_percent"] / 100)
+            >= queue["admission"]["status_poll_minimum_seconds"], "suggested jitter never goes below status minimum interval")
 
     chapters = sorted((ROOT / "docs").glob("[0-9][0-9]-*.md"))
-    require([int(p.name[:2]) for p in chapters] == list(range(1, 28)), "27 consecutively numbered plan chapters")
+    require([int(p.name[:2]) for p in chapters] == list(range(1, 29)), "28 consecutively numbered plan chapters")
     compiled = render_compiled(chapters)
     inventory_document = {"version": VERSION, "date": DATE, "scope": "DESIGN_ONLY_NOT_IMPLEMENTED_FORMS",
                           "config_files": len(configs), "console_modules": len(modules),
@@ -168,6 +197,7 @@ def main():
     ui_modules = re.findall(r"\['([a-z_]+)'\s*,", module_block.group(1))
     require(len(ui_modules) == 24 and set(ui_modules) == modules, "24 prototype module IDs match the configuration")
     require("程序仓库未创建" in fragment and "未配置" in fragment, "updater prototype honestly marks absent program source")
+    require(all(x in fragment for x in ["TG防连点", "资源调参", "注册排队", "RECOMMEND_MANUAL_APPLY", "AUTO_BOUNDED"]), "TG guard sizing and enrollment pages are present in admin prototype")
     wrapper = (ROOT / "ui" / "admin-console-preview.html").read_text(encoding="utf-8")
     require(fragment in wrapper, "standalone admin preview embeds current fragment")
     original = ROOT / "reference" / "emby-v1-original.markdown"
@@ -185,7 +215,7 @@ def main():
               "checks": checks}
     validation = ROOT / ".validation"
     validation.mkdir(exist_ok=True)
-    (validation / "v7-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (validation / "v7.1-plan-checks.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "checks"}, ensure_ascii=False, indent=2))
 
 

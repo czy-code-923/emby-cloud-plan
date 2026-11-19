@@ -1,6 +1,6 @@
-# v6设计输入，非Emby/Caddy可直接加载的防护配置；行为先观察、鉴权和硬边界始终执行。
+# v7.1设计输入，非Emby/Caddy可直接加载的配置；媒体与TG各有独立预算。
 schema_version: 7
-policy_version: anti-abuse-v6-2026-11-18
+policy_version: anti-abuse-v7.1-2026-11-19
 runtime_implemented: false
 behavior_mode: OBSERVE
 observation_hours: 72
@@ -89,3 +89,4 @@ observability:
   count_coalesced_requests_separately_from_attacks: true
   log_full_tokens_play_urls_or_cookies: false
   preview_impact_and_desired_applied_versions: true
+telegram_guard_contract: telegram-guard.example.yaml

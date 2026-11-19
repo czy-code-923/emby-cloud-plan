@@ -1,0 +1,91 @@
+# v7.1设计输入；Bot防连点与媒体防护分开，尚无真实中间件。
+schema_version: 7
+telegram_guard:
+  runtime_implemented: false
+  baseline_auth_bounds_idempotency_and_ingress_limits_required: true
+  behavioral_penalty_mode: OBSERVE
+  security_failure_cooldowns_always_required: true
+  observation_hours: 72
+  ingress:
+    receiver: SINGLE_POLLING_RECEIVER_INITIAL_THEN_VERIFIED_WEBHOOK_OPTION
+    webhook_secret_header_required_if_used: true
+    webhook_max_connections: 4
+    webhook_connection_limit_is_application_concurrency: false
+    allowed_updates: [message, callback_query, my_chat_member]
+    maximum_body_kib: 64
+    parse_concurrency: 4
+    handler_concurrency: 8
+    authenticated_accepts_per_second: 20
+    authenticated_accept_burst: 40
+    durable_inbox_outstanding_limit: 128
+    normalized_payload_max_kib: 2
+    pending_count_includes_queued_leased_and_retrying: true
+    one_coroutine_or_thread_per_pending_update: false
+    overflow_before_durable_accept: HTTP_503_RETRY_LATER
+    successful_ack_requires_durable_or_deliberate_safe_rejection: true
+    unexpected_update_is_rejected_without_unbounded_persistence: true
+    polling_offset_after_durable_acceptance_only: true
+    remote_shared_telegram_ip_is_user_identity: false
+  identity:
+    bucket_scope: VERIFIED_BOT_ID_AND_TELEGRAM_USER_ID
+    verified_mini_app_identity_uses_same_user_budget: true
+    arbitrary_callback_id_bypasses_budget: false
+    chat_or_message_change_bypasses_user_budget: false
+    require_object_permission_before_cached_result: true
+    unknown_uid_creates_full_member_or_unbounded_cache: false
+  rate_limits:
+    raw_uid_actions_10s: 20
+    raw_uid_actions_60s: 60
+    navigation_uid_10s: 10
+    navigation_uid_60s: 30
+    mutation_uid_10s: 3
+    mutation_uid_60s: 10
+    queue_status_uid_min_interval_seconds: 15
+    same_action_object_coalesce_seconds: 2
+    coalesced_receipts_consume_raw_not_new_mutation_budget: true
+    maximum_inflight_mutation_per_uid: 1
+    administrator_basic_limits_exempt: false
+    cooldown_feedback_min_interval_seconds: 30
+  callbacks:
+    opaque_reference_minimum_random_bits: 128
+    bind_actor_action_object_version_epoch_and_context: true
+    confirmation_ttl_seconds: 300
+    check_permission_and_revocation_before_reuse: true
+    stale_or_foreign_reference_runs_business_action: false
+    transport_update_idempotency_key: [BOT_ID, UPDATE_ID]
+    semantic_mutation_idempotency_persisted: true
+    recent_transport_id_retention_hours: 48
+    processed_transport_receipt_max_rows: 100000
+    processed_receipt_cap_can_evict_old_completed_receipts: true
+    cap_eviction_deletes_unprocessed_or_semantic_business_facts: false
+    transport_dedup_budget_does_not_replace_ledger_claim_constraints: true
+    target_callback_answer_seconds_normal_load: 2
+    callback_ack_equals_business_success: false
+    reply_cache_may_contain_passwords_codes_or_payment_secrets: false
+  brute_force:
+    invitation_or_redeem_invalid_uid_10m: 5
+    invalid_code_cooldown_seconds: 900
+    invalid_response_distinguishes_exists_or_owner: false
+    attacker_supplied_target_uid_can_lock_other_identity: false
+    security_code_failure_contract: policy.example.yaml
+    high_cost_hash_only_after_cheap_admission: true
+    temporary_cooldown_lift_requires_reason_expiry_and_scope: true
+    automatic_permanent_ban_delete_or_subnet_block: false
+  egress:
+    outgoing_messages_per_second_proposal: 20
+    ordinary_chat_messages_min_interval_seconds: 1
+    group_messages_per_minute_proposal: 15
+    reserve_control_response_lane: true
+    answer_callback_has_separate_method_budget: true
+    obey_actual_telegram_retry_after_and_method_scope: true
+    one_new_chat_message_per_duplicate_click: false
+    in_flight_or_duplicate_uses_bounded_ack_or_original_message: true
+    notification_retry_queue_is_bounded_and_persistent: true
+  resources:
+    sizing_contract: capacity-profiles.example.yaml
+    registration_queue_contract: registration-queue.example.yaml
+    byte_cap_precedes_key_count_cap: true
+    replay_or_cooldown_eviction_grants_fresh_write_budget: false
+    critical_limiter_state_failure_blocks_new_sensitive_writes: true
+    multi_replica_requires_shared_atomic_state_and_global_queue_caps: true
+    log_raw_code_token_or_callback_payload: false

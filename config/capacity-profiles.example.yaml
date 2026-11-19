@@ -6,6 +6,7 @@ recommendation:
   automatic_limit_increase: false
   automatic_destructive_cleanup: false
   scope: EFFECTIVE_HOST_OR_CONTAINER
+  automatic_limit_increase_scope: MEMBERS_SALES_PLAYBACK_AND_SECURITY_THRESHOLDS
 profiles:
   XS:
     min_memory_mib: 1024
@@ -61,3 +62,48 @@ semantics:
   lowering_limit: APPLY_TO_NEW_ADMISSIONS
   keep_existing_sessions_by_default: true
   permit_individual_override_above_global_hard_limit: false
+telegram_workload:
+  runtime_implemented: false
+  mode: RECOMMEND_MANUAL_APPLY
+  supported_modes: [MANUAL, RECOMMEND_MANUAL_APPLY, AUTO_BOUNDED]
+  effective_resource_scope_and_timestamp_visible: true
+  show_saved_recommended_desired_applied_and_protective_values: true
+  initial_profile: S
+  profiles:
+    XS: {state_cache_mib: 8, maximum_state_keys: 5000, reply_cache_mib: 4, inbox_outstanding: 64, registration_outstanding: 128, prefetch_refs: 1, recommended_provisioning_workers: 1, hash_concurrency: 1, full_stack_recommended: false}
+    S: {state_cache_mib: 16, maximum_state_keys: 10000, reply_cache_mib: 8, inbox_outstanding: 128, registration_outstanding: 256, prefetch_refs: 2, recommended_provisioning_workers: 1, hash_concurrency: 1}
+    M: {state_cache_mib: 32, maximum_state_keys: 20000, reply_cache_mib: 16, inbox_outstanding: 256, registration_outstanding: 512, prefetch_refs: 4, recommended_provisioning_workers: 2, hash_concurrency: 1}
+    L: {state_cache_mib: 64, maximum_state_keys: 40000, reply_cache_mib: 32, inbox_outstanding: 512, registration_outstanding: 1024, prefetch_refs: 4, recommended_provisioning_workers: 2, hash_concurrency: 2}
+    XL: {state_cache_mib: 128, maximum_state_keys: 80000, reply_cache_mib: 64, inbox_outstanding: 1024, registration_outstanding: 2048, prefetch_refs: 8, recommended_provisioning_workers: 4, hash_concurrency: 2}
+  auto_bounded:
+    enabled: false
+    owner_preapproved_ceiling_required: true
+    initially_auto_tunable: [STATE_CACHE_BYTES, REPLY_CACHE_BYTES, PREFETCH_REFS]
+    queue_capacity_auto_increase_opt_in: false
+    provisioning_worker_auto_increase_opt_in: false
+    hash_concurrency_auto_increase_opt_in: false
+    member_daily_sales_playback_security_or_telegram_egress_auto_increase: false
+    min_max_current_and_reason_visible: true
+    effective_memory_is_min_of_applicable_host_and_cgroup_limits: true
+    resource_unknown_blocks_increase: true
+    memory_growth_requires_unused_budget_after_real_stack_peak: true
+    stable_before_growth_minutes: 10
+    growth_step_percent_maximum: 25
+    minimum_interval_between_growth_minutes: 10
+    forced_shrink_or_pause_may_be_immediate: true
+    queue_growth_requires_database_disk_and_backlog_age_evidence: true
+    worker_growth_requires_cpu_emby_latency_pool_and_hash_budget_evidence: true
+    container_memory_or_db_pool_automatically_expanded: false
+    preserve_cooldowns_nonces_idempotency_and_claim_facts_during_resize: true
+    lowering_queue_cap_drops_already_admitted_tickets: false
+  pressure_guard:
+    enabled_by_design_in_all_modes: true
+    contract: registration-queue.example.yaml
+    manual_mode_disables_safety_pause: false
+    runtime_implemented: false
+  memory_accounting:
+    tg_state_and_reply_caches_are_separate_from_media_gateway_cache: true
+    byte_cap_before_key_count: true
+    configured_key_count_is_guaranteed_fit: false
+    queue_records_are_durable_not_resident_tasks: true
+    budget_includes_rss_db_hash_parse_buffers_and_media_peaks: true

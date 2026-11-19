@@ -1,0 +1,98 @@
+# v7.1注册高峰设计；数据库有界排队，不在RAM里同时开100个用户任务。
+schema_version: 7
+registration_queue:
+  runtime_implemented: false
+  admission:
+    enabled_in_design: true
+    private_verified_identity_required: true
+    one_active_intent_per_identity_and_service: true
+    duplicate_submit_returns_original_ticket: true
+    outstanding_limit: 256
+    outstanding_includes: [QUEUED, WAITING_CAPACITY, WAITING_POLICY, LEASED, RETRY_WAIT, RECONCILING]
+    maximum_normalized_payload_kib: 2
+    raw_password_security_code_or_invite_plaintext_persisted: false
+    ingress_limiter_contract: telegram-guard.example.yaml
+    admission_and_outstanding_counter_atomic: true
+    queue_full_http_status: 429
+    queue_full_retry_after_seconds: 60
+    status_poll_minimum_seconds: 15
+    status_poll_recommended_seconds: 20
+    status_poll_jitter_percent: 20
+    status_requires_ticket_owner: true
+    exact_queue_position_or_finish_time_promised: false
+    cancel_waiting_releases_own_reservations: true
+    cancel_provisioned_or_uncertain_job_blindly_deletes_account: false
+    eligibility_ticket_max_wait_hours: 24
+    expires_during_maintenance_or_capacity_incident: false
+  invitations:
+    issuance_modes: [ELIGIBILITY_ONLY, CAPACITY_RESERVED]
+    default_free_mode: ELIGIBILITY_ONLY
+    code_count_equals_member_or_concurrent_stream_capacity: false
+    large_batch_preflight_requires_showing_policy_and_reserved_seats: true
+    free_pending_invite_use_reserved_until_success_or_resolution: true
+    member_seat_reserved_only_when_ready_to_provision: true
+    paid_registration_seat_reserved_before_sale: true
+    reserve_paid_claim_converts_existing_reservation_not_double_counts: true
+    consume_invite_only_after_account_and_policy_verified: true
+    waiting_intent_bypasses_expiry_or_revocation: false
+    sold_code_rights_survive_general_registration_close: true
+  dispatch:
+    durable_queue: POSTGRESQL_INDEXED_JOBS
+    initial_provisioning_workers: 1
+    initial_prefetch_ticket_refs: 2
+    claim_batch_size: 1
+    idle_poll_seconds: 2
+    idle_poll_jitter_percent: 20
+    notifications_only_as_wakeup_hint: true
+    durable_rescan_after_restart: true
+    fair_order: READY_BATCH_ROUND_ROBIN_FIFO_WITHIN_BATCH
+    max_consecutive_reserved_paid_when_free_ready: 2
+    waiting_for_capacity_or_daily_quota_holds_worker: false
+    source_emby_and_hash_budgets_are_independent: true
+    claim_transaction_uses_skip_locked_and_fenced_lease: true
+    lease_seconds: 120
+    heartbeat_seconds: 30
+    external_request_timeout_seconds: 8
+    database_connection_held_during_external_request: false
+    one_db_connection_per_waiting_user: false
+    global_worker_and_queue_caps_not_multiplied_by_replicas: true
+    stop_after_claim_if_epoch_or_policy_revoked: true
+  provisioning:
+    stages: [VERIFY_ELIGIBILITY, RESERVE_READY_SEAT, CREATE_EMBY_ACCOUNT, APPLY_POLICY, VERIFY_MAPPING, COMMIT_SUCCESS, NOTIFY_ACTIVATION]
+    timeout_or_unknown_create_result_state: RECONCILING
+    unknown_result_blindly_retries_account_creation: false
+    existing_external_same_name_claimed_as_own_account: false
+    temporary_password_generated_only_when_needed_and_not_logged: true
+    final_password_set_via_one_time_https_activation: true
+    queue_admission_consumes_success_daily_quota: false
+    ready_slot_reserves_daily_quota_and_member_capacity_atomically: true
+    success_commits_daily_count_seat_invite_and_mapping: true
+    zero_or_closed_policy_silently_reopens_for_free_users: false
+  retries:
+    maximum_known_safe_transient_retries: 5
+    backoff_seconds: [5, 15, 45, 120, 300]
+    per_job_jitter_required: true
+    policy_errors_wait_without_busy_retry: true
+    uncertain_external_effect_holds_reservation_until_reconciled: true
+    lease_expiry_alone_proves_external_side_effect_absent: false
+  pressure:
+    pause_new_provisioning_available_memory_below_mib: 256
+    pause_new_provisioning_cgroup_usage_percent: 85
+    resume_available_memory_at_least_mib: 384
+    resume_cgroup_usage_at_most_percent: 75
+    resume_stable_seconds: 120
+    repeated_oom_or_swap_growth_pauses: true
+    registration_pause_kills_completed_accounts_or_playback: false
+    queue_cap_lowered_below_current_drops_existing_tickets: false
+    resume_unknown_metrics_automatically: false
+  autosizing:
+    contract: capacity-profiles.example.yaml
+    member_daily_sales_and_security_limits_auto_raise: false
+    queue_capacity_requires_owner_ceiling_and_disk_evidence: true
+    provisioning_workers_require_cpu_latency_and_db_evidence: true
+  observability:
+    show_pending_active_waiting_daily_capacity_reconciling_and_oldest_age: true
+    aggregate_queue_size_cached_seconds: 10
+    registration_failure_and_pause_reason_visible: true
+    queue_backend_unavailable_creates_users_inline: false
+    huge_inmemory_waiter_array_or_sleep_per_user: false
